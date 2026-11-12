@@ -21,6 +21,22 @@ export function contarPor<T>(
 }
 
 /**
+ * Para cada chave, um exemplo real do array — serve para mostrar o
+ * nome original (não o normalizado) e a imagem de cada entrada.
+ */
+export function exemplosDe(
+  scrobbles: Scrobble[],
+  chave: (s: Scrobble) => string,
+): Map<string, Scrobble> {
+  const exemplos = new Map<string, Scrobble>();
+  for (const s of scrobbles) {
+    const k = chave(s);
+    if (k !== "" && !exemplos.has(k)) exemplos.set(k, s);
+  }
+  return exemplos;
+}
+
+/**
  * Converte um Map de contagens num ranking ordenado.
  * Empates: ordem alfabética pela chave, para o ranking ser estável
  * entre renders.
@@ -53,15 +69,9 @@ export function totalArtistasDistintos(scrobbles: Scrobble[]): number {
 /* ---------- Rankings do dashboard ---------- */
 
 export function topArtistas(scrobbles: Scrobble[], n = 20): ItemRanking[] {
-  const contagens = contarPor(scrobbles, (s) => normalizarNome(s.artist_name));
-
-  // para mostrar o nome original (não o normalizado), procuramos
-  // uma ocorrência real de cada artista para tirar nome e imagem
-  const exemplos = new Map<string, Scrobble>();
-  for (const s of scrobbles) {
-    const k = normalizarNome(s.artist_name);
-    if (!exemplos.has(k)) exemplos.set(k, s);
-  }
+  const chaveDoArtista = (s: Scrobble) => normalizarNome(s.artist_name);
+  const contagens = contarPor(scrobbles, chaveDoArtista);
+  const exemplos = exemplosDe(scrobbles, chaveDoArtista);
 
   return paraRanking(contagens, n).map((item) => {
     const exemplo = exemplos.get(item.chave);
@@ -80,12 +90,7 @@ export function topMusicas(scrobbles: Scrobble[], n = 10): ItemRanking[] {
     `${normalizarNome(s.artist_name)}::${normalizarNome(s.track_name)}`;
 
   const contagens = contarPor(scrobbles, chaveDaMusica);
-
-  const exemplos = new Map<string, Scrobble>();
-  for (const s of scrobbles) {
-    const k = chaveDaMusica(s);
-    if (!exemplos.has(k)) exemplos.set(k, s);
-  }
+  const exemplos = exemplosDe(scrobbles, chaveDaMusica);
 
   return paraRanking(contagens, n).map((item) => {
     const exemplo = exemplos.get(item.chave);
@@ -103,12 +108,7 @@ export function topAlbuns(scrobbles: Scrobble[], n = 8): ItemRanking[] {
     `${normalizarNome(s.artist_name)}::${normalizarNome(s.album_name)}`;
 
   const contagens = contarPor(scrobbles, chaveDoAlbum);
-
-  const exemplos = new Map<string, Scrobble>();
-  for (const s of scrobbles) {
-    const k = chaveDoAlbum(s);
-    if (!exemplos.has(k)) exemplos.set(k, s);
-  }
+  const exemplos = exemplosDe(scrobbles, chaveDoAlbum);
 
   return paraRanking(contagens, n).map((item) => {
     const exemplo = exemplos.get(item.chave);

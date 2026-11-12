@@ -7,7 +7,7 @@ import type {
 } from "../types";
 import { chaveDoMes, formatarData, parseDataScrobble } from "./dates";
 import { normalizarNome, separarLista } from "./filters";
-import { contarPor, paraRanking } from "./stats";
+import { contarPor, exemplosDe, paraRanking } from "./stats";
 
 /* ---------- Existência e resumo ---------- */
 
@@ -64,13 +64,9 @@ export function topMusicasDoArtista(
   doArtista: Scrobble[],
   n = 10,
 ): ItemRanking[] {
-  const contagens = contarPor(doArtista, (s) => normalizarNome(s.track_name));
-
-  const exemplos = new Map<string, Scrobble>();
-  for (const s of doArtista) {
-    const k = normalizarNome(s.track_name);
-    if (!exemplos.has(k)) exemplos.set(k, s);
-  }
+  const chaveDaFaixa = (s: Scrobble) => normalizarNome(s.track_name);
+  const contagens = contarPor(doArtista, chaveDaFaixa);
+  const exemplos = exemplosDe(doArtista, chaveDaFaixa);
 
   return paraRanking(contagens, n).map((item) => {
     const exemplo = exemplos.get(item.chave);
