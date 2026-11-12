@@ -34,7 +34,7 @@ export default function PaginaVerificacao() {
             className={`rounded-full px-4 py-1.5 text-sm transition-colors ${
               periodo === p.valor
                 ? "bg-foreground text-background"
-                : "bg-black/[.05] dark:bg-white/[.06]"
+                : "bg-black/5 dark:bg-white/6"
             }`}
           >
             {p.rotulo}
