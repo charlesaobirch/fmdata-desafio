@@ -104,11 +104,14 @@ export function topMusicas(scrobbles: Scrobble[], n = 10): ItemRanking[] {
 }
 
 export function topAlbuns(scrobbles: Scrobble[], n = 8): ItemRanking[] {
+  // scrobbles sem álbum têm album_name "" → chave "artista::" nunca é
+  // vazia, por isso o guarda do contarPor não apanha; filtramos aqui
+  const comAlbum = scrobbles.filter((s) => s.album_name.trim() !== "");
   const chaveDoAlbum = (s: Scrobble) =>
     `${normalizarNome(s.artist_name)}::${normalizarNome(s.album_name)}`;
 
-  const contagens = contarPor(scrobbles, chaveDoAlbum);
-  const exemplos = exemplosDe(scrobbles, chaveDoAlbum);
+  const contagens = contarPor(comAlbum, chaveDoAlbum);
+  const exemplos = exemplosDe(comAlbum, chaveDoAlbum);
 
   return paraRanking(contagens, n).map((item) => {
     const exemplo = exemplos.get(item.chave);
