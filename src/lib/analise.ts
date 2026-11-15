@@ -367,3 +367,95 @@ export function generoPorFaixaDoDia(
     return { momento, rotulo, audicoes: dados.audicoes, tags };
   });
 }
+
+/* ---------- 5 · Valor estimado para os artistas ---------- */
+
+export type Plataforma = "youtube" | "spotify" | "apple" | "tidal";
+
+/**
+ * USD por reprodução. ASSUNÇÃO DECLARADA: médias aproximadas de
+ * valores divulgados publicamente, não vêm da API e variam por país,
+ * contrato e ano. A UI tem de as mostrar ao lado do resultado.
+ */
+export const TAXAS_POR_REPRODUCAO: {
+  plataforma: Plataforma;
+  rotulo: string;
+  taxa: number;
+}[] = [
+  { plataforma: "youtube", rotulo: "YouTube", taxa: 0.0007 },
+  { plataforma: "spotify", rotulo: "Spotify", taxa: 0.004 },
+  { plataforma: "apple", rotulo: "Apple Music", taxa: 0.008 },
+  { plataforma: "tidal", rotulo: "Tidal", taxa: 0.013 },
+];
+
+export interface ValorPorPlataforma {
+  plataforma: Plataforma;
+  rotulo: string;
+  taxa: number;
+  valor: number;
+}
+
+export interface Estimativa {
+  reproducoes: number;
+  porPlataforma: ValorPorPlataforma[];
+  minimo: number;
+  maximo: number;
+}
+
+export interface ValorEstimado {
+  total: Estimativa;
+  artistaPrincipal: Estimativa & { nome: string };
+}
+
+function estimar(
+  reproducoes: number,
+  taxas: typeof TAXAS_POR_REPRODUCAO,
+): Estimativa {
+  const porPlataforma = taxas.map((t) => ({
+    ...t,
+    valor: reproducoes * t.taxa,
+  }));
+  const valores = porPlataforma.map((p) => p.valor);
+  return {
+    reproducoes,
+    porPlataforma,
+    minimo: Math.min(...valores),
+    maximo: Math.max(...valores),
+  };
+}
+
+/**
+ * Quanto terão recebido os artistas pelas tuas reproduções?
+ * reproduções × taxa por plataforma; o intervalo vai da plataforma
+ * que paga menos à que paga mais, porque não se sabe onde se ouviu.
+ *
+ * - Conta todas as audições (como totalScrobbles e artistaDeCasa).
+ * - Artista principal: o de mais audições, agrupado por nome
+ *   normalizado; em empate, o primeiro por ordem alfabética da chave.
+ * - As taxas podem ser substituídas (por omissão TAXAS_POR_REPRODUCAO).
+ */
+export function valorEstimado(
+  scrobbles: Scrobble[],
+  taxas = TAXAS_POR_REPRODUCAO,
+): ValorEstimado | null {
+  if (scrobbles.length === 0 || taxas.length === 0) return null;
+
+  const porArtista = new Map<string, { nome: string; reproducoes: number }>();
+  for (const s of scrobbles) {
+    const k = normalizarNome(s.artist_name);
+    const atual = porArtista.get(k);
+    if (atual) atual.reproducoes += 1;
+    else porArtista.set(k, { nome: s.artist_name, reproducoes: 1 });
+  }
+  const [, principal] = [...porArtista.entries()].sort(
+    ([ka, a], [kb, b]) => b.reproducoes - a.reproducoes || ka.localeCompare(kb),
+  )[0];
+
+  return {
+    total: estimar(scrobbles.length, taxas),
+    artistaPrincipal: {
+      nome: principal.nome,
+      ...estimar(principal.reproducoes, taxas),
+    },
+  };
+}
