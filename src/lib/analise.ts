@@ -119,15 +119,20 @@ export function artistaDeCasa(scrobbles: Scrobble[]): ArtistaDeCasa | null {
   let noites = 0;
   for (const s of ultimaDoDia.values()) if (ehDele(s)) noites += 1;
 
-  const albuns = new Map<string, number>();
+  // agrupa pelo nome normalizado (como o artista e as faixas);
+  // mostra o nome tal como apareceu na primeira audição
+  const albuns = new Map<string, { nome: string; audicoes: number }>();
   for (const s of dele) {
-    if (s.album_name === "") continue; // há audições sem álbum
-    albuns.set(s.album_name, (albuns.get(s.album_name) ?? 0) + 1);
+    const k = normalizarNome(s.album_name);
+    if (k === "") continue; // há audições sem álbum
+    const atual = albuns.get(k);
+    if (atual) atual.audicoes += 1;
+    else albuns.set(k, { nome: s.album_name, audicoes: 1 });
   }
   let albumPrincipal: { nome: string; audicoes: number } | null = null;
-  for (const [nome, audicoes] of albuns) {
-    if (!albumPrincipal || audicoes > albumPrincipal.audicoes) {
-      albumPrincipal = { nome, audicoes };
+  for (const album of albuns.values()) {
+    if (!albumPrincipal || album.audicoes > albumPrincipal.audicoes) {
+      albumPrincipal = album;
     }
   }
 
