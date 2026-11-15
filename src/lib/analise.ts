@@ -179,3 +179,90 @@ export function artistaDeCasa(scrobbles: Scrobble[]): ArtistaDeCasa | null {
     porAno,
   };
 }
+
+/* ---------- 3 · Como abres e fechas o dia ---------- */
+
+export interface ContagemDeArtista {
+  artista: string;
+  dias: number;
+}
+
+export interface ContagemDeFaixa {
+  faixa: string;
+  artista: string;
+  dias: number;
+}
+
+export interface AberturaEFecho {
+  diasComMusica: number;
+  quemAbre: ContagemDeArtista[];
+  quemFecha: ContagemDeArtista[];
+  faixaQueMaisAbre: ContagemDeFaixa | null;
+  faixaQueMaisFecha: ContagemDeFaixa | null;
+  diasComMesmaFaixa: number;
+}
+
+/** Ordena por dias (desc.) e desempata alfabeticamente pela chave. */
+function ordenarPorDias<T extends { dias: number }>(mapa: Map<string, T>): T[] {
+  return [...mapa.entries()]
+    .sort(([ka, a], [kb, b]) => b.dias - a.dias || ka.localeCompare(kb))
+    .map(([, v]) => v);
+}
+
+/**
+ * Para cada dia UTC, olha só para a primeira e a última audição
+ * (ver extremosDoDia para o critério em empates de timestamp).
+ *
+ * - Artistas agrupados por nome normalizado; faixas pela chave
+ *   artista+faixa ("Hello" da Adele ≠ "Hello" de outro artista).
+ * - Rankings por número de dias, do maior para o menor. Em empate,
+ *   ordem alfabética da chave normalizada (o mesmo critério do
+ *   paraRanking), para o resultado não depender da ordem dos dados.
+ * - "Mesma faixa": a primeira e a última do dia têm a mesma chave.
+ *   Um dia com uma só audição conta, porque abriu e fechou com ela.
+ */
+export function primeiraEUltimaDoDia(
+  scrobbles: Scrobble[],
+): AberturaEFecho | null {
+  const dias = extremosDoDia(scrobbles);
+  if (dias.size === 0) return null;
+
+  const chaveFaixa = (s: Scrobble) =>
+    `${normalizarNome(s.artist_name)}::${normalizarNome(s.track_name)}`;
+
+  const abre = new Map<string, ContagemDeArtista>();
+  const fecha = new Map<string, ContagemDeArtista>();
+  const faixaAbre = new Map<string, ContagemDeFaixa>();
+  const faixaFecha = new Map<string, ContagemDeFaixa>();
+  let mesmaFaixa = 0;
+
+  const somarArtista = (mapa: Map<string, ContagemDeArtista>, s: Scrobble) => {
+    const k = normalizarNome(s.artist_name);
+    const atual = mapa.get(k);
+    if (atual) atual.dias += 1;
+    else mapa.set(k, { artista: s.artist_name, dias: 1 });
+  };
+  const somarFaixa = (mapa: Map<string, ContagemDeFaixa>, s: Scrobble) => {
+    const k = chaveFaixa(s);
+    const atual = mapa.get(k);
+    if (atual) atual.dias += 1;
+    else mapa.set(k, { faixa: s.track_name, artista: s.artist_name, dias: 1 });
+  };
+
+  for (const { primeira, ultima } of dias.values()) {
+    somarArtista(abre, primeira);
+    somarArtista(fecha, ultima);
+    somarFaixa(faixaAbre, primeira);
+    somarFaixa(faixaFecha, ultima);
+    if (chaveFaixa(primeira) === chaveFaixa(ultima)) mesmaFaixa += 1;
+  }
+
+  return {
+    diasComMusica: dias.size,
+    quemAbre: ordenarPorDias(abre),
+    quemFecha: ordenarPorDias(fecha),
+    faixaQueMaisAbre: ordenarPorDias(faixaAbre)[0] ?? null,
+    faixaQueMaisFecha: ordenarPorDias(faixaFecha)[0] ?? null,
+    diasComMesmaFaixa: mesmaFaixa,
+  };
+}
