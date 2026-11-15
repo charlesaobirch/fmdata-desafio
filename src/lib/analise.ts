@@ -15,9 +15,7 @@ export interface Maratona {
  * Ignora reproduções sem data (nowplaying): não se sabe onde
  * encaixam na sequência.
  */
-export function maiorSequenciaRepetida(
-  scrobbles: Scrobble[],
-): Maratona | null {
+export function maiorSequenciaRepetida(scrobbles: Scrobble[]): Maratona | null {
   const ordenados = scrobbles
     .filter((s): s is Scrobble & { date_uts: number } => s.date_uts !== null)
     .sort((a, b) => a.date_uts - b.date_uts);
