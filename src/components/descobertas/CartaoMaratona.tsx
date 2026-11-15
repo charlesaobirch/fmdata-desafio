@@ -8,10 +8,11 @@ import { useDescoberta } from "./useDescoberta";
 const MARCAS_MAX = 60;
 
 export function CartaoMaratona() {
-  const { resultado } = useDescoberta(maiorSequenciaRepetida);
+  const { resultado, cartao } = useDescoberta(maiorSequenciaRepetida);
 
   return (
     <CartaoDescoberta
+      {...cartao}
       pergunta="Qual foi a música que ouviste mais vezes seguidas?"
       titulo={resultado ? `${resultado.vezes} vezes seguidas, amor` : undefined}
       subtitulo={

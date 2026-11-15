@@ -6,12 +6,13 @@ import { formatarNumero } from "./formatar";
 import { useDescoberta } from "./useDescoberta";
 
 export function CartaoArtistaDeCasa() {
-  const { resultado: casa } = useDescoberta(artistaDeCasa);
+  const { resultado: casa, cartao } = useDescoberta(artistaDeCasa);
 
   const maximo = Math.max(1, ...(casa?.porAno.map((a) => a.audicoes) ?? []));
 
   return (
     <CartaoDescoberta
+      {...cartao}
       pergunta="Quem é o artista mais presente no teu dia a dia?"
       titulo={
         casa

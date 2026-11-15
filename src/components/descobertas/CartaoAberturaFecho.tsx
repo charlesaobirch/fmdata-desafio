@@ -45,10 +45,11 @@ function Coluna({
 }
 
 export function CartaoAberturaFecho() {
-  const { resultado: dia } = useDescoberta(primeiraEUltimaDoDia);
+  const { resultado: dia, cartao } = useDescoberta(primeiraEUltimaDoDia);
 
   return (
     <CartaoDescoberta
+      {...cartao}
       pergunta="Com que música começas e acabas o dia?"
       titulo={dia ? "Sabes acordar. Dormir, nem por isso." : undefined}
       subtitulo={

@@ -6,11 +6,12 @@ import { formatarNumero, formatarTaxa, formatarUSD } from "./formatar";
 import { useDescoberta } from "./useDescoberta";
 
 export function CartaoValor() {
-  const { resultado: valor } = useDescoberta(valorEstimado);
+  const { resultado: valor, cartao } = useDescoberta(valorEstimado);
   const artista = valor?.artistaPrincipal;
 
   return (
     <CartaoDescoberta
+      {...cartao}
       pergunta="Quanto terão recebido os artistas pelas tuas audições?"
       titulo={artista ? `E a ${artista.nome}, ficou com quê?` : undefined}
       subtitulo={artista ? "nove anos deram para meio café" : undefined}

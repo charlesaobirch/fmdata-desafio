@@ -1,6 +1,10 @@
 "use client";
 
-import { generoPorFaixaDoDia, MOMENTOS_DO_DIA } from "@/lib/analise";
+import {
+  type GeneroDoMomento,
+  generoPorFaixaDoDia,
+  MOMENTOS_DO_DIA,
+} from "@/lib/analise";
 import { CartaoDescoberta } from "./CartaoDescoberta";
 import { formatarIndice } from "./formatar";
 import { useDescoberta } from "./useDescoberta";
@@ -8,14 +12,23 @@ import { useDescoberta } from "./useDescoberta";
 // quantos géneros acima do habitual mostrar por momento
 const ACIMA = 3;
 
+// sem nenhum género com amostra suficiente, não há descoberta
+const semGenerosDestacados = (momentos: GeneroDoMomento[]) =>
+  momentos.every((m) => m.tags.length === 0);
+
 const horas = (de: number, ate: number) => `${de}h–${ate + 1}h`;
 
 export function CartaoGenero() {
-  const { resultado: momentos } = useDescoberta(generoPorFaixaDoDia);
+  const { resultado: momentos, cartao } = useDescoberta(
+    generoPorFaixaDoDia,
+    semGenerosDestacados,
+  );
 
   return (
     <CartaoDescoberta
+      {...cartao}
       largo
+      mensagemVazia="Ainda não há audições com géneros suficientes em nenhum momento do dia (são precisas 200 por género)."
       pergunta="Que géneros ouves mais a cada momento do dia?"
       titulo={
         momentos
