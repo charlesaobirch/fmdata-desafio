@@ -2,7 +2,12 @@
 
 import { valorEstimado } from "@/lib/analise";
 import { CartaoDescoberta } from "./CartaoDescoberta";
-import { formatarNumero, formatarTaxa, formatarUSD } from "./formatar";
+import {
+  formatarNumero,
+  formatarTaxa,
+  formatarUSD,
+  formatarValor,
+} from "./formatar";
 import { useDescoberta } from "./useDescoberta";
 
 export function CartaoValor() {
@@ -51,10 +56,10 @@ export function CartaoValor() {
                     scope="col"
                     className="py-1.5 pr-3 text-right font-normal"
                   >
-                    {artista.nome}
+                    {artista.nome} (USD)
                   </th>
                   <th scope="col" className="py-1.5 text-right font-normal">
-                    Tudo
+                    Tudo (USD)
                   </th>
                 </tr>
               </thead>
@@ -71,10 +76,10 @@ export function CartaoValor() {
                       {formatarTaxa(p.taxa)}
                     </td>
                     <td className="py-1.5 pr-3 text-right">
-                      {formatarUSD(p.valor)}
+                      {formatarValor(p.valor)}
                     </td>
                     <td className="py-1.5 text-right">
-                      {formatarUSD(
+                      {formatarValor(
                         valor.total.porPlataforma.find(
                           (x) => x.plataforma === p.plataforma,
                         )?.valor ?? 0,

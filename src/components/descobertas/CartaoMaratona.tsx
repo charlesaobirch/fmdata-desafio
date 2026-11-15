@@ -22,7 +22,7 @@ export function CartaoMaratona() {
       {resultado && (
         <div className="flex flex-col gap-3">
           {/* uma marca por repetição: a quantidade vê-se antes de se ler */}
-          <div aria-hidden="true" className="flex flex-wrap gap-1">
+          <div aria-hidden="true" className="flex flex-wrap gap-[3px]">
             {Array.from(
               { length: Math.min(resultado.vezes, MARCAS_MAX) },
               (_, i) => (

@@ -44,7 +44,7 @@ export function CartaoDescoberta({
     <article
       aria-label={pergunta}
       aria-busy={estado === "loading"}
-      className={`flex flex-col gap-5 rounded-2xl border border-foreground/10 bg-background p-6 ${
+      className={`flex min-w-0 flex-col gap-5 rounded-2xl border border-foreground/10 bg-background p-6 ${
         largo ? "md:col-span-2" : ""
       }`}
     >

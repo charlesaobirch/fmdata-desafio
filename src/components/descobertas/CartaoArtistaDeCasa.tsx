@@ -44,7 +44,7 @@ export function CartaoArtistaDeCasa() {
                   >
                     <span
                       className={`w-full rounded-t-sm ${
-                        pico ? "bg-foreground" : "bg-foreground/25"
+                        pico ? "bg-foreground" : "bg-foreground/50"
                       }`}
                       style={{ height: `${(audicoes / maximo) * 100}%` }}
                     />
@@ -56,7 +56,7 @@ export function CartaoArtistaDeCasa() {
                   </span>
                   <span
                     aria-hidden="true"
-                    className="text-[0.65rem] tabular-nums text-foreground/70"
+                    className="text-xs tabular-nums text-foreground/70"
                   >
                     {String(ano).slice(2)}
                   </span>

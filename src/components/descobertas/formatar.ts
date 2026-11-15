@@ -9,15 +9,20 @@ export function formatarNumero(n: number): string {
 }
 
 /**
- * 3.0415 -> "3,04 USD"; 56.485 -> "56,49 USD".
+ * 3.0415 -> "3,04"; 56.485 -> "56,49" (para tabelas com a unidade no cabeçalho).
  * Em vírgula flutuante 56.485 é 56.48499…, e toFixed arredondaria
  * para baixo; limpar o ruído dos cêntimos antes de arredondar
  * corrige o meio cêntimo.
  */
-export function formatarUSD(n: number): string {
+export function formatarValor(n: number): string {
   const centimos = Math.round(Number((n * 100).toPrecision(12)));
   const [inteiro, decimal] = (centimos / 100).toFixed(2).split(".");
-  return `${formatarNumero(Number(inteiro))},${decimal} USD`;
+  return `${formatarNumero(Number(inteiro))},${decimal}`;
+}
+
+/** 3.0415 -> "3,04 USD" */
+export function formatarUSD(n: number): string {
+  return `${formatarValor(n)} USD`;
 }
 
 /** 0.0007 -> "0,0007" (taxas por reprodução, sem arredondar) */
