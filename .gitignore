@@ -42,3 +42,4 @@ next-env.d.ts
 
 # dataset completo (26 MB) — obtém-se com `npm run dataset`
 /scrobbles-completo.json
+NOTAS-DANILO.md
