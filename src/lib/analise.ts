@@ -1,6 +1,34 @@
 import type { Scrobble } from "../types";
 import { normalizarNome } from "./filters";
 
+/* ---------- auxiliares partilhados ---------- */
+
+type ComData = Scrobble & { date_uts: number };
+
+/**
+ * Para cada dia UTC ("AAAA-MM-DD"), a primeira e a última audição.
+ * Ignora audições sem data. Em empate de timestamp fica a que aparece
+ * primeiro no array (comparação estrita).
+ */
+function extremosDoDia(
+  scrobbles: Scrobble[],
+): Map<string, { primeira: ComData; ultima: ComData }> {
+  const dias = new Map<string, { primeira: ComData; ultima: ComData }>();
+  for (const s of scrobbles) {
+    if (s.date_uts === null) continue;
+    const c = s as ComData;
+    const dia = new Date(c.date_uts * 1000).toISOString().slice(0, 10);
+    const atual = dias.get(dia);
+    if (!atual) {
+      dias.set(dia, { primeira: c, ultima: c });
+      continue;
+    }
+    if (c.date_uts < atual.primeira.date_uts) atual.primeira = c;
+    if (c.date_uts > atual.ultima.date_uts) atual.ultima = c;
+  }
+  return dias;
+}
+
 /* ---------- 1 · A maratona ---------- */
 
 export interface Maratona {
@@ -95,29 +123,16 @@ export function artistaDeCasa(scrobbles: Scrobble[]): ArtistaDeCasa | null {
     (s): s is Scrobble & { date_uts: number } => s.date_uts !== null,
   );
 
-  // primeira e última audição de cada dia, em todo o histórico
-  const primeiraDoDia = new Map<string, Scrobble>();
-  const ultimaDoDia = new Map<string, Scrobble>();
-  for (const s of scrobbles) {
-    if (s.date_uts === null) continue;
-    const dia = new Date(s.date_uts * 1000).toISOString().slice(0, 10);
-    const antes = primeiraDoDia.get(dia);
-    if (!antes || s.date_uts < (antes.date_uts as number)) {
-      primeiraDoDia.set(dia, s);
-    }
-    const depois = ultimaDoDia.get(dia);
-    if (!depois || s.date_uts > (depois.date_uts as number)) {
-      ultimaDoDia.set(dia, s);
-    }
-  }
-
   const nomeNorm = normalizarNome(dele[0].artist_name);
   const ehDele = (s: Scrobble) => normalizarNome(s.artist_name) === nomeNorm;
 
   let manhas = 0;
-  for (const s of primeiraDoDia.values()) if (ehDele(s)) manhas += 1;
   let noites = 0;
-  for (const s of ultimaDoDia.values()) if (ehDele(s)) noites += 1;
+  // primeira e última audição de cada dia, em todo o histórico
+  for (const { primeira, ultima } of extremosDoDia(scrobbles).values()) {
+    if (ehDele(primeira)) manhas += 1;
+    if (ehDele(ultima)) noites += 1;
+  }
 
   // agrupa pelo nome normalizado (como o artista e as faixas);
   // mostra o nome tal como apareceu na primeira audição
