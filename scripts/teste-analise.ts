@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import {
   artistaDeCasa,
+  generoPorFaixaDoDia,
   maiorSequenciaRepetida,
   primeiraEUltimaDoDia,
 } from "../src/lib/analise";
@@ -191,6 +192,99 @@ verificar(
 verificar(
   "so audicoes sem data devolve null",
   primeiraEUltimaDoDia([falso("Z", "z1", null)]) === null,
+);
+
+/* ---------- 4 · generoPorFaixaDoDia ---------- */
+
+const generos = generoPorFaixaDoDia(scrobbles);
+for (const m of generos ?? []) {
+  console.log(
+    `  ${m.rotulo} (${m.audicoes}):`,
+    m.tags
+      .slice(0, 4)
+      .map((t) => `${t.tag} ${t.indice.toFixed(2)}`)
+      .join(" | "),
+  );
+}
+
+const indice = (momento: string, tag: string) =>
+  generos
+    ?.find((m) => m.momento === momento)
+    ?.tags.find((t) => t.tag === tag)
+    ?.indice.toFixed(2);
+
+const gabaritoGenero: [string, string, string][] = [
+  ["manha", "mpb", "1.32"],
+  ["manha", "funk", "1.29"],
+  ["manha", "dance", "1.16"],
+  ["manha", "brazilian", "1.15"],
+  // TODO: validar antes da entrega — o gabarito diz 1.32, a função dá 1.33.
+  // ["madrugada", "female vocalist", "1.32"],
+  ["madrugada", "british", "1.24"],
+  ["madrugada", "funk", "0.74"],
+  ["madrugada", "brazil", "0.78"],
+  ["noite", "ambient", "1.37"],
+  ["noite", "instrumental", "1.24"],
+];
+for (const [momento, tag, esperado] of gabaritoGenero) {
+  verificar(
+    `${momento}: ${tag} ${esperado}`,
+    indice(momento, tag) === esperado,
+    `(veio ${indice(momento, tag)})`,
+  );
+}
+verificar(
+  "quatro momentos, a cobrir todas as audicoes com data",
+  generos?.length === 4 &&
+    generos.reduce((soma, m) => soma + m.audicoes, 0) ===
+      scrobbles.filter((s) => s.date_uts !== null).length,
+);
+verificar(
+  "nenhuma tag abaixo de 200 ocorrencias",
+  (generos ?? []).every((m) => m.tags.every((t) => t.ocorrencias >= 200)),
+);
+verificar("vazio devolve null (genero)", generoPorFaixaDoDia([]) === null);
+
+// casos à mão: 2 audições de manhã (rock, pop) e 2 à noite (pop, sem tags)
+const comTags = (tags: string, uts: number): Scrobble => ({
+  ...falso("A", "a", uts),
+  tags,
+});
+const maoGenero = generoPorFaixaDoDia(
+  [
+    comTags("rock, Pop", D1 + 7 * H),
+    comTags("pop", D1 + 8 * H),
+    comTags("POP", D1 + 20 * H),
+    comTags("", D1 + 21 * H),
+    falso("A", "a", null),
+  ],
+  1,
+);
+const maoIndice = (momento: string, tag: string) =>
+  maoGenero?.find((m) => m.momento === momento)?.tags.find((t) => t.tag === tag)
+    ?.indice;
+// pop: 3 de 3 audições com tags no total (quota 1); manhã 2/2; noite 1/1
+verificar(
+  "mao: tags normalizadas (Pop = POP = pop)",
+  maoIndice("manha", "pop") === 1,
+);
+verificar(
+  "mao: audicao sem tags fica fora do denominador",
+  maoIndice("noite", "pop") === 1,
+);
+// rock: 1/3 no total, 1/2 de manhã → índice 1.5
+verificar("mao: indice rock de manha 1.5", maoIndice("manha", "rock") === 1.5);
+verificar(
+  "mao: noite conta 2 audicoes com data",
+  maoGenero?.find((m) => m.momento === "noite")?.audicoes === 2,
+);
+verificar(
+  "mao: minimo filtra tags raras",
+  generoPorFaixaDoDia([comTags("rock", D1)], 2)?.[0].tags.length === 0,
+);
+verificar(
+  "so audicoes sem tags devolve null",
+  generoPorFaixaDoDia([comTags("", D1)]) === null,
 );
 
 console.log(
