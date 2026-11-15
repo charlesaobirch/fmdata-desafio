@@ -8,9 +8,15 @@ export function formatarNumero(n: number): string {
   return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
 
-/** 3.0415 -> "3,04 USD" */
+/**
+ * 3.0415 -> "3,04 USD"; 56.485 -> "56,49 USD".
+ * Em vírgula flutuante 56.485 é 56.48499…, e toFixed arredondaria
+ * para baixo; limpar o ruído dos cêntimos antes de arredondar
+ * corrige o meio cêntimo.
+ */
 export function formatarUSD(n: number): string {
-  const [inteiro, decimal] = n.toFixed(2).split(".");
+  const centimos = Math.round(Number((n * 100).toPrecision(12)));
+  const [inteiro, decimal] = (centimos / 100).toFixed(2).split(".");
   return `${formatarNumero(Number(inteiro))},${decimal} USD`;
 }
 
