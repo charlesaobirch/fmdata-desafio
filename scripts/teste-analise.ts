@@ -136,12 +136,17 @@ verificar(
     dia?.faixaQueMaisFecha?.dias === 12,
   `(veio ${dia?.faixaQueMaisFecha?.faixa} ${dia?.faixaQueMaisFecha?.dias})`,
 );
-// TODO: validar antes da entrega — o gabarito diz 126, a função dá 127.
-// verificar(
-//   "126 dias abriram e fecharam com a mesma faixa",
-//   dia?.diasComMesmaFaixa === 126,
-//   `(vieram ${dia?.diasComMesmaFaixa})`,
-// );
+// 127 (e não 126): em 121 dias há várias audições no mesmo segundo
+// numa das pontas. extremosDoDia fica, nas duas pontas, com a primeira
+// empatada na ordem do array — o mesmo critério que dá Adele 213/185.
+// Ficar com a última empatada só para o fecho daria 126, mas também
+// Adele 184 noites: os dois números só são coerentes com um critério.
+// Dos 127, 97 são dias com uma só audição; com 2+ audições são 30.
+verificar(
+  "127 dias abriram e fecharam com a mesma faixa",
+  dia?.diasComMesmaFaixa === 127,
+  `(vieram ${dia?.diasComMesmaFaixa})`,
+);
 verificar("vazio devolve null (dia)", primeiraEUltimaDoDia([]) === null);
 
 // casos pequenos feitos à mão
@@ -220,8 +225,10 @@ const gabaritoGenero: [string, string, string][] = [
   ["manha", "funk", "1.29"],
   ["manha", "dance", "1.16"],
   ["manha", "brazilian", "1.15"],
-  // TODO: validar antes da entrega — o gabarito diz 1.32, a função dá 1.33.
-  // ["madrugada", "female vocalist", "1.32"],
+  // 1.3259 arredonda para 1.33: quota sobre as audições com tags (as
+  // sem tags ficam fora do denominador). Com todas as audições daria
+  // 1.32 aqui, mas falhava mpb, brazilian, ambient e instrumental.
+  ["madrugada", "female vocalist", "1.33"],
   ["madrugada", "british", "1.24"],
   ["madrugada", "funk", "0.74"],
   ["madrugada", "brazil", "0.78"],
