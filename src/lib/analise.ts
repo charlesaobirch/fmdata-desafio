@@ -1,5 +1,5 @@
 import type { Scrobble } from "../types";
-import { normalizarNome } from "./filters";
+import { normalizarNome, separarLista } from "./filters";
 
 /* ---------- auxiliares partilhados ---------- */
 
@@ -265,4 +265,105 @@ export function primeiraEUltimaDoDia(
     faixaQueMaisFecha: ordenarPorDias(faixaFecha)[0] ?? null,
     diasComMesmaFaixa: mesmaFaixa,
   };
+}
+
+/* ---------- 4 · Género por faixa do dia ---------- */
+
+export type MomentoDoDia = "madrugada" | "manha" | "tarde" | "noite";
+
+/** Horas UTC (inclusivas) de cada momento do dia. */
+export const MOMENTOS_DO_DIA: {
+  momento: MomentoDoDia;
+  rotulo: string;
+  de: number;
+  ate: number;
+}[] = [
+  { momento: "madrugada", rotulo: "Madrugada", de: 0, ate: 5 },
+  { momento: "manha", rotulo: "Manhã", de: 6, ate: 11 },
+  { momento: "tarde", rotulo: "Tarde", de: 12, ate: 17 },
+  { momento: "noite", rotulo: "Noite", de: 18, ate: 23 },
+];
+
+export interface IndiceDeTag {
+  tag: string;
+  ocorrencias: number;
+  quota: number;
+  quotaTotal: number;
+  indice: number;
+}
+
+export interface GeneroDoMomento {
+  momento: MomentoDoDia;
+  rotulo: string;
+  audicoes: number;
+  tags: IndiceDeTag[];
+}
+
+/**
+ * Que géneros pesam mais em cada momento do dia do que no total?
+ *
+ * índice = quota da tag no momento ÷ quota da tag no histórico todo.
+ * 1 = igual ao habitual; 1.3 = 30% acima; 0.7 = 30% abaixo.
+ *
+ * - quota = audições com a tag ÷ audições com pelo menos uma tag.
+ *   As audições sem tags ficam fora do denominador: não dizem nada
+ *   sobre género e, se se concentrassem num momento, baixavam todos
+ *   os índices desse momento por igual.
+ * - Horas UTC, como o resto do projeto. Audições sem data ignoradas.
+ * - Tags normalizadas (minúsculas, sem acentos) e contadas uma vez
+ *   por audição.
+ * - Só entram tags com pelo menos `minimo` ocorrências no momento
+ *   (por omissão 200): abaixo disso o índice é ruído de amostra.
+ * - Ordenadas por índice (desc.); empate por ordem alfabética.
+ */
+export function generoPorFaixaDoDia(
+  scrobbles: Scrobble[],
+  minimo = 200,
+): GeneroDoMomento[] | null {
+  const totalPorTag = new Map<string, number>();
+  let totalComTags = 0;
+  const porMomento = MOMENTOS_DO_DIA.map(() => ({
+    audicoes: 0,
+    comTags: 0,
+    tags: new Map<string, number>(),
+  }));
+
+  for (const s of scrobbles) {
+    if (s.date_uts === null) continue;
+    const hora = new Date(s.date_uts * 1000).getUTCHours();
+    const i = MOMENTOS_DO_DIA.findIndex((m) => hora >= m.de && hora <= m.ate);
+    const atual = porMomento[i];
+    atual.audicoes += 1;
+
+    const tags = new Set(separarLista(s.tags).map(normalizarNome));
+    tags.delete("");
+    if (tags.size === 0) continue;
+    atual.comTags += 1;
+    totalComTags += 1;
+    for (const tag of tags) {
+      atual.tags.set(tag, (atual.tags.get(tag) ?? 0) + 1);
+      totalPorTag.set(tag, (totalPorTag.get(tag) ?? 0) + 1);
+    }
+  }
+
+  if (totalComTags === 0) return null;
+
+  return MOMENTOS_DO_DIA.map(({ momento, rotulo }, i) => {
+    const dados = porMomento[i];
+    const tags: IndiceDeTag[] = [];
+    for (const [tag, ocorrencias] of dados.tags) {
+      if (ocorrencias < minimo) continue;
+      const quota = ocorrencias / dados.comTags;
+      const quotaTotal = (totalPorTag.get(tag) ?? 0) / totalComTags;
+      tags.push({
+        tag,
+        ocorrencias,
+        quota,
+        quotaTotal,
+        indice: quota / quotaTotal,
+      });
+    }
+    tags.sort((a, b) => b.indice - a.indice || a.tag.localeCompare(b.tag));
+    return { momento, rotulo, audicoes: dados.audicoes, tags };
+  });
 }
