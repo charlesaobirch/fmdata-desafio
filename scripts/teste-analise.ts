@@ -4,6 +4,8 @@ import {
   generoPorFaixaDoDia,
   maiorSequenciaRepetida,
   primeiraEUltimaDoDia,
+  TAXAS_POR_REPRODUCAO,
+  valorEstimado,
 } from "../src/lib/analise";
 import type { Scrobble } from "../src/types";
 
@@ -285,6 +287,96 @@ verificar(
 verificar(
   "so audicoes sem tags devolve null",
   generoPorFaixaDoDia([comTags("", D1)]) === null,
+);
+
+/* ---------- 5 · valorEstimado ---------- */
+
+const valor = valorEstimado(scrobbles);
+console.log("  total:", valor?.total.minimo, "a", valor?.total.maximo);
+console.log(
+  "  artista:",
+  valor?.artistaPrincipal.nome,
+  valor?.artistaPrincipal.minimo,
+  "a",
+  valor?.artistaPrincipal.maximo,
+);
+
+const quase = (a: number | undefined, b: number) =>
+  a !== undefined && Math.abs(a - b) < 1e-9;
+const naPlataforma = (
+  e: { porPlataforma: { plataforma: string; valor: number }[] } | undefined,
+  p: string,
+) => e?.porPlataforma.find((x) => x.plataforma === p)?.valor;
+
+// esperados à mão: 51 522 e 4 345 (já validados acima) × taxa
+verificar("total: 51522 reproducoes", valor?.total.reproducoes === 51522);
+verificar(
+  "total YouTube 36.0654",
+  quase(naPlataforma(valor?.total, "youtube"), 36.0654),
+);
+verificar(
+  "total Spotify 206.088",
+  quase(naPlataforma(valor?.total, "spotify"), 206.088),
+);
+verificar(
+  "total Apple 412.176",
+  quase(naPlataforma(valor?.total, "apple"), 412.176),
+);
+verificar(
+  "total Tidal 669.786",
+  quase(naPlataforma(valor?.total, "tidal"), 669.786),
+);
+verificar(
+  "total: intervalo = YouTube a Tidal",
+  quase(valor?.total.minimo, 36.0654) && quase(valor?.total.maximo, 669.786),
+);
+verificar(
+  "artista principal e a Adele com 4345",
+  valor?.artistaPrincipal.nome === "Adele" &&
+    valor?.artistaPrincipal.reproducoes === 4345,
+);
+verificar(
+  "Adele: intervalo 3.0415 a 56.485",
+  quase(valor?.artistaPrincipal.minimo, 3.0415) &&
+    quase(valor?.artistaPrincipal.maximo, 56.485),
+);
+verificar(
+  "Adele Spotify 17.38",
+  quase(naPlataforma(valor?.artistaPrincipal, "spotify"), 17.38),
+);
+verificar(
+  "quatro plataformas com taxa visivel",
+  valor?.total.porPlataforma.length === TAXAS_POR_REPRODUCAO.length &&
+    valor.total.porPlataforma.every((p) => p.taxa > 0),
+);
+verificar("vazio devolve null (valor)", valorEstimado([]) === null);
+
+// casos à mão
+const maoValor = valorEstimado(
+  [falso("b", "x", D1), falso("B", "y", D1 + H), falso("a", "z", D1)],
+  [
+    { plataforma: "spotify", rotulo: "Spotify", taxa: 1 },
+    { plataforma: "tidal", rotulo: "Tidal", taxa: 2 },
+  ],
+);
+verificar(
+  "mao: artista agrupado por nome normalizado (b + B = 2)",
+  maoValor?.artistaPrincipal.reproducoes === 2 &&
+    maoValor.artistaPrincipal.maximo === 4,
+);
+verificar(
+  "mao: taxas personalizadas",
+  maoValor?.total.minimo === 3 && maoValor.total.maximo === 6,
+);
+const empate = valorEstimado([falso("Zeca", "x", D1), falso("Ana", "y", D1)]);
+verificar(
+  "mao: empate de artistas desempata por ordem alfabetica",
+  empate?.artistaPrincipal.nome === "Ana",
+  `(veio ${empate?.artistaPrincipal.nome})`,
+);
+verificar(
+  "sem taxas devolve null",
+  valorEstimado(scrobbles.slice(0, 1), []) === null,
 );
 
 console.log(
