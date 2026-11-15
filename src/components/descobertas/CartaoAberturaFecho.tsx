@@ -53,7 +53,9 @@ export function CartaoAberturaFecho() {
       pergunta="Com que música começas e acabas o dia?"
       titulo={dia ? "Sabes acordar. Dormir, nem por isso." : undefined}
       subtitulo={
-        dia ? "a primeira do dia repete-se, a última nunca" : undefined
+        dia?.faixaQueMaisAbre && dia.faixaQueMaisFecha
+          ? `a primeira do dia repete-se ${dia.faixaQueMaisAbre.dias} vezes, a última só ${dia.faixaQueMaisFecha.dias}`
+          : undefined
       }
       nota={
         dia &&

@@ -21,7 +21,7 @@ export function CartaoArtistaDeCasa() {
       }
       subtitulo={
         casa
-          ? `${formatarNumero(casa.audicoes)} músicas, acordou-te ${formatarNumero(
+          ? `${formatarNumero(casa.audicoes)} audições de ${formatarNumero(casa.faixasDistintas)} músicas, acordou-te ${formatarNumero(
               casa.manhasQueAbriu,
             )} manhãs, adormeceu-te ${formatarNumero(casa.noitesQueFechou)} noites`
           : undefined
