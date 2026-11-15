@@ -11,7 +11,8 @@
     "dataset": "tsx scripts/obter-dataset.mts",
     "test": "tsx scripts/teste-lib.ts",
     "test:limite": "tsx scripts/teste-casos-limite.ts",
-    "test:completo": "tsx scripts/teste-dataset-completo.mts"
+    "test:completo": "tsx scripts/teste-dataset-completo.mts",
+    "test:analise": "tsx scripts/teste-analise.ts"
   },
   "dependencies": {
     "next": "16.4.5",
