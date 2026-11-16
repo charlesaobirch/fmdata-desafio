@@ -9,6 +9,7 @@ import { useScrobbles } from "@/hooks/useScrobbles";
 import { filtrarPorArtista } from "@/lib/filters";
 import type { Scrobble } from "@/types";
 import { CabecalhoArtista } from "./CabecalhoArtista";
+import { EstatisticasArtista } from "./EstatisticasArtista";
 
 const FOCO =
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground";
@@ -84,7 +85,7 @@ interface ConteudoProps {
   todos: Scrobble[];
 }
 
-function ConteudoArtista({ doArtista }: ConteudoProps) {
+function ConteudoArtista({ doArtista, todos }: ConteudoProps) {
   // o nome como está nos dados ("Os Barões Da Pisadinha"), não como
   // veio no URL ("os baroes da pisadinha"): é o que a API reconhece
   const nomeCanonico = doArtista[0].artist_name;
@@ -92,6 +93,13 @@ function ConteudoArtista({ doArtista }: ConteudoProps) {
   return (
     <>
       <CabecalhoArtista nome={nomeCanonico} />
+      <div className="grid gap-4 md:grid-cols-3">
+        <EstatisticasArtista
+          className="md:col-span-3"
+          doArtista={doArtista}
+          todos={todos}
+        />
+      </div>
     </>
   );
 }

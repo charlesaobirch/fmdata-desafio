@@ -1,0 +1,59 @@
+"use client";
+
+import { useMemo } from "react";
+import { formatarNumero } from "@/components/descobertas/formatar";
+import { Bloco } from "@/components/ui/Bloco";
+import { resumoDoArtista } from "@/lib/artist";
+import type { Scrobble } from "@/types";
+
+/** 8.43 -> "8,4%"; abaixo de 0,1 não arredonda para "0,0%". */
+function formatarPercentagem(p: number): string {
+  if (p > 0 && p < 0.1) return "<0,1%";
+  return `${p.toFixed(1).replace(".", ",")}%`;
+}
+
+interface Props {
+  doArtista: Scrobble[];
+  todos: Scrobble[];
+  className?: string;
+}
+
+/** Bloco 2 da página do artista: os números de resumoDoArtista. */
+export function EstatisticasArtista({ doArtista, todos, className }: Props) {
+  const r = useMemo(
+    () => resumoDoArtista(doArtista, todos),
+    [doArtista, todos],
+  );
+
+  const cartoes = [
+    { rotulo: "Audições", valor: formatarNumero(r.totalAudicoes) },
+    {
+      rotulo: "Do teu total",
+      valor: formatarPercentagem(r.percentagemDoTotal),
+    },
+    { rotulo: "Faixas favoritas", valor: formatarNumero(r.faixasFavoritas) },
+    // null quando nenhuma audição tem data: nunca "Invalid Date"
+    { rotulo: "Primeira audição", valor: r.primeiraReproducao ?? "Sem data" },
+    { rotulo: "Última audição", valor: r.ultimaReproducao ?? "Sem data" },
+  ];
+
+  return (
+    <Bloco
+      className={className}
+      titulo="Em números"
+      contexto="todo o histórico"
+      estado="sucesso"
+    >
+      <dl className="grid grid-cols-2 gap-x-6 gap-y-5 md:grid-cols-5">
+        {cartoes.map((c) => (
+          <div key={c.rotulo} className="flex flex-col gap-1">
+            <dt className="text-xs text-foreground/70">{c.rotulo}</dt>
+            <dd className="text-2xl font-semibold tabular-nums tracking-tight">
+              {c.valor}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </Bloco>
+  );
+}
