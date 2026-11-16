@@ -73,8 +73,7 @@ export function PainelDescoberta({
       </header>
 
       {estado === "loading" && (
-        <div className="flex flex-col gap-4">
-          <output className="sr-only">A carregar o teu histórico…</output>
+        <div aria-hidden="true" className="flex flex-col gap-4">
           <span className="h-10 w-4/5 rounded-lg bg-foreground/10 motion-safe:animate-pulse sm:h-16" />
           <span className="h-10 w-3/5 rounded-lg bg-foreground/10 motion-safe:animate-pulse sm:h-16" />
           <span className="mt-2 h-4 w-1/2 rounded bg-foreground/10 motion-safe:animate-pulse" />

@@ -6,6 +6,7 @@ import { TopArtistas } from "@/components/dashboard/TopArtistas";
 import { TopMusicas } from "@/components/dashboard/TopMusicas";
 import { Totais } from "@/components/dashboard/Totais";
 import { Descobertas } from "@/components/descobertas/Descobertas";
+import { AnuncioHistorico } from "@/components/ui/AnuncioHistorico";
 import { AvisoHistorico } from "@/components/ui/AvisoHistorico";
 
 /**
@@ -27,6 +28,7 @@ export default function PaginaDashboard() {
 
         {/* só aparece se o histórico falhar: um aviso por todos os blocos */}
         <AvisoHistorico />
+        <AnuncioHistorico />
 
         <div className="grid gap-4 md:grid-cols-3">
           {/* alturas equilibradas: o top 20 (alto) acompanha as músicas

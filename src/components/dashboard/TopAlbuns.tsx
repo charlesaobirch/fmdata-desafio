@@ -11,8 +11,7 @@ const semAlbuns = (albuns: ItemRanking[]) => albuns.length === 0;
 
 function Esqueleto() {
   return (
-    <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-      <output className="sr-only">A carregar o teu histórico…</output>
+    <div aria-hidden="true" className="grid grid-cols-2 gap-3 md:grid-cols-4">
       {["a", "b", "c", "d", "e", "f", "g", "h"].map((k) => (
         <span
           key={k}

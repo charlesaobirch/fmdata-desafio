@@ -3,6 +3,7 @@
 import { ArrowLeftIcon } from "@solar-icons/react/linear/arrow-left";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { AnuncioHistorico } from "@/components/ui/AnuncioHistorico";
 import { AvisoHistorico } from "@/components/ui/AvisoHistorico";
 import { EstadoCarregar } from "@/components/ui/EstadoCarregar";
 import { EstadoSemHistorico } from "@/components/ui/EstadoSemHistorico";
@@ -31,6 +32,7 @@ function Moldura({ children }: { children: ReactNode }) {
       </Link>
       {/* só aparece se o histórico falhar, e fica enquanto se tenta outra vez */}
       <AvisoHistorico />
+      <AnuncioHistorico />
       {children}
     </main>
   );

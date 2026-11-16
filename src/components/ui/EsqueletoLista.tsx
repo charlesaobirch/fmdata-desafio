@@ -10,8 +10,7 @@ export function EsqueletoLista({
   redondo = false,
 }: EsqueletoListaProps) {
   return (
-    <div className="flex flex-col gap-3">
-      <output className="sr-only">A carregar o teu histórico…</output>
+    <div aria-hidden="true" className="flex flex-col gap-3">
       {Array.from({ length: linhas }, (_, i) => (
         // lista fixa e sem estado: o índice serve de chave
         // biome-ignore lint/suspicious/noArrayIndexKey: ver acima
