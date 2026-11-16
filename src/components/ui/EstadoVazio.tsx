@@ -4,7 +4,7 @@ interface EstadoVazioProps {
 
 /** Os dados chegaram mas não há nada para mostrar neste período. */
 export function EstadoVazio({
-  mensagem = "Sem audições neste período. Experimenta um período maior.",
+  mensagem = "Sem audições neste período. Escolhe um período maior no canto do bloco.",
 }: EstadoVazioProps) {
   return <p className="text-pretty text-sm text-foreground/70">{mensagem}</p>;
 }

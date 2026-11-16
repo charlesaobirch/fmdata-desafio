@@ -1,54 +1,27 @@
-"use client";
-
 import { GeneroMaisOuvido } from "@/components/dashboard/GeneroMaisOuvido";
 import { Grafico24h } from "@/components/dashboard/Grafico24h";
+import { NotaPeriodos } from "@/components/dashboard/NotaPeriodos";
 import { TopAlbuns } from "@/components/dashboard/TopAlbuns";
 import { TopArtistas } from "@/components/dashboard/TopArtistas";
 import { TopMusicas } from "@/components/dashboard/TopMusicas";
 import { Totais } from "@/components/dashboard/Totais";
 import { Descobertas } from "@/components/descobertas/Descobertas";
-import { usePeriodo } from "@/hooks/usePeriodo";
-import type { Periodo } from "@/types";
-
-const PERIODOS: { valor: Periodo; rotulo: string }[] = [
-  { valor: "tudo", rotulo: "Tudo" },
-  { valor: "30d", rotulo: "30 dias" },
-  { valor: "14d", rotulo: "14 dias" },
-  { valor: "7d", rotulo: "7 dias" },
-  { valor: "24h", rotulo: "24 horas" },
-];
 
 /**
- * Dashboard: o seletor de período afeta todos os blocos da grelha;
- * as Descobertas, por baixo, são sempre sobre o histórico completo.
+ * Dashboard. Server Component: os blocos são Client Components e cada
+ * um escolhe o seu período; as Descobertas, por baixo, são sempre
+ * sobre o histórico completo.
  */
 export default function PaginaDashboard() {
-  const { periodo, setPeriodo } = usePeriodo();
-
   return (
     <main className="flex min-h-screen flex-col gap-10">
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-10 p-8">
-        <section className="flex flex-col gap-6">
+        <section className="flex flex-col gap-2">
           <h1 className="text-xl font-semibold">
             fmdata — o teu histórico em números
           </h1>
 
-          <div className="flex flex-wrap gap-2">
-            {PERIODOS.map((p) => (
-              <button
-                key={p.valor}
-                type="button"
-                onClick={() => setPeriodo(p.valor)}
-                className={`rounded-full px-4 py-1.5 text-sm transition-colors ${
-                  periodo === p.valor
-                    ? "bg-foreground text-background"
-                    : "bg-black/5 dark:bg-white/6"
-                }`}
-              >
-                {p.rotulo}
-              </button>
-            ))}
-          </div>
+          <NotaPeriodos />
         </section>
 
         <div className="grid gap-4 md:grid-cols-3">

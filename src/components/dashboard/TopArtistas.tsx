@@ -26,7 +26,7 @@ export function TopArtistas({ className }: { className?: string }) {
       contexto="audições"
       {...bloco}
       esqueleto={<EsqueletoLista linhas={8} redondo />}
-      mensagemVazia="Sem artistas neste período. Experimenta um período maior."
+      mensagemVazia="Sem artistas neste período. Escolhe um período maior no canto do bloco."
     >
       <ol className="flex flex-col gap-2.5">
         {artistas.map((a, i) => (

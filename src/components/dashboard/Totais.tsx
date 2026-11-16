@@ -3,9 +3,8 @@
 import { formatarNumero } from "@/components/descobertas/formatar";
 import { Bloco } from "@/components/ui/Bloco";
 import { EstadoCarregar } from "@/components/ui/EstadoCarregar";
-import { usePeriodo } from "@/hooks/usePeriodo";
 import { totalArtistasDistintos, totalScrobbles } from "@/lib/stats";
-import type { Periodo, Scrobble } from "@/types";
+import type { Scrobble } from "@/types";
 import { useBlocoFiltrado } from "./useBlocoFiltrado";
 
 interface Contagens {
@@ -22,25 +21,14 @@ function calcularTotais(scrobbles: Scrobble[]): Contagens {
 
 const semAudicoes = (t: Contagens) => t.audicoes === 0;
 
-// os períodos contam a partir da audição mais recente, não de agora
-const ROTULO: Record<Periodo, string> = {
-  tudo: "todo o histórico",
-  "30d": "últimos 30 dias",
-  "14d": "últimos 14 dias",
-  "7d": "últimos 7 dias",
-  "24h": "últimas 24 horas",
-};
-
 /** Bloco 2 do dashboard: audições e artistas distintos no período. */
 export function Totais({ className }: { className?: string }) {
-  const { periodo } = usePeriodo();
   const { resultado: t, bloco } = useBlocoFiltrado(calcularTotais, semAudicoes);
 
   return (
     <Bloco
       className={className}
       titulo="Totais"
-      contexto={ROTULO[periodo]}
       {...bloco}
       esqueleto={<EstadoCarregar linhas={2} />}
     >
