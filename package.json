@@ -12,7 +12,8 @@
     "test": "tsx scripts/teste-lib.ts",
     "test:limite": "tsx scripts/teste-casos-limite.ts",
     "test:completo": "tsx scripts/teste-dataset-completo.mts",
-    "test:analise": "tsx scripts/teste-analise.ts"
+    "test:analise": "tsx scripts/teste-analise.ts",
+    "verificar": "npm run lint && npm run test && npm run test:limite && npm run test:analise && npm run test:completo && tsc --noEmit && next build"
   },
   "dependencies": {
     "@solar-icons/react": "^2.6.0",
