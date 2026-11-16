@@ -1,18 +1,25 @@
 "use client";
 
-import { maiorSequenciaRepetida } from "@/lib/analise";
+import { type Maratona, maiorSequenciaRepetida } from "@/lib/analise";
 import { PainelDescoberta } from "./PainelDescoberta";
 import { useDescoberta } from "./useDescoberta";
 
 // acima disto a fila de marcas deixa de caber e deixa de se ler
 const MARCAS_MAX = 60;
 
+// uma música ouvida uma só vez não é maratona (e daria "1 vezes")
+const semMaratona = (m: Maratona) => m.vezes < 2;
+
 export function CartaoMaratona() {
-  const { resultado, cartao } = useDescoberta(maiorSequenciaRepetida);
+  const { resultado, cartao } = useDescoberta(
+    maiorSequenciaRepetida,
+    semMaratona,
+  );
 
   return (
     <PainelDescoberta
       {...cartao}
+      mensagemVazia="Ainda não ouviste nenhuma música duas vezes seguidas. Há sempre uma primeira vez."
       pergunta="Qual foi a música que ouviste mais vezes seguidas?"
       titulo={resultado ? `${resultado.vezes} vezes seguidas, amor` : undefined}
       subtitulo={
