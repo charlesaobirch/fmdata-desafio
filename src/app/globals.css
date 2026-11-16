@@ -23,6 +23,11 @@
   --rosa: #e6197d;
   --rosa-sobre-claro: #b60058;
   --rosa-sobre-escuro: #f15391;
+  /* o roxo e o azul da Ana: só no gradiente de fundo, nunca em texto */
+  --roxo: #3b1e5e;
+  --azul: #4d8dff;
+  /* força do gradiente de fundo: muito ténue no claro */
+  --fundo-intensidade: 6%;
   /* qual dos dois tons serve o fundo da página e qual o da faixa invertida */
   --rosa-texto-pagina: var(--rosa-sobre-claro);
   --rosa-texto-inverso: var(--rosa-sobre-escuro);
@@ -49,6 +54,7 @@
     --cor-tinta: #ededed;
     --rosa-texto-pagina: var(--rosa-sobre-escuro);
     --rosa-texto-inverso: var(--rosa-sobre-claro);
+    --fundo-intensidade: 18%;
   }
 }
 
@@ -64,6 +70,7 @@
 }
 
 body {
+  isolation: isolate;
   background: var(--background);
   color: var(--foreground);
   /* a Geist que o layout.tsx carrega (next/font); o resto é recurso */
@@ -118,4 +125,33 @@ body {
   [data-revelar="pendente"] [data-detalhe] {
     opacity: 0;
   }
+}
+
+/*
+ * O gradiente da Ana como fundo contido: três manchas (rosa, roxo, azul)
+ * numa camada fixa atrás de tudo. Os cartões e a faixa das Descobertas
+ * têm fundo opaco, por isso só se vê nas margens e atrás do cabeçalho.
+ */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      55% 45% at 8% 0%,
+      color-mix(in oklab, var(--rosa) var(--fundo-intensidade), transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      50% 45% at 95% 8%,
+      color-mix(in oklab, var(--roxo) var(--fundo-intensidade), transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      60% 55% at 75% 100%,
+      color-mix(in oklab, var(--azul) var(--fundo-intensidade), transparent),
+      transparent 70%
+    );
 }
