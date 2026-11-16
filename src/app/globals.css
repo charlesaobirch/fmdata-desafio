@@ -6,6 +6,9 @@
  * Trocar de tema é só mudar o mapeamento semântico.
  */
 :root {
+  /* controlos nativos (o menu do <select>) seguem o esquema do sistema */
+  color-scheme: light dark;
+
   /* primitivos */
   --cor-papel: #ffffff;
   --cor-tinta: #171717;
