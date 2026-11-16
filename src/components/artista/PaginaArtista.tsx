@@ -10,6 +10,7 @@ import { EstadoSemHistorico } from "@/components/ui/EstadoSemHistorico";
 import { BOTAO_PRIMARIO } from "@/components/ui/estilos";
 import { useScrobblesDoArtista } from "@/hooks/useScrobblesDoArtista";
 import type { Scrobble } from "@/types";
+import { AlbunsArtista } from "./AlbunsArtista";
 import { ArtistasSemelhantes } from "./ArtistasSemelhantes";
 import { CabecalhoArtista } from "./CabecalhoArtista";
 import { EstatisticasArtista } from "./EstatisticasArtista";
@@ -123,6 +124,11 @@ function ConteudoArtista({
         />
         <TopMusicasArtista className="md:col-span-2" doArtista={doArtista} />
         <UltimasAudicoes doArtista={doArtista} />
+        <AlbunsArtista
+          className="md:col-span-3"
+          artista={nomeCanonico}
+          doArtista={doArtista}
+        />
         <ScrobblesPorMes className="md:col-span-3" doArtista={doArtista} />
         <RelogioArtista className="md:col-span-2" doArtista={doArtista} />
         <ArtistasSemelhantes nome={nomeCanonico} todos={todos} />
