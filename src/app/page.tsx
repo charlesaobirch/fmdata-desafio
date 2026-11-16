@@ -3,8 +3,8 @@
 import { GeneroMaisOuvido } from "@/components/dashboard/GeneroMaisOuvido";
 import { Grafico24h } from "@/components/dashboard/Grafico24h";
 import { TopAlbuns } from "@/components/dashboard/TopAlbuns";
+import { Totais } from "@/components/dashboard/Totais";
 import { Descobertas } from "@/components/descobertas/Descobertas";
-import { useFiltrados } from "@/hooks/useFiltrados";
 import { usePeriodo } from "@/hooks/usePeriodo";
 import type { Periodo } from "@/types";
 
@@ -23,7 +23,6 @@ const PERIODOS: { valor: Periodo; rotulo: string }[] = [
  */
 export default function PaginaVerificacao() {
   const { periodo, setPeriodo } = usePeriodo();
-  const { scrobbles, status, error, recarregar } = useFiltrados();
 
   return (
     <main className="mx-auto flex min-h-screen max-w-5xl flex-col gap-10 p-8">
@@ -46,31 +45,13 @@ export default function PaginaVerificacao() {
             </button>
           ))}
         </div>
-
-        {status === "loading" && <p>A carregar scrobbles…</p>}
-
-        {status === "error" && (
-          <div>
-            <p className="text-red-500">{error}</p>
-            <button
-              type="button"
-              onClick={recarregar}
-              className="mt-2 underline"
-            >
-              Tentar de novo
-            </button>
-          </div>
-        )}
-
-        {status === "success" && (
-          <p className="text-3xl font-bold">{scrobbles.length} audições</p>
-        )}
       </section>
 
       <div className="grid gap-4 md:grid-cols-3">
+        <Totais className="md:col-span-2" />
+        <GeneroMaisOuvido />
         <TopAlbuns className="md:col-span-3" />
         <Grafico24h className="md:col-span-2" />
-        <GeneroMaisOuvido />
       </div>
 
       <Descobertas />
