@@ -24,11 +24,12 @@ function Esqueleto() {
 }
 
 /** Bloco 5 do dashboard: os 8 álbuns mais ouvidos no período. */
-export function TopAlbuns() {
+export function TopAlbuns({ className }: { className?: string }) {
   const { resultado: albuns, bloco } = useBlocoFiltrado(topAlbuns, semAlbuns);
 
   return (
     <Bloco
+      className={className}
       titulo="Top 8 álbuns"
       {...bloco}
       esqueleto={<Esqueleto />}
@@ -45,6 +46,8 @@ export function TopAlbuns() {
               alt={`Capa de ${album.nome}${album.subtitulo ? `, de ${album.subtitulo}` : ""}`}
               nome={album.nome}
               sizes="(min-width: 768px) 25vw, 50vw"
+              // a capa maior da página varia com a largura; são só 8
+              carregarJa
             />
             {/* sobreposição escura: texto legível sobre qualquer capa */}
             <div className="absolute inset-0 flex flex-col justify-between bg-linear-to-t from-black/85 via-black/30 to-transparent p-3 text-white">

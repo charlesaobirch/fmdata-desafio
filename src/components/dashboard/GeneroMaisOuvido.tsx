@@ -22,11 +22,12 @@ function calcularGenero(scrobbles: Scrobble[]): Genero | null {
 const semGenero = (g: Genero | null) => g === null;
 
 /** Bloco 7 do dashboard: o género (tag) mais ouvido no período. */
-export function GeneroMaisOuvido() {
+export function GeneroMaisOuvido({ className }: { className?: string }) {
   const { resultado: g, bloco } = useBlocoFiltrado(calcularGenero, semGenero);
 
   return (
     <Bloco
+      className={className}
       titulo="Género mais ouvido"
       {...bloco}
       esqueleto={<EstadoCarregar linhas={2} />}

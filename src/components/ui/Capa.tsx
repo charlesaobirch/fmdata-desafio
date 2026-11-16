@@ -16,6 +16,8 @@ interface CapaProps {
   /** Texto de recurso quando não há imagem (p.ex. o nome do álbum). */
   nome: string;
   sizes?: string;
+  /** Carregar já (acima da dobra / candidata a LCP) em vez de lazy. */
+  carregarJa?: boolean;
 }
 
 /**
@@ -24,7 +26,13 @@ interface CapaProps {
  * `unoptimized`: as capas vêm de um CDN externo já em 300×300, e assim
  * não é preciso configurar remotePatterns.
  */
-export function Capa({ src, alt, nome, sizes = "25vw" }: CapaProps) {
+export function Capa({
+  src,
+  alt,
+  nome,
+  sizes = "25vw",
+  carregarJa = false,
+}: CapaProps) {
   const [falhou, setFalhou] = useState(false);
   const temImagem = !!src && !src.includes(SEM_CAPA_LASTFM) && !falhou;
 
@@ -52,6 +60,7 @@ export function Capa({ src, alt, nome, sizes = "25vw" }: CapaProps) {
       fill
       unoptimized
       sizes={sizes}
+      loading={carregarJa ? "eager" : "lazy"}
       onError={() => setFalhou(true)}
       className="object-cover"
     />

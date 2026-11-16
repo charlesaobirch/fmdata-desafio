@@ -46,6 +46,9 @@ const semAudicoes = (r: Relogio) => r.pico === null;
 
 const intervalo = (h: number) => `${h}h–${h + 1}h`;
 
+// marcas de 3 em 3 horas: regulares e legíveis de 375px a desktop
+const MARCAS_HORA = [0, 3, 6, 9, 12, 15, 18, 21];
+
 /** Barra com cor própria na hora de pico (substitui o Cell, obsoleto). */
 function BarraHora(props: BarShapeProps) {
   const { x, y, width, height, payload } = props;
@@ -65,12 +68,13 @@ function BarraHora(props: BarShapeProps) {
 }
 
 /** Bloco 6 do dashboard: audições por hora do dia (UTC) no período. */
-export function Grafico24h() {
+export function Grafico24h({ className }: { className?: string }) {
   const { resultado, bloco } = useBlocoFiltrado(calcularRelogio, semAudicoes);
   const { pontos, pico } = resultado;
 
   return (
     <Bloco
+      className={className}
       titulo="A que horas ouves"
       contexto="horas em UTC"
       {...bloco}
@@ -105,7 +109,8 @@ export function Grafico24h() {
                 tick={{ fill: "currentColor", fontSize: 12 }}
                 tickLine={false}
                 axisLine={false}
-                minTickGap={4}
+                ticks={MARCAS_HORA}
+                interval={0}
               />
               <YAxis
                 tickFormatter={(v: number) => formatarNumero(v)}
