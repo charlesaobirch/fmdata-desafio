@@ -79,7 +79,7 @@ export function ScrobblesPorMes({ doArtista, className }: Props) {
               data={pontos}
               responsive
               style={{ width: "100%", height: 240 }}
-              margin={{ top: 8, right: 8, bottom: 0, left: -12 }}
+              margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
               accessibilityLayer={false}
             >
               <CartesianGrid
