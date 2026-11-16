@@ -1,15 +1,21 @@
 interface EstadoErroProps {
+  /** O que falhou, em linguagem do utilizador. */
+  mensagem?: string;
   /** Mensagem técnica (já amigável) vinda da camada de pedidos. */
   detalhe?: string | null;
   aoRepetir?: () => void;
 }
 
 /** O pedido falhou: diz o que aconteceu e oferece tentar de novo. */
-export function EstadoErro({ detalhe, aoRepetir }: EstadoErroProps) {
+export function EstadoErro({
+  mensagem = "Não conseguimos carregar o teu histórico.",
+  detalhe,
+  aoRepetir,
+}: EstadoErroProps) {
   return (
     <div role="alert" className="flex flex-col items-start gap-3 text-sm">
       <p>
-        Não conseguimos carregar o teu histórico.
+        {mensagem}
         {detalhe && (
           <span className="block text-foreground/70">Detalhe: {detalhe}</span>
         )}

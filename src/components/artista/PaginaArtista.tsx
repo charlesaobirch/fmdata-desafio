@@ -8,6 +8,7 @@ import { EstadoErro } from "@/components/ui/EstadoErro";
 import { useScrobbles } from "@/hooks/useScrobbles";
 import { filtrarPorArtista } from "@/lib/filters";
 import type { Scrobble } from "@/types";
+import { CabecalhoArtista } from "./CabecalhoArtista";
 
 const FOCO =
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground";
@@ -89,7 +90,9 @@ function ConteudoArtista({ doArtista }: ConteudoProps) {
   const nomeCanonico = doArtista[0].artist_name;
 
   return (
-    <h1 className="text-4xl font-semibold tracking-tight">{nomeCanonico}</h1>
+    <>
+      <CabecalhoArtista nome={nomeCanonico} />
+    </>
   );
 }
 
