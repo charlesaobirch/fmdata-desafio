@@ -82,7 +82,7 @@ export function FiguraRelogio({ relogio }: { relogio: Relogio }) {
           data={pontos}
           responsive
           style={{ width: "100%", height: 240 }}
-          margin={{ top: 8, right: 4, bottom: 0, left: -12 }}
+          margin={{ top: 8, right: 4, bottom: 0, left: 0 }}
           accessibilityLayer={false}
         >
           <CartesianGrid
