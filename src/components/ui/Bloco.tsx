@@ -10,6 +10,8 @@ interface BlocoProps {
   contexto?: string;
   estado: EstadoDoBloco;
   erro?: string | null;
+  /** O que falhou, quando não é o histórico (p.ex. o perfil da API). */
+  mensagemErro?: string;
   aoRepetir?: () => void;
   mensagemVazia?: string;
   /** Esqueleto com a forma do conteúdo; por omissão, três linhas. */
@@ -27,6 +29,7 @@ export function Bloco({
   contexto,
   estado,
   erro,
+  mensagemErro,
   aoRepetir,
   mensagemVazia,
   esqueleto,
@@ -49,7 +52,13 @@ export function Bloco({
       </header>
 
       {estado === "loading" && (esqueleto ?? <EstadoCarregar />)}
-      {estado === "erro" && <EstadoErro detalhe={erro} aoRepetir={aoRepetir} />}
+      {estado === "erro" && (
+        <EstadoErro
+          mensagem={mensagemErro}
+          detalhe={erro}
+          aoRepetir={aoRepetir}
+        />
+      )}
       {estado === "vazio" && <EstadoVazio mensagem={mensagemVazia} />}
       {estado === "sucesso" && children}
     </section>

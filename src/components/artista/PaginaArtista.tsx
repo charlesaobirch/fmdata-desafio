@@ -8,6 +8,7 @@ import { EstadoErro } from "@/components/ui/EstadoErro";
 import { useScrobbles } from "@/hooks/useScrobbles";
 import { filtrarPorArtista } from "@/lib/filters";
 import type { Scrobble } from "@/types";
+import { ArtistasSemelhantes } from "./ArtistasSemelhantes";
 import { CabecalhoArtista } from "./CabecalhoArtista";
 import { EstatisticasArtista } from "./EstatisticasArtista";
 import { RelogioArtista } from "./RelogioArtista";
@@ -107,6 +108,7 @@ function ConteudoArtista({ doArtista, todos }: ConteudoProps) {
         <UltimasAudicoes doArtista={doArtista} />
         <ScrobblesPorMes className="md:col-span-3" doArtista={doArtista} />
         <RelogioArtista className="md:col-span-2" doArtista={doArtista} />
+        <ArtistasSemelhantes nome={nomeCanonico} todos={todos} />
       </div>
     </>
   );
@@ -150,7 +152,13 @@ export function PaginaArtista({ nome }: { nome: string }) {
 
   return (
     <Moldura>
-      <ConteudoArtista doArtista={doArtista} todos={todos} />
+      {/* key: ao saltar para um semelhante, os blocos começam do zero
+          (p.ex. a bio volta a fechada) em vez de herdar estado */}
+      <ConteudoArtista
+        key={doArtista[0].artist_name}
+        doArtista={doArtista}
+        todos={todos}
+      />
     </Moldura>
   );
 }
