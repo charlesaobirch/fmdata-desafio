@@ -1,10 +1,10 @@
-import type { ReactNode } from "react";
+import { type ReactNode, useId } from "react";
 import type { EstadoDescoberta } from "./useDescoberta";
 
 interface CartaoDescobertaProps {
-  /** A pergunta a que o cartão responde: título enquanto não há resposta. */
+  /** A pergunta a que o cartão responde: é sempre o título. */
   pergunta: string;
-  /** A resposta, em tom de manchete. */
+  /** A resposta, em tom de manchete, logo abaixo da pergunta. */
   titulo?: string;
   subtitulo?: string;
   /** Assunções e definições que têm de ficar visíveis junto do resultado. */
@@ -21,7 +21,8 @@ interface CartaoDescobertaProps {
 }
 
 /**
- * Moldura comum às descobertas, com os quatro estados: loading
+ * Moldura comum às descobertas: a pergunta é o título e a resposta
+ * vem por baixo (guia, etapa 9.3). Quatro estados: loading
  * (esqueleto), erro (com "tentar de novo"), vazio e sucesso.
  * Só apresenta: não calcula nem vai buscar dados — isso fica nos
  * cartões, via useDescoberta.
@@ -39,19 +40,28 @@ export function CartaoDescoberta({
   children,
 }: CartaoDescobertaProps) {
   const sucesso = estado === "sucesso";
+  const idTitulo = useId();
 
   return (
     <article
-      aria-label={pergunta}
+      aria-labelledby={idTitulo}
       aria-busy={estado === "loading"}
       className={`flex min-w-0 flex-col gap-5 rounded-2xl border border-foreground/10 bg-background p-6 ${
         largo ? "md:col-span-2" : ""
       }`}
     >
       <header className="flex flex-col gap-1.5">
-        <h3 className="text-balance text-xl font-semibold leading-snug tracking-tight">
-          {(sucesso && titulo) || pergunta}
+        <h3
+          id={idTitulo}
+          className="text-balance text-lg font-semibold leading-snug tracking-tight"
+        >
+          {pergunta}
         </h3>
+        {sucesso && titulo && (
+          <p className="text-balance text-xl font-semibold leading-snug tracking-tight">
+            {titulo}
+          </p>
+        )}
         {sucesso && subtitulo && (
           <p className="text-pretty text-sm text-foreground/70">{subtitulo}</p>
         )}
