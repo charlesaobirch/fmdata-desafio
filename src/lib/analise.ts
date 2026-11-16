@@ -1,9 +1,25 @@
 import type { Scrobble } from "../types";
+import { horaUTC, parseDataScrobble } from "./dates";
 import { normalizarNome, separarLista } from "./filters";
 
 /* ---------- auxiliares partilhados ---------- */
 
 type ComData = Scrobble & { date_uts: number };
+
+/**
+ * As audições com data válida, com date_uts sempre preenchido. A data
+ * vem de parseDataScrobble, a regra única da app (date_uts, recurso a
+ * date_iso, nowplaying fora): assim as descobertas contam as mesmas
+ * audições que o dashboard.
+ */
+function comDatas(scrobbles: Scrobble[]): ComData[] {
+  const resultado: ComData[] = [];
+  for (const s of scrobbles) {
+    const data = parseDataScrobble(s);
+    if (data) resultado.push({ ...s, date_uts: data.getTime() / 1000 });
+  }
+  return resultado;
+}
 
 /**
  * Para cada dia UTC ("AAAA-MM-DD"), a primeira e a última audição.
@@ -14,9 +30,7 @@ function extremosDoDia(
   scrobbles: Scrobble[],
 ): Map<string, { primeira: ComData; ultima: ComData }> {
   const dias = new Map<string, { primeira: ComData; ultima: ComData }>();
-  for (const s of scrobbles) {
-    if (s.date_uts === null) continue;
-    const c = s as ComData;
+  for (const c of comDatas(scrobbles)) {
     const dia = new Date(c.date_uts * 1000).toISOString().slice(0, 10);
     const atual = dias.get(dia);
     if (!atual) {
@@ -44,9 +58,7 @@ export interface Maratona {
  * encaixam na sequência.
  */
 export function maiorSequenciaRepetida(scrobbles: Scrobble[]): Maratona | null {
-  const ordenados = scrobbles
-    .filter((s): s is Scrobble & { date_uts: number } => s.date_uts !== null)
-    .sort((a, b) => a.date_uts - b.date_uts);
+  const ordenados = comDatas(scrobbles).sort((a, b) => a.date_uts - b.date_uts);
 
   if (ordenados.length === 0) return null;
 
@@ -119,9 +131,7 @@ export function artistaDeCasa(scrobbles: Scrobble[]): ArtistaDeCasa | null {
   }
   if (dele.length === 0) return null;
 
-  const comData = dele.filter(
-    (s): s is Scrobble & { date_uts: number } => s.date_uts !== null,
-  );
+  const comData = comDatas(dele);
 
   const nomeNorm = normalizarNome(dele[0].artist_name);
   const ehDele = (s: Scrobble) => normalizarNome(s.artist_name) === nomeNorm;
@@ -328,9 +338,8 @@ export function generoPorFaixaDoDia(
     tags: new Map<string, number>(),
   }));
 
-  for (const s of scrobbles) {
-    if (s.date_uts === null) continue;
-    const hora = new Date(s.date_uts * 1000).getUTCHours();
+  for (const s of comDatas(scrobbles)) {
+    const hora = horaUTC(new Date(s.date_uts * 1000));
     const i = MOMENTOS_DO_DIA.findIndex((m) => hora >= m.de && hora <= m.ate);
     const atual = porMomento[i];
     atual.audicoes += 1;

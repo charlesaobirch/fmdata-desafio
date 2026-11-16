@@ -42,6 +42,29 @@ verificar(
 );
 verificar("array vazio devolve null", maiorSequenciaRepetida([]) === null);
 
+// a data vem de parseDataScrobble: só date_iso também conta, nowplaying não
+const soIso = (faixa: string, iso: string): Scrobble => ({
+  track_name: faixa,
+  artist_name: "Teste",
+  album_name: "",
+  date_iso: iso,
+  date_uts: null,
+  tags: "",
+  loved: 0,
+  image_url: null,
+  nowplaying: false,
+});
+const comIso = maiorSequenciaRepetida([
+  soIso("A", "2024-01-01T10:00:00Z"),
+  soIso("A", "2024-01-01T10:04:00Z"),
+  { ...soIso("A", "2024-01-01T10:08:00Z"), nowplaying: true },
+]);
+verificar(
+  "date_iso sem date_uts conta; nowplaying nao",
+  comIso?.vezes === 2,
+  `(vieram ${comIso?.vezes})`,
+);
+
 const casa = artistaDeCasa(scrobbles);
 console.log("  artista de casa:", casa?.nome, casa?.audicoes);
 console.log("  faixas:", casa?.faixasDistintas);
