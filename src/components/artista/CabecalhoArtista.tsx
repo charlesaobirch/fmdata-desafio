@@ -8,7 +8,6 @@ import { EstadoCarregar } from "@/components/ui/EstadoCarregar";
 import { EstadoErro } from "@/components/ui/EstadoErro";
 import { useArtistInfo } from "@/hooks/useArtistInfo";
 import { separarLista } from "@/lib/filters";
-import { useStore } from "@/store/useStore";
 import type { ArtistInfo } from "@/types";
 
 /**
@@ -92,10 +91,7 @@ function Ligacoes({ info }: { info: ArtistInfo }) {
  * e degrada se faltar: um 404 aqui não apaga as audições do artista.
  */
 export function CabecalhoArtista({ nome }: { nome: string }) {
-  const { data: info, status, error } = useArtistInfo(nome);
-  // useArtistInfo não expõe "recarregar"; carregarArtista volta a
-  // pedir quando a entrada está em "error"
-  const carregarArtista = useStore((estado) => estado.carregarArtista);
+  const { data: info, status, error, recarregar } = useArtistInfo(nome);
   // sem repetidos: são a chave da lista
   const tags = info ? [...new Set(separarLista(info.tags))] : [];
 
@@ -140,7 +136,7 @@ export function CabecalhoArtista({ nome }: { nome: string }) {
             <EstadoErro
               mensagem="Não conseguimos carregar o perfil deste artista."
               detalhe={error}
-              aoRepetir={() => void carregarArtista(nome)}
+              aoRepetir={recarregar}
             />
           )}
 

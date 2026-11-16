@@ -7,7 +7,6 @@ import { EstadoCarregar } from "@/components/ui/EstadoCarregar";
 import { estadoDe } from "@/components/ui/estado";
 import { useArtistInfo } from "@/hooks/useArtistInfo";
 import { artistasSemelhantes } from "@/lib/artist";
-import { useStore } from "@/store/useStore";
 import type { Scrobble } from "@/types";
 import { caminhoDoArtista } from "./caminho";
 
@@ -23,8 +22,7 @@ interface Props {
  * aparecem sem link e com outro aspeto, sem depender só da cor.
  */
 export function ArtistasSemelhantes({ nome, todos, className }: Props) {
-  const { data: info, status, error } = useArtistInfo(nome);
-  const carregarArtista = useStore((estado) => estado.carregarArtista);
+  const { data: info, status, error, recarregar } = useArtistInfo(nome);
 
   const semelhantes = useMemo(
     () => (info ? artistasSemelhantes(info, todos) : []),
@@ -44,7 +42,7 @@ export function ArtistasSemelhantes({ nome, todos, className }: Props) {
       estado={estado}
       erro={error}
       mensagemErro="Não conseguimos carregar os artistas semelhantes."
-      aoRepetir={() => void carregarArtista(nome)}
+      aoRepetir={recarregar}
       esqueleto={<EstadoCarregar linhas={2} />}
       mensagemVazia={
         status === "not-found"
