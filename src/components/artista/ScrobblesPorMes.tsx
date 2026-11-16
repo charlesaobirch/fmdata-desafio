@@ -126,9 +126,9 @@ export function ScrobblesPorMes({ doArtista, className }: Props) {
               <Area
                 dataKey="contagem"
                 type="linear"
-                stroke="var(--foreground)"
+                stroke="var(--destaque)"
                 strokeWidth={1.5}
-                fill="var(--foreground)"
+                fill="var(--destaque)"
                 fillOpacity={0.12}
                 // com um só mês não há linha: mostra o ponto
                 dot={pontos.length === 1 ? { r: 3 } : false}

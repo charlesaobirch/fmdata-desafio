@@ -37,7 +37,7 @@ export function CartaoMaratona() {
                   // posições fixas: a lista nunca é reordenada
                   // biome-ignore lint/suspicious/noArrayIndexKey: marcas idênticas
                   key={i}
-                  className="h-10 w-1.5 rounded-full bg-foreground/80 sm:h-14 sm:w-2"
+                  className="h-10 w-1.5 rounded-full bg-destaque sm:h-14 sm:w-2"
                 />
               ),
             )}

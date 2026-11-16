@@ -55,7 +55,7 @@ export function EstatisticasArtista({ doArtista, todos, className }: Props) {
               {"icone" in c && c.icone}
               {c.rotulo}
             </dt>
-            <dd className="text-2xl font-semibold tabular-nums tracking-tight">
+            <dd className="text-2xl font-semibold tabular-nums tracking-tight text-destaque-texto">
               {c.valor}
             </dd>
           </div>

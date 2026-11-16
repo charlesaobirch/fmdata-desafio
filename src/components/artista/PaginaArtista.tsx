@@ -27,7 +27,7 @@ function Moldura({ children }: { children: ReactNode }) {
     <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-10 p-8">
       <Link
         href="/"
-        className={`inline-flex w-fit items-center gap-1.5 rounded text-sm text-foreground/70 transition-colors duration-150 hover:text-foreground ${FOCO}`}
+        className={`inline-flex w-fit items-center gap-1.5 rounded text-sm text-foreground/70 transition-colors duration-150 hover:text-destaque-texto ${FOCO}`}
       >
         <ArrowLeftIcon />
         Dashboard

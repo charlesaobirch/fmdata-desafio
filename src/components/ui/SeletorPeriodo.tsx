@@ -37,7 +37,7 @@ interface SeletorPeriodoProps {
  *
  * Duas variantes, para vários blocos com períodos diferentes não se
  * confundirem: "Todo o histórico" é uma pílula só com contorno,
- * discreta; um período recortado é preenchida e com peso, e salta à
+ * discreta; um período recortado é preenchida a rosa e com peso, e salta à
  * vista quais blocos estão filtrados. O texto muda também: a distinção
  * nunca depende só da cor.
  */
@@ -51,7 +51,7 @@ export function SeletorPeriodo({
   return (
     <span
       className={`group relative ${FORMA} ${
-        recortado ? "font-medium text-foreground" : "text-foreground/70"
+        recortado ? "font-medium text-destaque-texto" : "text-foreground/70"
       }`}
     >
       <select
@@ -60,7 +60,7 @@ export function SeletorPeriodo({
         onChange={(e) => aoMudar(e.target.value as Periodo)}
         className={`h-full cursor-pointer appearance-none rounded-full pr-7 pl-3 field-sizing-content transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground ${
           recortado
-            ? "bg-foreground/10 hover:bg-foreground/15"
+            ? "bg-destaque/12 ring-1 ring-destaque ring-inset hover:bg-destaque/20"
             : "bg-transparent ring-1 ring-foreground/20 ring-inset group-hover:text-foreground hover:bg-foreground/5"
         }`}
       >

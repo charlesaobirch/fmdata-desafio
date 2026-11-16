@@ -52,7 +52,7 @@ export function TopArtistas({ className }: { className?: string }) {
             </div>
             <Link
               href={caminhoDoArtista(a.nome)}
-              className="min-w-0 flex-1 truncate rounded font-medium underline-offset-4 transition-colors duration-150 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+              className="min-w-0 flex-1 truncate rounded font-medium decoration-destaque decoration-2 underline-offset-4 transition-colors duration-150 hover:text-destaque-texto hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
             >
               {a.nome}
             </Link>

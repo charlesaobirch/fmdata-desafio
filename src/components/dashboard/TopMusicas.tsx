@@ -47,7 +47,7 @@ export function TopMusicas({ className }: { className?: string }) {
               {m.subtitulo && (
                 <Link
                   href={caminhoDoArtista(m.subtitulo)}
-                  className="block w-fit max-w-full truncate rounded text-sm text-foreground/70 underline-offset-4 transition-colors duration-150 hover:text-foreground hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+                  className="block w-fit max-w-full truncate rounded text-sm text-foreground/70 decoration-destaque underline-offset-4 transition-colors duration-150 hover:text-destaque-texto hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
                 >
                   {m.subtitulo}
                 </Link>

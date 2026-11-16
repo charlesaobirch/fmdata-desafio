@@ -27,7 +27,7 @@ export function CartaoValor() {
       {valor && artista && (
         <div className="flex flex-col gap-4">
           <p className="text-sm text-foreground/70">
-            <span className="mb-2 block text-balance text-3xl font-semibold tabular-nums tracking-[-0.03em] text-foreground sm:text-5xl">
+            <span className="mb-2 block text-balance text-3xl font-semibold tabular-nums tracking-[-0.03em] text-destaque-texto sm:text-5xl">
               {formatarUSD(artista.minimo)} a {formatarUSD(artista.maximo)}
             </span>
             pelas tuas {contar(artista.reproducoes, "audição", "audições")},

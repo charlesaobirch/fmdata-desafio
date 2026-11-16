@@ -34,14 +34,14 @@ export function Totais({ className }: { className?: string }) {
     >
       <p className="flex flex-wrap items-baseline gap-x-8 gap-y-3 text-foreground/70">
         <span>
-          <span className="text-4xl font-semibold tabular-nums tracking-tight text-foreground">
+          <span className="text-4xl font-semibold tabular-nums tracking-tight text-destaque-texto">
             {formatarNumero(t.audicoes)}
           </span>{" "}
           {t.audicoes === 1 ? "audição" : "audições"}
         </span>
         <span>
           de{" "}
-          <span className="text-4xl font-semibold tabular-nums tracking-tight text-foreground">
+          <span className="text-4xl font-semibold tabular-nums tracking-tight text-destaque-texto">
             {formatarNumero(t.artistas)}
           </span>{" "}
           {t.artistas === 1 ? "artista" : "artistas distintos"}

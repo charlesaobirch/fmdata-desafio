@@ -42,7 +42,7 @@ export function CartaoArtistaDeCasa() {
                   >
                     <span
                       className={`w-full rounded-t-sm ${
-                        pico ? "bg-foreground" : "bg-foreground/50"
+                        pico ? "bg-destaque" : "bg-foreground/50"
                       }`}
                       style={{ height: `${(audicoes / maximo) * 100}%` }}
                     />

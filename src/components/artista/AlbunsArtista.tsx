@@ -68,7 +68,7 @@ function LinhaAlbum({ artista, album, doArtista }: LinhaProps) {
               className="h-1 rounded-full bg-foreground/10"
             >
               <span
-                className="block h-full rounded-full bg-foreground/60"
+                className="block h-full rounded-full bg-destaque"
                 style={{ width: `${(ouvidas / data.track_count) * 100}%` }}
               />
             </span>

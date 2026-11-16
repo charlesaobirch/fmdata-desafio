@@ -55,7 +55,7 @@ function BarraHora(props: BarShapeProps) {
       height={height}
       rx={2}
       className={
-        (payload as PontoHora).pico ? "fill-foreground" : "fill-foreground/50"
+        (payload as PontoHora).pico ? "fill-destaque" : "fill-foreground/40"
       }
     />
   );

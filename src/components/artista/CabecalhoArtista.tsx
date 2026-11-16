@@ -46,7 +46,7 @@ function Biografia({ info }: { info: ArtistInfo }) {
           type="button"
           aria-expanded={aberta}
           onClick={() => setAberta((a) => !a)}
-          className="rounded font-medium text-foreground underline underline-offset-4 transition-colors duration-150 hover:text-foreground/70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+          className="rounded font-medium text-foreground underline decoration-destaque decoration-2 underline-offset-4 transition-colors duration-150 hover:text-destaque-texto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
         >
           {aberta ? "Ler menos" : "Ler mais"}
         </button>
@@ -73,10 +73,10 @@ function Ligacoes({ info }: { info: ArtistInfo }) {
             href={l.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 rounded font-medium underline-offset-4 transition-colors duration-150 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+            className="inline-flex items-center gap-1 rounded font-medium text-destaque-texto decoration-destaque underline-offset-4 transition-colors duration-150 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
           >
             {l.rotulo}
-            <SquareArrowRightUpIcon className="text-foreground/60" />
+            <SquareArrowRightUpIcon />
             <span className="sr-only"> (abre noutro separador)</span>
           </a>
         </li>
