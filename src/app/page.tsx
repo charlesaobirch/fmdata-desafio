@@ -4,6 +4,7 @@ import { GeneroMaisOuvido } from "@/components/dashboard/GeneroMaisOuvido";
 import { Grafico24h } from "@/components/dashboard/Grafico24h";
 import { TopAlbuns } from "@/components/dashboard/TopAlbuns";
 import { TopArtistas } from "@/components/dashboard/TopArtistas";
+import { TopMusicas } from "@/components/dashboard/TopMusicas";
 import { Totais } from "@/components/dashboard/Totais";
 import { Descobertas } from "@/components/descobertas/Descobertas";
 import { usePeriodo } from "@/hooks/usePeriodo";
@@ -51,7 +52,8 @@ export default function PaginaVerificacao() {
       <div className="grid gap-4 md:grid-cols-3">
         <Totais className="md:col-span-2" />
         <GeneroMaisOuvido />
-        <TopArtistas />
+        <TopArtistas className="md:row-span-2" />
+        <TopMusicas className="md:col-span-2" />
         <Grafico24h className="md:col-span-2" />
         <TopAlbuns className="md:col-span-3" />
       </div>
