@@ -97,7 +97,12 @@ export function Bloco({
           mensagem={periodo === "tudo" ? mensagemVaziaHistorico : mensagemVazia}
         />
       )}
-      {estado === "sucesso" && children}
+      {/* a key remonta o conteúdo ao mudar de período: a entrada volta a correr */}
+      {estado === "sucesso" && (
+        <div key={periodo ?? "fixo"} className="entrada min-w-0">
+          {children}
+        </div>
+      )}
     </section>
   );
 }

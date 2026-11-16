@@ -48,3 +48,31 @@ body {
   /* a Geist que o layout.tsx carrega (next/font); o resto é recurso */
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 }
+
+/*
+ * Movimento. Os blocos: o conteúdo entra quando os dados chegam e
+ * quando muda o período (o Bloco remonta-o). Com movimento reduzido
+ * fica só um fade curto.
+ */
+@keyframes entrar-suave {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes entrar {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+.entrada {
+  animation: entrar-suave 150ms ease-out both;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .entrada {
+    animation: entrar 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
