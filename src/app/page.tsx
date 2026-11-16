@@ -19,17 +19,18 @@ const PERIODOS: { valor: Periodo; rotulo: string }[] = [
 ];
 
 /**
- * Página mínima de verificação da fundação (etapa 6).
- * Mostra a contagem de scrobbles filtrados pelo período;
- * na fase da UI é substituída pelo dashboard completo.
+ * Dashboard: o seletor de período afeta todos os blocos da grelha;
+ * as Descobertas, por baixo, são sempre sobre o histórico completo.
  */
-export default function PaginaVerificacao() {
+export default function PaginaDashboard() {
   const { periodo, setPeriodo } = usePeriodo();
 
   return (
     <main className="mx-auto flex min-h-screen max-w-5xl flex-col gap-10 p-8">
       <section className="flex flex-col gap-6">
-        <h1 className="text-xl font-semibold">Verificação da fundação</h1>
+        <h1 className="text-xl font-semibold">
+          fmdata — o teu histórico em números
+        </h1>
 
         <div className="flex flex-wrap gap-2">
           {PERIODOS.map((p) => (
