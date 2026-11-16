@@ -1,12 +1,7 @@
 "use client";
 
 import { valorEstimado } from "@/lib/analise";
-import {
-  formatarNumero,
-  formatarTaxa,
-  formatarUSD,
-  formatarValor,
-} from "./formatar";
+import { contar, formatarTaxa, formatarUSD, formatarValor } from "./formatar";
 import { PainelDescoberta } from "./PainelDescoberta";
 import { useDescoberta } from "./useDescoberta";
 
@@ -35,8 +30,8 @@ export function CartaoValor() {
             <span className="mb-2 block text-balance text-3xl font-semibold tabular-nums tracking-[-0.03em] text-foreground sm:text-5xl">
               {formatarUSD(artista.minimo)} a {formatarUSD(artista.maximo)}
             </span>
-            pelas tuas {formatarNumero(artista.reproducoes)} audições, conforme
-            a plataforma
+            pelas tuas {contar(artista.reproducoes, "audição", "audições")},
+            conforme a plataforma
           </p>
 
           <div className="max-w-3xl overflow-x-auto">

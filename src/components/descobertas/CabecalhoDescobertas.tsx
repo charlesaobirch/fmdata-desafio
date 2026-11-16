@@ -6,7 +6,7 @@ import { PeriodoFixo, ROTULOS_PERIODO } from "@/components/ui/SeletorPeriodo";
 import { useFiltradosPor } from "@/hooks/useFiltradosPor";
 import { formatarData, parseDataScrobble } from "@/lib/dates";
 import type { Scrobble } from "@/types";
-import { formatarNumero } from "./formatar";
+import { contar } from "./formatar";
 
 /** A primeira audição com data (o histórico não vem ordenado). */
 function primeiraData(scrobbles: Scrobble[]): Date | null {
@@ -45,7 +45,7 @@ export function CabecalhoDescobertas() {
         {inicio && referencia && (
           <p className="text-sm font-medium tabular-nums">
             {formatarData(inicio)} a {formatarData(referencia)} ·{" "}
-            {formatarNumero(scrobbles.length)} audições
+            {contar(scrobbles.length, "audição", "audições")}
           </p>
         )}
         <p className="text-pretty text-sm leading-relaxed text-foreground/75">

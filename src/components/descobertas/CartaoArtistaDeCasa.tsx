@@ -1,7 +1,7 @@
 "use client";
 
 import { artistaDeCasa } from "@/lib/analise";
-import { formatarNumero, formatarPercentagem } from "./formatar";
+import { contar, formatarNumero, formatarPercentagem } from "./formatar";
 import { PainelDescoberta } from "./PainelDescoberta";
 import { useDescoberta } from "./useDescoberta";
 
@@ -21,9 +21,7 @@ export function CartaoArtistaDeCasa() {
       }
       subtitulo={
         casa
-          ? `${formatarNumero(casa.audicoes)} audições de ${formatarNumero(casa.faixasDistintas)} músicas, acordou-te ${formatarNumero(
-              casa.manhasQueAbriu,
-            )} manhãs, adormeceu-te ${formatarNumero(casa.noitesQueFechou)} noites`
+          ? `${contar(casa.audicoes, "audição", "audições")} de ${contar(casa.faixasDistintas, "música", "músicas")}, acordou-te ${contar(casa.manhasQueAbriu, "manhã", "manhãs")}, adormeceu-te ${contar(casa.noitesQueFechou, "noite", "noites")}`
           : undefined
       }
     >
@@ -50,7 +48,7 @@ export function CartaoArtistaDeCasa() {
                     />
                   </span>
                   <span className="sr-only">
-                    {`${ano}: ${formatarNumero(audicoes)} audições${
+                    {`${ano}: ${contar(audicoes, "audição", "audições")}${
                       pico ? " (ano de pico)" : ""
                     }`}
                   </span>

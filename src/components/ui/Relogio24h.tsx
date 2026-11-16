@@ -9,7 +9,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { formatarNumero } from "@/components/descobertas/formatar";
+import { contar, formatarNumero } from "@/components/descobertas/formatar";
 import { horaDePico, scrobblesPorHora } from "@/lib/stats";
 import type { Scrobble } from "@/types";
 
@@ -74,7 +74,7 @@ export function FiguraRelogio({ relogio }: { relogio: Relogio }) {
       <figcaption className="text-sm text-foreground/70">
         Ouves mais entre as{" "}
         <span className="font-semibold text-foreground">{intervalo(pico)}</span>{" "}
-        UTC ({formatarNumero(pontos[pico].audicoes)} audições).
+        UTC ({contar(pontos[pico].audicoes, "audição", "audições")}).
       </figcaption>
 
       <div className="text-foreground/70" aria-hidden="true">
@@ -116,7 +116,7 @@ export function FiguraRelogio({ relogio }: { relogio: Relogio }) {
                 <div className="rounded-lg border border-foreground/10 bg-background px-3 py-2 text-xs text-foreground shadow-sm">
                   <p className="font-medium">{intervalo(ponto.hora)} UTC</p>
                   <p className="tabular-nums">
-                    {formatarNumero(ponto.audicoes)} audições
+                    {contar(ponto.audicoes, "audição", "audições")}
                   </p>
                 </div>
               );

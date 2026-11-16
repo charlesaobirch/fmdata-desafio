@@ -5,7 +5,7 @@ import {
   type ContagemDeFaixa,
   primeiraEUltimaDoDia,
 } from "@/lib/analise";
-import { formatarNumero } from "./formatar";
+import { contar } from "./formatar";
 import { PainelDescoberta } from "./PainelDescoberta";
 import { useDescoberta } from "./useDescoberta";
 
@@ -28,7 +28,7 @@ function Coluna({
           <li key={a.artista} className="flex justify-between gap-3">
             <span>{a.artista}</span>
             <span className="tabular-nums text-foreground/70">
-              {formatarNumero(a.dias)} dias
+              {contar(a.dias, "dia", "dias")}
             </span>
           </li>
         ))}
@@ -37,14 +37,14 @@ function Coluna({
         <p className="text-sm text-foreground/70">
           Música mais repetida:{" "}
           <span className="font-medium text-foreground">{faixa.faixa}</span>,{" "}
-          {faixa.artista} ({formatarNumero(faixa.dias)} dias)
+          {faixa.artista} ({contar(faixa.dias, "dia", "dias")})
         </p>
       )}
     </div>
   );
 }
 
-const vezes = (n: number) => (n === 1 ? "1 vez" : `${n} vezes`);
+const vezes = (n: number) => contar(n, "vez", "vezes");
 
 /**
  * Só afirma contraste quando os números são mesmo diferentes; com a
@@ -89,7 +89,7 @@ export function CartaoAberturaFecho() {
       subtitulo={frases?.subtitulo}
       nota={
         dia &&
-        `Em ${formatarNumero(dia.diasComMusica)} dias com música, a primeira e a última audição de cada dia (UTC).`
+        `Em ${contar(dia.diasComMusica, "dia", "dias")} com música, a primeira e a última audição de cada dia (UTC).`
       }
     >
       {dia && (

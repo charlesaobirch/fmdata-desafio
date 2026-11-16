@@ -20,6 +20,14 @@ export function formatarValor(n: number): string {
   return `${formatarNumero(Number(inteiro))},${decimal}`;
 }
 
+/**
+ * 1 -> "1 audição"; 4345 -> "4 345 audições": o número formatado com a
+ * palavra no singular ou no plural (nunca "1 músicas").
+ */
+export function contar(n: number, singular: string, plural: string): string {
+  return `${formatarNumero(n)} ${n === 1 ? singular : plural}`;
+}
+
 /** 8.43 -> "8,4%"; abaixo de 0,1 não arredonda para "0,0%". */
 export function formatarPercentagem(p: number): string {
   if (p > 0 && p < 0.1) return "<0,1%";
