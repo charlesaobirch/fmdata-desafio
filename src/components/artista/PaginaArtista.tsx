@@ -88,15 +88,24 @@ function ArtistaNaoEncontrado({ nome }: { nome: string }) {
 }
 
 interface ConteudoProps {
+  /** Só audições com data: a base das contas, como no dashboard. */
   doArtista: Scrobble[];
+  comData: Scrobble[];
+  /** O histórico completo: "ouvido" nos semelhantes = a página existe. */
   todos: Scrobble[];
+  /**
+   * O nome como está nos dados ("Os Barões Da Pisadinha"), não como
+   * veio no URL ("os baroes da pisadinha"): é o que a API reconhece.
+   */
+  nomeCanonico: string;
 }
 
-function ConteudoArtista({ doArtista, todos }: ConteudoProps) {
-  // o nome como está nos dados ("Os Barões Da Pisadinha"), não como
-  // veio no URL ("os baroes da pisadinha"): é o que a API reconhece
-  const nomeCanonico = doArtista[0].artist_name;
-
+function ConteudoArtista({
+  doArtista,
+  comData,
+  todos,
+  nomeCanonico,
+}: ConteudoProps) {
   return (
     <>
       <CabecalhoArtista nome={nomeCanonico} />
@@ -104,7 +113,7 @@ function ConteudoArtista({ doArtista, todos }: ConteudoProps) {
         <EstatisticasArtista
           className="md:col-span-3"
           doArtista={doArtista}
-          todos={todos}
+          todos={comData}
         />
         <TopMusicasArtista className="md:col-span-2" doArtista={doArtista} />
         <UltimasAudicoes doArtista={doArtista} />
@@ -123,7 +132,8 @@ function ConteudoArtista({ doArtista, todos }: ConteudoProps) {
  */
 export function PaginaArtista({ nome }: { nome: string }) {
   // sempre o histórico completo: a página do artista ignora o período
-  const { doArtista, todos, status } = useScrobblesDoArtista(nome);
+  const { doArtista, comData, todos, existe, nomeCanonico, status } =
+    useScrobblesDoArtista(nome);
 
   if (status === "idle" || status === "loading") return <EsqueletoArtista />;
 
@@ -140,7 +150,9 @@ export function PaginaArtista({ nome }: { nome: string }) {
     );
   }
 
-  if (!nome || doArtista.length === 0) {
+  // "não encontrado" só se não aparece de todo: um artista só com
+  // audições sem data abre, com os blocos vazios
+  if (!nome || !existe || !nomeCanonico) {
     return (
       <Moldura>
         <ArtistaNaoEncontrado nome={nome} />
@@ -153,9 +165,11 @@ export function PaginaArtista({ nome }: { nome: string }) {
       {/* key: ao saltar para um semelhante, os blocos começam do zero
           (p.ex. a bio volta a fechada) em vez de herdar estado */}
       <ConteudoArtista
-        key={doArtista[0].artist_name}
+        key={nomeCanonico}
         doArtista={doArtista}
+        comData={comData}
         todos={todos}
+        nomeCanonico={nomeCanonico}
       />
     </Moldura>
   );

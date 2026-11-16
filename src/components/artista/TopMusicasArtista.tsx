@@ -21,7 +21,7 @@ export function TopMusicasArtista({ doArtista, className }: Props) {
       className={className}
       titulo="Top 10 músicas"
       estado={musicas.length === 0 ? "vazio" : "sucesso"}
-      mensagemVazia="Sem músicas para mostrar."
+      mensagemVazia="Nenhuma audição deste artista tem data."
     >
       <ol className="flex flex-col gap-3">
         {musicas.map((m, i) => (

@@ -44,7 +44,9 @@ export function EstatisticasArtista({ doArtista, todos, className }: Props) {
       className={className}
       titulo="Em números"
       contexto="todo o histórico"
-      estado="sucesso"
+      // só audições com data contam: sem nenhuma, não há números a mostrar
+      estado={r.totalAudicoes === 0 ? "vazio" : "sucesso"}
+      mensagemVazia="Nenhuma audição deste artista tem data, por isso ficam fora das contas."
     >
       <dl className="grid grid-cols-2 gap-x-6 gap-y-5 md:grid-cols-5">
         {cartoes.map((c) => (
