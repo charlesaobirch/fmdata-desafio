@@ -38,7 +38,12 @@ export function TopAlbuns({ className }: { className?: string }) {
         {albuns.map((album, i) => (
           <li
             key={album.chave}
-            className="relative aspect-square overflow-hidden rounded-xl"
+            // o n.º 1 com contorno rosa: marca, não texto (rosa sobre capa falharia 4,5:1)
+            className={`relative aspect-square overflow-hidden rounded-xl ${
+              i === 0
+                ? "ring-2 ring-destaque ring-offset-2 ring-offset-background"
+                : ""
+            }`}
           >
             <Capa
               src={album.imagem}

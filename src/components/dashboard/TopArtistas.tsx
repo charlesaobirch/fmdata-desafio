@@ -6,6 +6,7 @@ import { formatarNumero } from "@/components/descobertas/formatar";
 import { Bloco } from "@/components/ui/Bloco";
 import { Capa } from "@/components/ui/Capa";
 import { EsqueletoLista } from "@/components/ui/EsqueletoLista";
+import { classePosicao } from "@/components/ui/estilos";
 import { topArtistas } from "@/lib/stats";
 import type { ItemRanking } from "@/types";
 import { useBlocoFiltrado } from "./useBlocoFiltrado";
@@ -31,9 +32,7 @@ export function TopArtistas({ className }: { className?: string }) {
       <ol className="flex flex-col gap-2.5">
         {artistas.map((a, i) => (
           <li key={a.chave} className="flex items-center gap-3">
-            <span className="w-5 shrink-0 text-right text-sm tabular-nums text-foreground/60">
-              {i + 1}
-            </span>
+            <span className={classePosicao(i)}>{i + 1}</span>
             {/*
               Imagem: o image_url que já vem nos scrobbles (guia, 7.3
               permite este ou o perfil da API). Escolhido para o

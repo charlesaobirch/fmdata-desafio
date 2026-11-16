@@ -41,7 +41,7 @@ export function Totais({ className }: { className?: string }) {
         </span>
         <span>
           de{" "}
-          <span className="text-4xl font-semibold tabular-nums tracking-tight text-destaque-texto">
+          <span className="text-4xl font-semibold tabular-nums tracking-tight text-foreground">
             {formatarNumero(t.artistas)}
           </span>{" "}
           {t.artistas === 1 ? "artista" : "artistas distintos"}

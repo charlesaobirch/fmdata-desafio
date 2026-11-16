@@ -56,7 +56,7 @@ export function GeneroMaisOuvido({ className }: { className?: string }) {
                 >
                   <span
                     className={`block h-full rounded-full ${
-                      i === 0 ? "bg-destaque" : "bg-destaque/60"
+                      i === 0 ? "bg-destaque" : "bg-foreground/40"
                     }`}
                     style={{
                       width: `${maior ? (g.percentagem / maior) * 100 : 0}%`,

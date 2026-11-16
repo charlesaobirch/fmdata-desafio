@@ -6,6 +6,7 @@ import { formatarNumero } from "@/components/descobertas/formatar";
 import { Bloco } from "@/components/ui/Bloco";
 import { Capa } from "@/components/ui/Capa";
 import { EsqueletoLista } from "@/components/ui/EsqueletoLista";
+import { classePosicao } from "@/components/ui/estilos";
 import { topMusicas } from "@/lib/stats";
 import type { ItemRanking } from "@/types";
 import { useBlocoFiltrado } from "./useBlocoFiltrado";
@@ -30,9 +31,7 @@ export function TopMusicas({ className }: { className?: string }) {
       <ol className="flex flex-col gap-3">
         {musicas.map((m, i) => (
           <li key={m.chave} className="flex items-center gap-3">
-            <span className="w-5 shrink-0 text-right text-sm tabular-nums text-foreground/60">
-              {i + 1}
-            </span>
+            <span className={classePosicao(i)}>{i + 1}</span>
             {/* image_url pode ser null: o Capa mostra a inicial */}
             <div className="relative size-11 shrink-0 overflow-hidden rounded-lg">
               <Capa
