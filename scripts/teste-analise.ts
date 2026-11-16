@@ -107,6 +107,30 @@ verificar(
 );
 verificar("vazio devolve null", artistaDeCasa([]) === null);
 
+// empate: ordem alfabética, não a ordem do ficheiro
+const doArtistaEmpate = (artista: string): Scrobble => ({
+  track_name: "Faixa",
+  artist_name: artista,
+  album_name: "",
+  date_iso: null,
+  date_uts: 1_700_000_000,
+  tags: "",
+  loved: 0,
+  image_url: null,
+  nowplaying: false,
+});
+const casaEmpate = artistaDeCasa([
+  doArtistaEmpate("Zeca"),
+  doArtistaEmpate("Zeca"),
+  doArtistaEmpate("Ana"),
+  doArtistaEmpate("Ana"),
+]);
+verificar(
+  "artistaDeCasa: empate decide-se por ordem alfabética",
+  casaEmpate?.nome === "Ana",
+  `(veio ${casaEmpate?.nome})`,
+);
+
 /* ---------- 3 · primeiraEUltimaDoDia ---------- */
 
 const dia = primeiraEUltimaDoDia(scrobbles);

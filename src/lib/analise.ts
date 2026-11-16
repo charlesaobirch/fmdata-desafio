@@ -126,8 +126,16 @@ export function artistaDeCasa(scrobbles: Scrobble[]): ArtistaDeCasa | null {
   }
 
   let dele: Scrobble[] = [];
-  for (const lista of porArtista.values()) {
-    if (lista.length > dele.length) dele = lista;
+  let chaveDele = "";
+  for (const [k, lista] of porArtista) {
+    // empate: ordem alfabética da chave normalizada, como o paraRanking e
+    // os outros rankings, para o resultado não depender da ordem do ficheiro
+    const empataEAntes =
+      lista.length === dele.length && k.localeCompare(chaveDele) < 0;
+    if (lista.length > dele.length || empataEAntes) {
+      dele = lista;
+      chaveDele = k;
+    }
   }
   if (dele.length === 0) return null;
 
