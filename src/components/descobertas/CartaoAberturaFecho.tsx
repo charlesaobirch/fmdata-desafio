@@ -15,10 +15,13 @@ function Coluna({
   titulo,
   artistas,
   faixa,
+  destacar,
 }: {
   titulo: string;
   artistas: ContagemDeArtista[];
   faixa: ContagemDeFaixa | null;
+  /** A coluna que sustenta o título: os dias da sua faixa ficam a rosa. */
+  destacar: boolean;
 }) {
   return (
     <div className="flex flex-col gap-2">
@@ -37,7 +40,13 @@ function Coluna({
         <p className="text-sm text-foreground/70">
           Música mais repetida:{" "}
           <span className="font-medium text-foreground">{faixa.faixa}</span>,{" "}
-          {faixa.artista} ({contar(faixa.dias, "dia", "dias")})
+          {faixa.artista} (
+          <span
+            className={destacar ? "font-medium text-destaque-texto" : undefined}
+          >
+            {contar(faixa.dias, "dia", "dias")}
+          </span>
+          )
         </p>
       )}
     </div>
@@ -80,6 +89,11 @@ export function CartaoAberturaFecho() {
   const frases = dia
     ? frasesDoDia(dia.faixaQueMaisAbre?.dias, dia.faixaQueMaisFecha?.dias)
     : null;
+  // o ponto rosa do painel: a coluna cujo número sustenta o título;
+  // em empate o título é neutro e nenhuma coluna se destaca
+  const abre = dia?.faixaQueMaisAbre?.dias ?? 0;
+  const fecha = dia?.faixaQueMaisFecha?.dias ?? 0;
+  const vence = abre > fecha ? "abre" : fecha > abre ? "fecha" : null;
 
   return (
     <PainelDescoberta
@@ -98,11 +112,13 @@ export function CartaoAberturaFecho() {
             titulo="Abre o dia"
             artistas={dia.quemAbre}
             faixa={dia.faixaQueMaisAbre}
+            destacar={vence === "abre"}
           />
           <Coluna
             titulo="Fecha o dia"
             artistas={dia.quemFecha}
             faixa={dia.faixaQueMaisFecha}
+            destacar={vence === "fecha"}
           />
         </div>
       )}

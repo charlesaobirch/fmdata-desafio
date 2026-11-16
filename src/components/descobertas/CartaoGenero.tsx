@@ -23,6 +23,15 @@ export function CartaoGenero() {
     generoPorFaixaDoDia,
     semGenerosDestacados,
   );
+  // o maior índice acima do habitual em todo o dia (empate: o 1.º na ordem do dia)
+  let maior: { momento: string; tag: string; indice: number } | null = null;
+  for (const m of momentos ?? []) {
+    for (const t of m.tags.filter((x) => x.indice > 1).slice(0, ACIMA)) {
+      if (!maior || t.indice > maior.indice) {
+        maior = { momento: m.momento, tag: t.tag, indice: t.indice };
+      }
+    }
+  }
 
   return (
     <PainelDescoberta
@@ -44,6 +53,7 @@ export function CartaoGenero() {
     >
       {momentos && (
         <ul className="grid gap-x-6 gap-y-5 sm:grid-cols-2 lg:grid-cols-4">
+          {/* o ponto rosa do painel: o maior salto do dia, um só */}
           {momentos.map((m) => {
             const meta = MOMENTOS_DO_DIA.find((x) => x.momento === m.momento);
             const acima = m.tags.filter((t) => t.indice > 1).slice(0, ACIMA);
@@ -67,7 +77,13 @@ export function CartaoGenero() {
                     {acima.map((t) => (
                       <li key={t.tag} className="flex justify-between gap-3">
                         <span>{t.tag}</span>
-                        <span className="font-medium tabular-nums">
+                        <span
+                          className={`font-medium tabular-nums ${
+                            maior?.momento === m.momento && maior.tag === t.tag
+                              ? "text-destaque-texto"
+                              : ""
+                          }`}
+                        >
                           {formatarIndice(t.indice)}
                         </span>
                       </li>
