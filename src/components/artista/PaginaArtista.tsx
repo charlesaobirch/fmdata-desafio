@@ -1,7 +1,6 @@
 "use client";
 
 import { AltArrowRightIcon } from "@solar-icons/react/linear/alt-arrow-right";
-import { ArrowLeftIcon } from "@solar-icons/react/linear/arrow-left";
 import Link from "next/link";
 import { type ReactNode, useEffect } from "react";
 import { AnuncioHistorico } from "@/components/ui/AnuncioHistorico";
@@ -9,7 +8,7 @@ import { AvisoHistorico } from "@/components/ui/AvisoHistorico";
 import { EstadoCarregar } from "@/components/ui/EstadoCarregar";
 import { EstadoSemHistorico } from "@/components/ui/EstadoSemHistorico";
 import { BOTAO_PRIMARIO } from "@/components/ui/estilos";
-import { ACAO_FAIXA, FaixaEntrada } from "@/components/ui/FaixaEntrada";
+import { FaixaEntrada } from "@/components/ui/FaixaEntrada";
 import { Rodape } from "@/components/ui/Rodape";
 import { useScrobblesDoArtista } from "@/hooks/useScrobblesDoArtista";
 import type { Scrobble } from "@/types";
@@ -53,16 +52,7 @@ function Moldura({ children }: { children: ReactNode }) {
   return (
     <>
       <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-10 p-8">
-        <FaixaEntrada
-          titulo="fmdata"
-          subtitulo={<Caminho />}
-          acao={
-            <Link href="/" className={ACAO_FAIXA}>
-              <ArrowLeftIcon />
-              Dashboard
-            </Link>
-          }
-        />
+        <FaixaEntrada titulo="fmdata" subtitulo={<Caminho />} />
         {/* só aparece se o histórico falhar, e fica enquanto se tenta outra vez */}
         <AvisoHistorico />
         <AnuncioHistorico />
