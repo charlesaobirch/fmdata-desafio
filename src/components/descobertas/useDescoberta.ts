@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { useScrobbles } from "@/hooks/useScrobbles";
+import { useFiltradosPor } from "@/hooks/useFiltradosPor";
 import type { Scrobble } from "@/types";
 
 export type EstadoDescoberta =
@@ -26,7 +26,8 @@ export function useDescoberta<T>(
   calcular: (scrobbles: Scrobble[]) => T | null,
   estaVazio?: (resultado: T) => boolean,
 ) {
-  const { data, status } = useScrobbles();
+  // o mesmo histórico do dashboard: só audições com data (sem nowplaying)
+  const { scrobbles: data, status } = useFiltradosPor("tudo");
 
   const resultado = useMemo(
     () => (status === "success" ? calcular(data) : null),
