@@ -1,5 +1,8 @@
+"use client";
+
 import { type ReactNode, useId } from "react";
 import type { EstadoDescoberta } from "./useDescoberta";
+import { useRevelar } from "./useRevelar";
 
 interface PainelDescobertaProps {
   /** A pergunta a que o painel responde: é sempre o título. */
@@ -38,9 +41,12 @@ export function PainelDescoberta({
 }: PainelDescobertaProps) {
   const sucesso = estado === "sucesso";
   const idTitulo = useId();
+  const { ref, revelar } = useRevelar<HTMLElement>();
 
   return (
     <article
+      ref={ref}
+      data-revelar={revelar}
       aria-labelledby={idTitulo}
       aria-busy={estado === "loading"}
       className="flex min-w-0 flex-col gap-10"
@@ -53,12 +59,18 @@ export function PainelDescoberta({
           {pergunta}
         </h3>
         {sucesso && titulo && (
-          <p className="max-w-4xl text-balance text-4xl font-semibold leading-[1.02] tracking-[-0.03em] sm:text-6xl lg:text-7xl">
+          <p
+            data-manchete
+            className="max-w-4xl text-balance text-4xl font-semibold leading-[1.02] tracking-[-0.03em] sm:text-6xl lg:text-7xl"
+          >
             {titulo}
           </p>
         )}
         {sucesso && subtitulo && (
-          <p className="max-w-2xl text-pretty text-lg leading-snug text-foreground/75 sm:text-xl">
+          <p
+            data-detalhe
+            className="max-w-2xl text-pretty text-lg leading-snug text-foreground/75 sm:text-xl"
+          >
             {subtitulo}
           </p>
         )}
@@ -102,10 +114,13 @@ export function PainelDescoberta({
         </p>
       )}
 
-      {sucesso && children}
+      {sucesso && <div data-detalhe>{children}</div>}
 
       {sucesso && nota && (
-        <p className="max-w-prose border-t border-foreground/15 pt-4 text-xs leading-relaxed text-foreground/65">
+        <p
+          data-detalhe
+          className="max-w-prose border-t border-foreground/15 pt-4 text-xs leading-relaxed text-foreground/65"
+        >
           {nota}
         </p>
       )}

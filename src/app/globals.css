@@ -51,8 +51,10 @@ body {
 
 /*
  * Movimento. Os blocos: o conteúdo entra quando os dados chegam e
- * quando muda o período (o Bloco remonta-o). Com movimento reduzido
- * fica só um fade curto.
+ * quando muda o período (o Bloco remonta-o). As Descobertas: a
+ * manchete sobe por uma fenda ao entrar no ecrã, o detalhe vem a
+ * seguir. Com movimento reduzido fica só um fade curto nos blocos e
+ * os painéis aparecem já visíveis.
  */
 @keyframes entrar-suave {
   from {
@@ -74,5 +76,25 @@ body {
 @media (prefers-reduced-motion: no-preference) {
   .entrada {
     animation: entrar 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  [data-manchete] {
+    clip-path: inset(-10% -10% -15% -10%);
+    transition:
+      clip-path 700ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-detalhe] {
+    transition: opacity 500ms ease-out 200ms;
+  }
+
+  [data-revelar="pendente"] [data-manchete] {
+    clip-path: inset(100% -10% -15% -10%);
+    transform: translateY(0.35em);
+  }
+
+  [data-revelar="pendente"] [data-detalhe] {
+    opacity: 0;
   }
 }
