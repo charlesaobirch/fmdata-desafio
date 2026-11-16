@@ -160,19 +160,22 @@ export function horaDePico(porHora: number[]): number | null {
 /* ---------- Género ---------- */
 
 /** O género (tag) mais contado; null se não houver tags. */
-export function generoMaisOuvido(
-  scrobbles: Scrobble[],
-): { genero: string; contagem: number } | null {
-  // cada audição contribui para TODAS as suas tags
+/** Cada audição conta para TODAS as suas tags (de género). */
+function contarGeneros(scrobbles: Scrobble[]): Map<string, number> {
   const contagens = new Map<string, number>();
-
   for (const s of scrobbles) {
     for (const tag of separarLista(s.tags)) {
       const k = tag.toLowerCase(); // "Rock" e "rock" contam juntas
       contagens.set(k, (contagens.get(k) ?? 0) + 1);
     }
   }
+  return contagens;
+}
 
+export function generoMaisOuvido(
+  scrobbles: Scrobble[],
+): { genero: string; contagem: number } | null {
+  const contagens = contarGeneros(scrobbles);
   if (contagens.size === 0) return null;
 
   let melhor: [string, number] | null = null;
@@ -187,4 +190,27 @@ export function generoMaisOuvido(
   }
 
   return melhor ? { genero: melhor[0], contagem: melhor[1] } : null;
+}
+
+/* ---------- Top géneros ---------- */
+
+export interface GeneroNoTop {
+  genero: string;
+  contagem: number;
+  /** Das audições recebidas, quantas têm esta tag (0–100). */
+  percentagem: number;
+}
+
+/**
+ * Os n géneros (tags) com mais audições, do mais ouvido para o menos.
+ * Uma audição pode ter várias tags, por isso as percentagens não somam
+ * 100: cada uma é a fatia das audições que tem aquela tag.
+ */
+export function topGeneros(scrobbles: Scrobble[], n = 5): GeneroNoTop[] {
+  const total = scrobbles.length;
+  return paraRanking(contarGeneros(scrobbles), n).map((item) => ({
+    genero: item.nome,
+    contagem: item.contagem,
+    percentagem: total === 0 ? 0 : (item.contagem / total) * 100,
+  }));
 }

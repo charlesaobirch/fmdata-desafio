@@ -15,6 +15,7 @@ import {
   horaDePico,
   scrobblesPorHora,
   topAlbuns,
+  topGeneros,
 } from "../src/lib/stats";
 import type { Scrobble } from "../src/types";
 
@@ -122,6 +123,33 @@ verificar(
     // "indie" por ordem alfabética, o que seria correto mas confuso)
     return g?.genero === "rock" && g.contagem === 3;
   })(),
+);
+verificar("topGeneros com array vazio → []", topGeneros([]).length === 0);
+verificar(
+  "topGeneros sem tags → []",
+  topGeneros([sc({ tags: "" }), sc({ tags: " " })]).length === 0,
+);
+verificar(
+  "topGeneros: Rock e rock juntas, percentagem sobre as audições",
+  (() => {
+    const t = topGeneros([
+      sc({ tags: "Rock" }),
+      sc({ tags: "rock, indie" }),
+      sc({ tags: "indie" }),
+      sc({ tags: "" }),
+    ]);
+    // rock 2 de 4 (50%), indie 2 de 4 (50%): empate por ordem alfabética
+    return (
+      t.length === 2 &&
+      t[0].genero === "indie" &&
+      t[1].genero === "rock" &&
+      t[1].percentagem === 50
+    );
+  })(),
+);
+verificar(
+  "topGeneros corta em n",
+  topGeneros([sc({ tags: "a, b, c, d, e, f" })], 5).length === 5,
 );
 verificar(
   "topAlbuns ignora audições sem álbum",

@@ -21,6 +21,7 @@ import {
   scrobblesPorHora,
   topAlbuns,
   topArtistas,
+  topGeneros,
   topMusicas,
   totalArtistasDistintos,
   totalScrobbles,
@@ -111,6 +112,26 @@ verificar(
 verificar("topAlbuns <= 8", topAlbuns(semData).length <= 8);
 const genero = generoMaisOuvido(semData);
 verificar("generoMaisOuvido existe", genero !== null, JSON.stringify(genero));
+const top5 = topGeneros(semData);
+console.log(
+  "    top5 géneros:",
+  top5.map((g) => `${g.genero} ${g.percentagem.toFixed(1)}%`).join(", "),
+);
+verificar("topGeneros devolve 5", top5.length === 5);
+verificar(
+  "topGeneros[0] é o generoMaisOuvido",
+  top5[0]?.genero === genero?.genero && top5[0]?.contagem === genero?.contagem,
+);
+verificar(
+  "topGeneros ordenado do mais para o menos ouvido",
+  top5.every((g, i) => i === 0 || top5[i - 1].contagem >= g.contagem),
+);
+verificar(
+  "topGeneros: percentagem = contagem / audições",
+  top5.every(
+    (g) => Math.abs(g.percentagem - (g.contagem / semData.length) * 100) < 1e-9,
+  ),
+);
 
 console.log("\n[artist]");
 const nomeArtista = topArtistas(semData, 1)[0].nome;
