@@ -2,7 +2,7 @@
 
 import { ArrowLeftIcon } from "@solar-icons/react/linear/arrow-left";
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect } from "react";
 import { AnuncioHistorico } from "@/components/ui/AnuncioHistorico";
 import { AvisoHistorico } from "@/components/ui/AvisoHistorico";
 import { EstadoCarregar } from "@/components/ui/EstadoCarregar";
@@ -106,6 +106,12 @@ function ConteudoArtista({
   todos,
   nomeCanonico,
 }: ConteudoProps) {
+  // o servidor só conhece o nome do URL ("os baroes da pisadinha"); o
+  // canónico vem dos dados, por isso o separador acerta-se aqui
+  useEffect(() => {
+    document.title = `${nomeCanonico} — fmdata`;
+  }, [nomeCanonico]);
+
   return (
     <>
       <CabecalhoArtista nome={nomeCanonico} />
