@@ -229,8 +229,15 @@ export function artistasSemelhantes(
 ): ArtistaSemelhante[] {
   const ouvidos = new Set(todos.map((s) => normalizarNome(s.artist_name)));
 
-  return separarLista(info.similar_artists).map((nome) => ({
-    nome,
-    ouvido: ouvidos.has(normalizarNome(nome)),
-  }));
+  // A API repete nomes ("Luísa Sonza" veio 2x para o Jão) e a lista
+  // alimenta chaves de render: sem repetições, à fonte.
+  const vistos = new Set<string>();
+  const semelhantes: ArtistaSemelhante[] = [];
+  for (const nome of separarLista(info.similar_artists)) {
+    const chave = normalizarNome(nome);
+    if (vistos.has(chave)) continue;
+    vistos.add(chave);
+    semelhantes.push({ nome, ouvido: ouvidos.has(chave) });
+  }
+  return semelhantes;
 }

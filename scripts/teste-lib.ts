@@ -163,7 +163,7 @@ const infoFalsa: ArtistInfo = {
   listeners_global: 0,
   bio_summary: "",
   bio_content: "",
-  similar_artists: `${nomeArtista}, ZZZ-Nao-Existe`,
+  similar_artists: `${nomeArtista}, ZZZ-Nao-Existe, ${nomeArtista}`,
   url_lastfm: "",
   url_wikipedia: null,
   url_musicbrainz: null,
@@ -172,6 +172,12 @@ const semelhantes = artistasSemelhantes(infoFalsa, semData);
 verificar(
   "artistaSemelhante: ouvido=true e inexistente=false",
   semelhantes.some((a) => a.ouvido) && semelhantes.some((a) => !a.ouvido),
+);
+verificar(
+  "artistaSemelhante: a API repete nomes e a lista não",
+  semelhantes.filter(
+    (a) => normalizarNome(a.nome) === normalizarNome(nomeArtista),
+  ).length === 1,
 );
 const albuns = albunsDoArtista(doArtista);
 verificar(
