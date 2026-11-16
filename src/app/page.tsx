@@ -1,5 +1,6 @@
 "use client";
 
+import { Descobertas } from "@/components/descobertas/Descobertas";
 import { useFiltrados } from "@/hooks/useFiltrados";
 import { usePeriodo } from "@/hooks/usePeriodo";
 import type { Periodo } from "@/types";
@@ -22,40 +23,48 @@ export default function PaginaVerificacao() {
   const { scrobbles, status, error, recarregar } = useFiltrados();
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-2xl flex-col gap-6 p-8">
-      <h1 className="text-xl font-semibold">Verificação da fundação</h1>
+    <main className="mx-auto flex min-h-screen max-w-5xl flex-col gap-10 p-8">
+      <section className="flex flex-col gap-6">
+        <h1 className="text-xl font-semibold">Verificação da fundação</h1>
 
-      <div className="flex flex-wrap gap-2">
-        {PERIODOS.map((p) => (
-          <button
-            key={p.valor}
-            type="button"
-            onClick={() => setPeriodo(p.valor)}
-            className={`rounded-full px-4 py-1.5 text-sm transition-colors ${
-              periodo === p.valor
-                ? "bg-foreground text-background"
-                : "bg-black/5 dark:bg-white/6"
-            }`}
-          >
-            {p.rotulo}
-          </button>
-        ))}
-      </div>
-
-      {status === "loading" && <p>A carregar scrobbles…</p>}
-
-      {status === "error" && (
-        <div>
-          <p className="text-red-500">{error}</p>
-          <button type="button" onClick={recarregar} className="mt-2 underline">
-            Tentar de novo
-          </button>
+        <div className="flex flex-wrap gap-2">
+          {PERIODOS.map((p) => (
+            <button
+              key={p.valor}
+              type="button"
+              onClick={() => setPeriodo(p.valor)}
+              className={`rounded-full px-4 py-1.5 text-sm transition-colors ${
+                periodo === p.valor
+                  ? "bg-foreground text-background"
+                  : "bg-black/5 dark:bg-white/6"
+              }`}
+            >
+              {p.rotulo}
+            </button>
+          ))}
         </div>
-      )}
 
-      {status === "success" && (
-        <p className="text-3xl font-bold">{scrobbles.length} audições</p>
-      )}
+        {status === "loading" && <p>A carregar scrobbles…</p>}
+
+        {status === "error" && (
+          <div>
+            <p className="text-red-500">{error}</p>
+            <button
+              type="button"
+              onClick={recarregar}
+              className="mt-2 underline"
+            >
+              Tentar de novo
+            </button>
+          </div>
+        )}
+
+        {status === "success" && (
+          <p className="text-3xl font-bold">{scrobbles.length} audições</p>
+        )}
+      </section>
+
+      <Descobertas />
     </main>
   );
 }
