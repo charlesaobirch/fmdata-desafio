@@ -1,26 +1,157 @@
 @import "tailwindcss";
 
+/*
+ * Tokens em duas camadas: primitivos (as cores do tema, que mudam com
+ * o esquema do sistema) e semânticos (o papel de cada uma). Trocar de
+ * tema é só mudar o mapeamento semântico; o modo escuro só troca
+ * primitivos.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* controlos nativos (o menu do <select>) seguem o esquema do sistema */
+  color-scheme: light dark;
+
+  /* primitivos */
+  --cor-papel: #ffffff;
+  --cor-tinta: #171717;
+
+  /*
+   * Destaque: o rosa da Ana e dois tons do mesmo matiz (OKLCH, só muda
+   * a luminosidade). O rosa puro é para marcas (barras, gráficos,
+   * contornos: >= 3:1 em todos os fundos). Como texto não chega a 4,5:1,
+   * por isso o texto rosa usa o tom do fundo onde está: >= 4,8:1.
+   */
+  --rosa: #e6197d;
+  --rosa-sobre-claro: #b60058;
+  --rosa-sobre-escuro: #f15391;
+  /* o roxo e o azul da Ana: só no gradiente de fundo, nunca em texto */
+  --roxo: #3b1e5e;
+  --azul: #4d8dff;
+  /* força do gradiente de fundo: muito ténue no claro */
+  --fundo-intensidade: 6%;
+  /* qual dos dois tons serve o fundo da página e qual o da faixa invertida */
+  --rosa-texto-pagina: var(--rosa-sobre-claro);
+  --rosa-texto-inverso: var(--rosa-sobre-escuro);
+
+  /* semânticos */
+  --background: var(--cor-papel);
+  --foreground: var(--cor-tinta);
+  --destaque: var(--rosa);
+  --destaque-texto: var(--rosa-texto-pagina);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-destaque: var(--destaque);
+  --color-destaque-texto: var(--destaque-texto);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --cor-papel: #0a0a0a;
+    --cor-tinta: #ededed;
+    --rosa-texto-pagina: var(--rosa-sobre-escuro);
+    --rosa-texto-inverso: var(--rosa-sobre-claro);
+    --fundo-intensidade: 18%;
   }
 }
 
+/*
+ * As mesmas duas cores, trocadas: a parte editorial (Descobertas)
+ * distingue-se do resto do dashboard sem paleta nova. Tudo o que usa
+ * bg-background / text-foreground / foreground/xx lá dentro inverte.
+ */
+.tema-invertido {
+  --background: var(--cor-tinta);
+  --foreground: var(--cor-papel);
+  --destaque-texto: var(--rosa-texto-inverso);
+}
+
 body {
+  isolation: isolate;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* a Geist que o layout.tsx carrega (next/font); o resto é recurso */
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/*
+ * Movimento. Os blocos: o conteúdo entra quando os dados chegam e
+ * quando muda o período (o Bloco remonta-o). As Descobertas: a
+ * manchete sobe por uma fenda ao entrar no ecrã, o detalhe vem a
+ * seguir. Com movimento reduzido fica só um fade curto nos blocos e
+ * os painéis aparecem já visíveis.
+ */
+@keyframes entrar-suave {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes entrar {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+.entrada {
+  animation: entrar-suave 150ms ease-out both;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .entrada {
+    animation: entrar 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  [data-manchete] {
+    clip-path: inset(-10% -10% -15% -10%);
+    transition:
+      clip-path 700ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-detalhe] {
+    transition: opacity 500ms ease-out 200ms;
+  }
+
+  [data-revelar="pendente"] [data-manchete] {
+    clip-path: inset(100% -10% -15% -10%);
+    transform: translateY(0.35em);
+  }
+
+  [data-revelar="pendente"] [data-detalhe] {
+    opacity: 0;
+  }
+}
+
+/*
+ * O gradiente da Ana como fundo contido: três manchas (rosa, roxo, azul)
+ * numa camada fixa atrás de tudo. Os cartões e a faixa das Descobertas
+ * têm fundo opaco, por isso só se vê nas margens e atrás do cabeçalho.
+ */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      55% 45% at 8% 0%,
+      color-mix(in oklab, var(--rosa) var(--fundo-intensidade), transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      50% 45% at 95% 8%,
+      color-mix(in oklab, var(--roxo) var(--fundo-intensidade), transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      60% 55% at 75% 100%,
+      color-mix(in oklab, var(--azul) var(--fundo-intensidade), transparent),
+      transparent 70%
+    );
 }

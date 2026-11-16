@@ -7,14 +7,20 @@
     "build": "next build",
     "start": "next start",
     "lint": "biome check",
-    "format": "biome format --write"
+    "format": "biome format --write",
+    "dataset": "tsx scripts/obter-dataset.mts",
+    "test": "tsx scripts/teste-lib.ts",
+    "test:limite": "tsx scripts/teste-casos-limite.ts",
+    "test:completo": "tsx scripts/teste-dataset-completo.mts",
+    "test:analise": "tsx scripts/teste-analise.ts",
+    "verificar": "npm run lint && npm run test && npm run test:limite && npm run test:analise && npm run test:completo && tsc --noEmit && next build"
   },
   "dependencies": {
+    "@solar-icons/react": "^2.6.0",
     "next": "16.4.5",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "recharts": "^3.10.1",
-    "solar-icons": "^0.0.15",
     "zustand": "^5.1.0"
   },
   "devDependencies": {
@@ -24,6 +30,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   }
 }
