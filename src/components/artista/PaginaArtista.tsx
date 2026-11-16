@@ -1,5 +1,6 @@
 "use client";
 
+import { AltArrowRightIcon } from "@solar-icons/react/linear/alt-arrow-right";
 import { ArrowLeftIcon } from "@solar-icons/react/linear/arrow-left";
 import Link from "next/link";
 import { type ReactNode, useEffect } from "react";
@@ -21,22 +22,40 @@ import { ScrobblesPorMes } from "./ScrobblesPorMes";
 import { TopMusicasArtista } from "./TopMusicasArtista";
 import { UltimasAudicoes } from "./UltimasAudicoes";
 
-function Moldura({
-  subtitulo,
-  children,
-}: {
-  /** O artista, na faixa de entrada (o canónico quando já se conhece). */
-  subtitulo: string;
-  children: ReactNode;
-}) {
+/**
+ * O caminho até esta página, na faixa de entrada. O nome do artista não
+ * se repete aqui: já é o título grande logo abaixo.
+ */
+function Caminho() {
+  return (
+    <nav aria-label="Caminho">
+      <ol className="flex items-center gap-1.5 text-sm text-foreground/70">
+        <li>
+          <Link
+            href="/"
+            className="rounded decoration-destaque underline-offset-4 transition-colors duration-150 hover:text-destaque-texto hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+          >
+            Dashboard
+          </Link>
+        </li>
+        <li className="flex">
+          <AltArrowRightIcon className="size-3.5" />
+        </li>
+        <li aria-current="page" className="font-medium text-foreground">
+          Artista
+        </li>
+      </ol>
+    </nav>
+  );
+}
+
+function Moldura({ children }: { children: ReactNode }) {
   return (
     <>
       <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-10 p-8">
         <FaixaEntrada
           titulo="fmdata"
-          subtitulo={
-            <p className="truncate text-sm text-foreground/70">{subtitulo}</p>
-          }
+          subtitulo={<Caminho />}
           acao={
             <Link href="/" className={ACAO_FAIXA}>
               <ArrowLeftIcon />
@@ -70,9 +89,9 @@ function EsqueletoPagina() {
 }
 
 /** A página inteira a carregar (também serve de fallback do Suspense). */
-export function EsqueletoArtista({ nome }: { nome?: string }) {
+export function EsqueletoArtista() {
   return (
-    <Moldura subtitulo={nome || "Página do artista"}>
+    <Moldura>
       <EsqueletoPagina />
     </Moldura>
   );
@@ -161,12 +180,11 @@ export function PaginaArtista({ nome }: { nome: string }) {
   const { doArtista, comData, todos, existe, nomeCanonico, status } =
     useScrobblesDoArtista(nome);
 
-  if (status === "idle" || status === "loading")
-    return <EsqueletoArtista nome={nome} />;
+  if (status === "idle" || status === "loading") return <EsqueletoArtista />;
 
   if (status === "error" || status === "not-found") {
     return (
-      <Moldura subtitulo={nome || "Artista"}>
+      <Moldura>
         <section className="flex flex-col items-start gap-4 py-12">
           <h1 className="text-3xl font-semibold tracking-tight">
             {nome || "Artista"}
@@ -181,14 +199,14 @@ export function PaginaArtista({ nome }: { nome: string }) {
   // audições sem data abre, com os blocos vazios
   if (!nome || !existe || !nomeCanonico) {
     return (
-      <Moldura subtitulo="Artista não encontrado">
+      <Moldura>
         <ArtistaNaoEncontrado nome={nome} />
       </Moldura>
     );
   }
 
   return (
-    <Moldura subtitulo={nomeCanonico}>
+    <Moldura>
       {/* key: ao saltar para um semelhante, os blocos começam do zero
           (p.ex. a bio volta a fechada) em vez de herdar estado */}
       <ConteudoArtista
