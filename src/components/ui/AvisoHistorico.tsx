@@ -3,6 +3,7 @@
 import { RoutingIcon } from "@solar-icons/react/linear/routing";
 import { useState } from "react";
 import { useScrobbles } from "@/hooks/useScrobbles";
+import { BOTAO_PRIMARIO } from "./estilos";
 
 /**
  * O aviso único quando o histórico não chega: em vez de uma mensagem
@@ -45,7 +46,7 @@ export function AvisoHistorico() {
           setTentou(true);
           recarregar();
         }}
-        className="shrink-0 self-start rounded-full bg-foreground px-4 py-1.5 text-sm font-medium text-background transition-colors duration-150 hover:bg-foreground/85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground disabled:cursor-wait disabled:opacity-60 sm:self-center"
+        className={`shrink-0 self-start ${BOTAO_PRIMARIO} disabled:cursor-wait disabled:opacity-60 sm:self-center`}
       >
         {aTentar ? "A tentar…" : "Tentar de novo"}
       </button>

@@ -7,6 +7,7 @@ import { AnuncioHistorico } from "@/components/ui/AnuncioHistorico";
 import { AvisoHistorico } from "@/components/ui/AvisoHistorico";
 import { EstadoCarregar } from "@/components/ui/EstadoCarregar";
 import { EstadoSemHistorico } from "@/components/ui/EstadoSemHistorico";
+import { BOTAO_PRIMARIO } from "@/components/ui/estilos";
 import { useScrobblesDoArtista } from "@/hooks/useScrobblesDoArtista";
 import type { Scrobble } from "@/types";
 import { ArtistasSemelhantes } from "./ArtistasSemelhantes";
@@ -79,10 +80,7 @@ function ArtistaNaoEncontrado({ nome }: { nome: string }) {
         )}{" "}
         Confirma o nome ou escolhe um artista a partir do dashboard.
       </p>
-      <Link
-        href="/"
-        className={`rounded-full bg-foreground px-4 py-1.5 text-sm font-medium text-background transition-colors duration-150 hover:bg-foreground/85 ${FOCO}`}
-      >
+      <Link href="/" className={BOTAO_PRIMARIO}>
         Voltar ao dashboard
       </Link>
     </section>

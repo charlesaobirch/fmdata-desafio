@@ -1,4 +1,5 @@
 import { DangerTriangleIcon } from "@solar-icons/react/linear/danger-triangle";
+import { BOTAO_PRIMARIO } from "./estilos";
 
 interface EstadoErroProps {
   /** O que falhou, em linguagem do utilizador. */
@@ -27,11 +28,7 @@ export function EstadoErro({
         </span>
       </p>
       {aoRepetir && (
-        <button
-          type="button"
-          onClick={aoRepetir}
-          className="rounded-full bg-foreground px-4 py-1.5 font-medium text-background transition-colors duration-150 hover:bg-foreground/85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
-        >
+        <button type="button" onClick={aoRepetir} className={BOTAO_PRIMARIO}>
           Tentar de novo
         </button>
       )}

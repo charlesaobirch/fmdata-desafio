@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BOTAO_PRIMARIO } from "@/components/ui/estilos";
 
 export const metadata: Metadata = {
   title: "Página não encontrada — fmdata",
@@ -19,10 +20,7 @@ export default function NaoEncontrado() {
         Este endereço não corresponde a nenhuma página do fmdata. Pode ter sido
         escrito à mão com um erro, ou a página mudou de sítio.
       </p>
-      <Link
-        href="/"
-        className="rounded-full bg-foreground px-4 py-1.5 text-sm font-medium text-background transition-colors duration-150 hover:bg-foreground/85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
-      >
+      <Link href="/" className={BOTAO_PRIMARIO}>
         Voltar ao dashboard
       </Link>
     </main>
