@@ -39,8 +39,12 @@ export function TopMusicasArtista({ doArtista, className }: Props) {
             </div>
             <p className="min-w-0 flex-1 truncate font-medium">{m.nome}</p>
             <p className="shrink-0 text-sm tabular-nums text-foreground/70">
-              {formatarNumero(m.contagem)}{" "}
-              {m.contagem === 1 ? "audição" : "audições"}
+              {formatarNumero(m.contagem)}
+              {/* a 375px a palavra roubava o espaço ao nome da faixa */}
+              <span className="sr-only sm:not-sr-only">
+                {" "}
+                {m.contagem === 1 ? "audição" : "audições"}
+              </span>
             </p>
           </li>
         ))}
