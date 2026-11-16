@@ -22,16 +22,18 @@ export function useBlocoFiltrado<T>(
   estaVazio: (resultado: T) => boolean,
 ) {
   const [periodo, setPeriodo] = useState<Periodo>("tudo");
-  const { scrobbles, status, error, recarregar } = useFiltradosPor(periodo);
+  const { scrobbles, status } = useFiltradosPor(periodo);
 
   const resultado = useMemo(() => calcular(scrobbles), [calcular, scrobbles]);
 
   return {
     resultado,
     bloco: {
-      estado: estadoDe(status, estaVazio(resultado)),
-      erro: error,
-      aoRepetir: recarregar,
+      // o histórico falhou: o aviso único no topo fala por todos os blocos
+      estado:
+        status === "error"
+          ? ("sem-historico" as const)
+          : estadoDe(status, estaVazio(resultado)),
       periodo,
       aoMudarPeriodo: setPeriodo,
     },

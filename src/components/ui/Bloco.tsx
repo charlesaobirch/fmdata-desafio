@@ -2,6 +2,7 @@ import { type ReactNode, useId } from "react";
 import type { Periodo } from "@/types";
 import { EstadoCarregar } from "./EstadoCarregar";
 import { EstadoErro } from "./EstadoErro";
+import { EstadoSemHistorico } from "./EstadoSemHistorico";
 import { EstadoVazio } from "./EstadoVazio";
 import type { EstadoDoBloco } from "./estado";
 import { SeletorPeriodo } from "./SeletorPeriodo";
@@ -92,6 +93,7 @@ export function Bloco({
           aoRepetir={aoRepetir}
         />
       )}
+      {estado === "sem-historico" && <EstadoSemHistorico />}
       {estado === "vazio" && (
         <EstadoVazio
           mensagem={periodo === "tudo" ? mensagemVaziaHistorico : mensagemVazia}

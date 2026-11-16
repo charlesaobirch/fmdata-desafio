@@ -13,9 +13,6 @@ interface PainelDescobertaProps {
   /** Assunções e definições que têm de ficar visíveis junto do resultado. */
   nota?: ReactNode;
   estado: EstadoDescoberta;
-  /** Mensagem técnica do erro, se a houver. */
-  erro?: string | null;
-  aoRepetir?: () => void;
   /** Texto do estado vazio, se o painel precisar de um próprio. */
   mensagemVazia?: string;
   children?: ReactNode;
@@ -24,8 +21,9 @@ interface PainelDescobertaProps {
 /**
  * Painel editorial de uma descoberta, a toda a largura: a pergunta é o
  * título (guia, 9.3), a resposta vem por baixo em letra gigante e o
- * detalhe em corpo pequeno. Quatro estados: loading (esqueleto com a
- * forma da manchete), erro (com "tentar de novo"), vazio e sucesso.
+ * detalhe em corpo pequeno. Estados: loading (esqueleto com a forma
+ * da manchete), sem histórico (lugar quieto; o aviso no topo explica),
+ * vazio e sucesso.
  * Só apresenta: o cálculo fica nos painéis, via useDescoberta.
  */
 export function PainelDescoberta({
@@ -34,8 +32,6 @@ export function PainelDescoberta({
   subtitulo,
   nota,
   estado,
-  erro,
-  aoRepetir,
   mensagemVazia = "Ainda não há audições suficientes para esta descoberta. Volta depois de ouvires mais música.",
   children,
 }: PainelDescobertaProps) {
@@ -85,26 +81,11 @@ export function PainelDescoberta({
         </div>
       )}
 
-      {estado === "erro" && (
-        <div role="alert" className="flex flex-col items-start gap-4">
-          <p className="max-w-prose text-pretty">
-            Não conseguimos carregar o teu histórico, por isso esta descoberta
-            ficou por fazer.
-            {erro && (
-              <span className="mt-1 block text-sm text-foreground/70">
-                Detalhe: {erro}
-              </span>
-            )}
-          </p>
-          {aoRepetir && (
-            <button
-              type="button"
-              onClick={aoRepetir}
-              className="rounded-full bg-foreground px-4 py-1.5 text-sm font-medium text-background transition-colors duration-150 hover:bg-foreground/85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
-            >
-              Tentar de novo
-            </button>
-          )}
+      {/* o histórico falhou: o AvisoHistorico explica no topo da página */}
+      {estado === "sem-historico" && (
+        <div aria-hidden="true" className="flex flex-col gap-4">
+          <span className="h-10 w-4/5 rounded-lg bg-foreground/5 sm:h-16" />
+          <span className="h-10 w-3/5 rounded-lg bg-foreground/5 sm:h-16" />
         </div>
       )}
 

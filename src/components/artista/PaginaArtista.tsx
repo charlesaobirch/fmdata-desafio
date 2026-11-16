@@ -3,8 +3,9 @@
 import { ArrowLeftIcon } from "@solar-icons/react/linear/arrow-left";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { AvisoHistorico } from "@/components/ui/AvisoHistorico";
 import { EstadoCarregar } from "@/components/ui/EstadoCarregar";
-import { EstadoErro } from "@/components/ui/EstadoErro";
+import { EstadoSemHistorico } from "@/components/ui/EstadoSemHistorico";
 import { useScrobblesDoArtista } from "@/hooks/useScrobblesDoArtista";
 import type { Scrobble } from "@/types";
 import { ArtistasSemelhantes } from "./ArtistasSemelhantes";
@@ -28,6 +29,8 @@ function Moldura({ children }: { children: ReactNode }) {
         <ArrowLeftIcon />
         Dashboard
       </Link>
+      {/* só aparece se o histórico falhar, e fica enquanto se tenta outra vez */}
+      <AvisoHistorico />
       {children}
     </main>
   );
@@ -120,8 +123,7 @@ function ConteudoArtista({ doArtista, todos }: ConteudoProps) {
  */
 export function PaginaArtista({ nome }: { nome: string }) {
   // sempre o histórico completo: a página do artista ignora o período
-  const { doArtista, todos, status, error, recarregar } =
-    useScrobblesDoArtista(nome);
+  const { doArtista, todos, status } = useScrobblesDoArtista(nome);
 
   if (status === "idle" || status === "loading") return <EsqueletoArtista />;
 
@@ -132,7 +134,7 @@ export function PaginaArtista({ nome }: { nome: string }) {
           <h1 className="text-3xl font-semibold tracking-tight">
             {nome || "Artista"}
           </h1>
-          <EstadoErro detalhe={error} aoRepetir={recarregar} />
+          <EstadoSemHistorico />
         </section>
       </Moldura>
     );

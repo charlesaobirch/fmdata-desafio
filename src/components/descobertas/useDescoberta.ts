@@ -4,7 +4,11 @@ import { useMemo } from "react";
 import { useScrobbles } from "@/hooks/useScrobbles";
 import type { Scrobble } from "@/types";
 
-export type EstadoDescoberta = "loading" | "erro" | "vazio" | "sucesso";
+export type EstadoDescoberta =
+  | "loading"
+  | "sem-historico"
+  | "vazio"
+  | "sucesso";
 
 /**
  * Liga uma função pura de lib/analise.ts ao histórico completo.
@@ -22,7 +26,7 @@ export function useDescoberta<T>(
   calcular: (scrobbles: Scrobble[]) => T | null,
   estaVazio?: (resultado: T) => boolean,
 ) {
-  const { data, status, error, recarregar } = useScrobbles();
+  const { data, status } = useScrobbles();
 
   const resultado = useMemo(
     () => (status === "success" ? calcular(data) : null),
@@ -31,12 +35,14 @@ export function useDescoberta<T>(
 
   let estado: EstadoDescoberta;
   if (status === "idle" || status === "loading") estado = "loading";
-  else if (status === "error" || status === "not-found") estado = "erro";
+  // falha do histórico: o aviso único no topo da página explica
+  else if (status === "error" || status === "not-found")
+    estado = "sem-historico";
   else if (resultado === null || estaVazio?.(resultado)) estado = "vazio";
   else estado = "sucesso";
 
   return {
     resultado: estado === "sucesso" ? resultado : null,
-    cartao: { estado, erro: error, aoRepetir: recarregar },
+    cartao: { estado },
   };
 }

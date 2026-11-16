@@ -6,6 +6,7 @@ import { TopArtistas } from "@/components/dashboard/TopArtistas";
 import { TopMusicas } from "@/components/dashboard/TopMusicas";
 import { Totais } from "@/components/dashboard/Totais";
 import { Descobertas } from "@/components/descobertas/Descobertas";
+import { AvisoHistorico } from "@/components/ui/AvisoHistorico";
 
 /**
  * Dashboard. Server Component: os blocos são Client Components e cada
@@ -23,6 +24,9 @@ export default function PaginaDashboard() {
 
           <NotaPeriodos />
         </section>
+
+        {/* só aparece se o histórico falhar: um aviso por todos os blocos */}
+        <AvisoHistorico />
 
         <div className="grid gap-4 md:grid-cols-3">
           {/* alturas equilibradas: o top 20 (alto) acompanha as músicas
