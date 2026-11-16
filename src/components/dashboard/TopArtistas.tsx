@@ -6,39 +6,11 @@ import { formatarNumero } from "@/components/descobertas/formatar";
 import { Bloco } from "@/components/ui/Bloco";
 import { Capa } from "@/components/ui/Capa";
 import { EsqueletoLista } from "@/components/ui/EsqueletoLista";
-import { useArtistInfo } from "@/hooks/useArtistInfo";
 import { topArtistas } from "@/lib/stats";
 import type { ItemRanking } from "@/types";
 import { useBlocoFiltrado } from "./useBlocoFiltrado";
 
 const semArtistas = (artistas: ItemRanking[]) => artistas.length === 0;
-
-/**
- * A foto vem do perfil do artista (useArtistInfo, em cache e
- * persistido), não do image_url dos scrobbles: esse é a capa de um
- * álbum. Enquanto carrega, um disco vazio; se faltar, a inicial.
- */
-function FotoArtista({ nome }: { nome: string }) {
-  const { data, status } = useArtistInfo(nome);
-  const aCarregar = status === "idle" || status === "loading";
-
-  return (
-    <div
-      className={`relative size-10 shrink-0 overflow-hidden rounded-full ${
-        aCarregar ? "bg-foreground/10 motion-safe:animate-pulse" : ""
-      }`}
-    >
-      {!aCarregar && (
-        <Capa
-          src={data?.image_url}
-          alt={`Fotografia de ${nome}`}
-          nome={nome}
-          sizes="40px"
-        />
-      )}
-    </div>
-  );
-}
 
 /** Bloco 3 do dashboard: os 20 artistas mais ouvidos no período. */
 export function TopArtistas({ className }: { className?: string }) {
@@ -62,7 +34,22 @@ export function TopArtistas({ className }: { className?: string }) {
             <span className="w-5 shrink-0 text-right text-sm tabular-nums text-foreground/60">
               {i + 1}
             </span>
-            <FotoArtista nome={a.nome} />
+            {/*
+              Imagem: o image_url que já vem nos scrobbles (guia, 7.3
+              permite este ou o perfil da API). Escolhido para o
+              dashboard abrir sem pedidos extra: o perfil via
+              useArtistInfo eram 20 pedidos à API por período. É a capa
+              de um álbum do artista; quando falta, o Capa mostra a
+              inicial.
+            */}
+            <div className="relative size-10 shrink-0 overflow-hidden rounded-full">
+              <Capa
+                src={a.imagem}
+                alt={`Capa de um álbum de ${a.nome}`}
+                nome={a.nome}
+                sizes="40px"
+              />
+            </div>
             <Link
               href={caminhoDoArtista(a.nome)}
               className="min-w-0 flex-1 truncate rounded font-medium underline-offset-4 transition-colors duration-150 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
