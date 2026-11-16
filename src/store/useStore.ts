@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import type { StateStorage } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 import { normalizarNome } from "../lib/filters";
 import {
   mensagemDeErro,
@@ -26,6 +27,39 @@ function entradaVazia<T>(): Entry<T> {
  * Dois pedidos iguais em simultâneo partilham a mesma promessa.
  */
 const pedidosEmCurso = new Map<string, Promise<void>>();
+
+/**
+ * localStorage à prova de falhas: se a escrita falhar (quota excedida,
+ * modo privado), o erro NÃO se propaga para a store — a cache em
+ * memória continua a funcionar; só se perde a persistência entre
+ * sessões. Sem isto, um throw dentro do `set` do zustand propaga-se
+ * para as ações e transforma dados carregados em estado de erro.
+ */
+const armazenamentoSeguro: StateStorage = {
+  getItem: (nome) => {
+    try {
+      return localStorage.getItem(nome);
+    } catch {
+      return null;
+    }
+  },
+  setItem: (nome, valor) => {
+    try {
+      localStorage.setItem(nome, valor);
+    } catch {
+      console.warn(
+        `Não foi possível persistir "${nome}" (localStorage cheio ou indisponível) — a cache em memória continua ativa.`,
+      );
+    }
+  },
+  removeItem: (nome) => {
+    try {
+      localStorage.removeItem(nome);
+    } catch {
+      // nada a fazer: sem persistência
+    }
+  },
+};
 
 interface StoreState {
   periodo: Periodo;
@@ -224,11 +258,15 @@ export const useStore = create<StoreState>()(
       name: "fmdata-cache",
       version: 1,
       skipHydration: true, // reidratação manual no cliente (useHydrated)
-      // só o que interessa: periodo e os dados. Nunca o "status" —
-      // um "loading" persistido deixaria a página presa a carregar.
+      storage: createJSONStorage(() => armazenamentoSeguro),
+      // ⚠️ NUNCA persistir os scrobbles: o dataset completo tem ~25 MB
+      // e estoura a quota do localStorage (5–10 MB) em vários browsers,
+      // o que partida o app inteiro. Os scrobbles voltam a ser pedidos
+      // a cada sessão; a cache EM MEMÓRIA evita pedidos repetidos
+      // durante a navegação. Só se persistem dados pequenos:
+      // o período e os perfis de artista/álbum.
       partialize: (estado) => ({
         periodo: estado.periodo,
-        scrobbles: serializarEntry(estado.scrobbles),
         artistas: serializarMapa(estado.artistas),
         albuns: serializarMapa(estado.albuns),
       }),
