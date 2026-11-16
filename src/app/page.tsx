@@ -25,11 +25,13 @@ export default function PaginaDashboard() {
         </section>
 
         <div className="grid gap-4 md:grid-cols-3">
-          <Totais className="md:col-span-2" />
-          <GeneroMaisOuvido />
+          {/* alturas equilibradas: o top 20 (alto) acompanha as músicas
+              e, por baixo delas, o gráfico 24h e o género lado a lado */}
+          <Totais className="md:col-span-3" />
           <TopArtistas className="md:row-span-2" />
           <TopMusicas className="md:col-span-2" />
-          <Grafico24h className="md:col-span-2" />
+          <Grafico24h />
+          <GeneroMaisOuvido />
           <TopAlbuns className="md:col-span-3" />
         </div>
       </div>
