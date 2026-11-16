@@ -33,7 +33,7 @@ export function TopAlbuns({ className }: { className?: string }) {
       titulo="Top 8 álbuns"
       {...bloco}
       esqueleto={<Esqueleto />}
-      mensagemVazia="Sem álbuns neste período. Escolhe um período maior no canto do bloco."
+      mensagemVazia="Sem álbuns neste período. Escolhe um período maior no topo do bloco."
     >
       <ol className="grid grid-cols-2 gap-3 md:grid-cols-4">
         {albuns.map((album, i) => (

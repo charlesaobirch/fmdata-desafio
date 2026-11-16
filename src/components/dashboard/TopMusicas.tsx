@@ -25,7 +25,7 @@ export function TopMusicas({ className }: { className?: string }) {
       titulo="Top 10 músicas"
       {...bloco}
       esqueleto={<EsqueletoLista linhas={5} />}
-      mensagemVazia="Sem músicas neste período. Escolhe um período maior no canto do bloco."
+      mensagemVazia="Sem músicas neste período. Escolhe um período maior no topo do bloco."
     >
       <ol className="flex flex-col gap-3">
         {musicas.map((m, i) => (

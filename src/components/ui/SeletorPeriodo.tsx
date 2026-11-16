@@ -21,7 +21,7 @@ const ORDEM: Periodo[] = ["tudo", "30d", "14d", "7d", "24h"];
 
 // forma comum ao controlo e ao marcador fixo: quem vê um reconhece o outro
 const FORMA =
-  "inline-flex h-8 shrink-0 items-center rounded-full text-xs leading-none";
+  "inline-flex h-7 shrink-0 items-center rounded-full text-xs leading-none";
 
 interface SeletorPeriodoProps {
   valor: Periodo;
@@ -36,9 +36,10 @@ interface SeletorPeriodoProps {
  * menu do sistema, com teclado e leitores de ecrã de graça.
  *
  * Duas variantes, para vários blocos com períodos diferentes não se
- * confundirem: "Todo o histórico" fica discreto; um período recortado
- * ganha peso e fundo, e salta à vista quais blocos estão filtrados.
- * O texto muda também: a distinção nunca depende só da cor.
+ * confundirem: "Todo o histórico" é uma pílula só com contorno,
+ * discreta; um período recortado é preenchida e com peso, e salta à
+ * vista quais blocos estão filtrados. O texto muda também: a distinção
+ * nunca depende só da cor.
  */
 export function SeletorPeriodo({
   valor,
@@ -60,7 +61,7 @@ export function SeletorPeriodo({
         className={`h-full cursor-pointer appearance-none rounded-full pr-7 pl-3 field-sizing-content transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground ${
           recortado
             ? "bg-foreground/10 hover:bg-foreground/15"
-            : "bg-transparent group-hover:text-foreground hover:bg-foreground/5"
+            : "bg-transparent ring-1 ring-foreground/20 ring-inset group-hover:text-foreground hover:bg-foreground/5"
         }`}
       >
         {ORDEM.map((p) => (

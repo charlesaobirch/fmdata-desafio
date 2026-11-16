@@ -31,7 +31,7 @@ export function GeneroMaisOuvido({ className }: { className?: string }) {
       titulo="Género mais ouvido"
       {...bloco}
       esqueleto={<EstadoCarregar linhas={2} />}
-      mensagemVazia="Sem géneros para mostrar neste período: as audições não têm etiquetas. Escolhe um período maior no canto do bloco."
+      mensagemVazia="Sem géneros para mostrar neste período: as audições não têm etiquetas. Escolhe um período maior no topo do bloco."
     >
       {g && (
         <div className="flex flex-col gap-1">

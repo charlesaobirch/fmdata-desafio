@@ -13,7 +13,7 @@ export function NotaPeriodos() {
 
   return (
     <p className="max-w-prose text-pretty text-sm text-foreground/70">
-      Cada bloco tem o seu período, escolhido no canto do bloco. Os períodos
+      Cada bloco tem o seu período, que se muda no topo do bloco. Os períodos
       contam a partir da tua última audição
       {referencia && (
         <>

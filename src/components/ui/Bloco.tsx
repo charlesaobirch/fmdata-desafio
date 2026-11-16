@@ -8,7 +8,7 @@ import { SeletorPeriodo } from "./SeletorPeriodo";
 
 interface BlocoProps {
   titulo: string;
-  /** Nota curta por baixo do título (p.ex. "horas em UTC"). */
+  /** Nota curta por baixo do título, a seguir ao período (p.ex. "horas em UTC"). */
   contexto?: string;
   /** Período do bloco; com aoMudarPeriodo, aparece o controlo no cabeçalho. */
   periodo?: Periodo;
@@ -52,21 +52,28 @@ export function Bloco({
       aria-busy={estado === "loading"}
       className={`flex min-w-0 flex-col gap-4 rounded-2xl border border-foreground/10 bg-background p-6 ${className}`}
     >
-      {/* o período fica sempre no mesmo sítio: no canto, à altura do título */}
-      <header className="flex items-start justify-between gap-3">
-        <div className="flex min-w-0 flex-col gap-0.5">
-          <h2 id={idTitulo} className="text-lg font-semibold tracking-tight">
-            {titulo}
-          </h2>
-          {contexto && <p className="text-xs text-foreground/70">{contexto}</p>}
-        </div>
-        {periodo && aoMudarPeriodo && (
-          <div className="-mt-0.5">
-            <SeletorPeriodo
-              valor={periodo}
-              aoMudar={aoMudarPeriodo}
-              rotulo={`Período de ${titulo}`}
-            />
+      {/*
+        O período fica sempre no mesmo sítio, colado ao título e por
+        baixo dele: em colunas estreitas não disputa a linha com o
+        título, e a borda esquerda dos blocos lê-se como uma lista de
+        "título, período".
+      */}
+      <header className="flex flex-col items-start gap-2">
+        <h2 id={idTitulo} className="text-lg font-semibold tracking-tight">
+          {titulo}
+        </h2>
+        {((periodo && aoMudarPeriodo) || contexto) && (
+          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
+            {periodo && aoMudarPeriodo && (
+              <SeletorPeriodo
+                valor={periodo}
+                aoMudar={aoMudarPeriodo}
+                rotulo={`Período de ${titulo}`}
+              />
+            )}
+            {contexto && (
+              <p className="text-xs text-foreground/70">{contexto}</p>
+            )}
           </div>
         )}
       </header>
