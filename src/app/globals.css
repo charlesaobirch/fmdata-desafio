@@ -1,8 +1,18 @@
 @import "tailwindcss";
 
+/*
+ * Tokens em duas camadas: primitivos (as duas cores do tema, que
+ * mudam com o esquema do sistema) e semânticos (o papel de cada uma).
+ * Trocar de tema é só mudar o mapeamento semântico.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* primitivos */
+  --cor-papel: #ffffff;
+  --cor-tinta: #171717;
+
+  /* semânticos */
+  --background: var(--cor-papel);
+  --foreground: var(--cor-tinta);
 }
 
 @theme inline {
@@ -14,9 +24,19 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --cor-papel: #0a0a0a;
+    --cor-tinta: #ededed;
   }
+}
+
+/*
+ * As mesmas duas cores, trocadas: a parte editorial (Descobertas)
+ * distingue-se do resto do dashboard sem paleta nova. Tudo o que usa
+ * bg-background / text-foreground / foreground/xx lá dentro inverte.
+ */
+.tema-invertido {
+  --background: var(--cor-tinta);
+  --foreground: var(--cor-papel);
 }
 
 body {

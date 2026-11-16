@@ -1,8 +1,8 @@
 "use client";
 
 import { artistaDeCasa } from "@/lib/analise";
-import { CartaoDescoberta } from "./CartaoDescoberta";
 import { formatarNumero } from "./formatar";
+import { PainelDescoberta } from "./PainelDescoberta";
 import { useDescoberta } from "./useDescoberta";
 
 export function CartaoArtistaDeCasa() {
@@ -11,7 +11,7 @@ export function CartaoArtistaDeCasa() {
   const maximo = Math.max(1, ...(casa?.porAno.map((a) => a.audicoes) ?? []));
 
   return (
-    <CartaoDescoberta
+    <PainelDescoberta
       {...cartao}
       pergunta="Quem é o artista mais presente no teu dia a dia?"
       titulo={
@@ -29,7 +29,7 @@ export function CartaoArtistaDeCasa() {
     >
       {casa && (
         <div className="flex flex-col gap-4">
-          <ul className="flex h-28 items-end gap-1.5">
+          <ul className="flex h-40 items-end gap-1.5 sm:h-52 sm:gap-2">
             {casa.porAno.map(({ ano, audicoes }) => {
               const pico = ano === casa.anoDePico?.ano;
               return (
@@ -65,7 +65,7 @@ export function CartaoArtistaDeCasa() {
             })}
           </ul>
 
-          <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+          <dl className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm sm:grid-cols-4">
             <div>
               <dt className="text-foreground/70">Do que ouviste</dt>
               <dd className="font-medium tabular-nums">
@@ -103,6 +103,6 @@ export function CartaoArtistaDeCasa() {
           </dl>
         </div>
       )}
-    </CartaoDescoberta>
+    </PainelDescoberta>
   );
 }

@@ -26,39 +26,42 @@ export default function PaginaDashboard() {
   const { periodo, setPeriodo } = usePeriodo();
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-5xl flex-col gap-10 p-8">
-      <section className="flex flex-col gap-6">
-        <h1 className="text-xl font-semibold">
-          fmdata — o teu histórico em números
-        </h1>
+    <main className="flex min-h-screen flex-col gap-10">
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-10 p-8">
+        <section className="flex flex-col gap-6">
+          <h1 className="text-xl font-semibold">
+            fmdata — o teu histórico em números
+          </h1>
 
-        <div className="flex flex-wrap gap-2">
-          {PERIODOS.map((p) => (
-            <button
-              key={p.valor}
-              type="button"
-              onClick={() => setPeriodo(p.valor)}
-              className={`rounded-full px-4 py-1.5 text-sm transition-colors ${
-                periodo === p.valor
-                  ? "bg-foreground text-background"
-                  : "bg-black/5 dark:bg-white/6"
-              }`}
-            >
-              {p.rotulo}
-            </button>
-          ))}
+          <div className="flex flex-wrap gap-2">
+            {PERIODOS.map((p) => (
+              <button
+                key={p.valor}
+                type="button"
+                onClick={() => setPeriodo(p.valor)}
+                className={`rounded-full px-4 py-1.5 text-sm transition-colors ${
+                  periodo === p.valor
+                    ? "bg-foreground text-background"
+                    : "bg-black/5 dark:bg-white/6"
+                }`}
+              >
+                {p.rotulo}
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <div className="grid gap-4 md:grid-cols-3">
+          <Totais className="md:col-span-2" />
+          <GeneroMaisOuvido />
+          <TopArtistas className="md:row-span-2" />
+          <TopMusicas className="md:col-span-2" />
+          <Grafico24h className="md:col-span-2" />
+          <TopAlbuns className="md:col-span-3" />
         </div>
-      </section>
-
-      <div className="grid gap-4 md:grid-cols-3">
-        <Totais className="md:col-span-2" />
-        <GeneroMaisOuvido />
-        <TopArtistas className="md:row-span-2" />
-        <TopMusicas className="md:col-span-2" />
-        <Grafico24h className="md:col-span-2" />
-        <TopAlbuns className="md:col-span-3" />
       </div>
 
+      {/* a toda a largura: a faixa editorial sai da coluna do dashboard */}
       <Descobertas />
     </main>
   );

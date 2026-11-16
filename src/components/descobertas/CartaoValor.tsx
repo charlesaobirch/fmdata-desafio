@@ -1,13 +1,13 @@
 "use client";
 
 import { valorEstimado } from "@/lib/analise";
-import { CartaoDescoberta } from "./CartaoDescoberta";
 import {
   formatarNumero,
   formatarTaxa,
   formatarUSD,
   formatarValor,
 } from "./formatar";
+import { PainelDescoberta } from "./PainelDescoberta";
 import { useDescoberta } from "./useDescoberta";
 
 export function CartaoValor() {
@@ -15,7 +15,7 @@ export function CartaoValor() {
   const artista = valor?.artistaPrincipal;
 
   return (
-    <CartaoDescoberta
+    <PainelDescoberta
       {...cartao}
       pergunta="Quanto terão recebido os artistas pelas tuas audições?"
       titulo={artista ? `E a ${artista.nome}, ficou com quê?` : undefined}
@@ -32,14 +32,14 @@ export function CartaoValor() {
       {valor && artista && (
         <div className="flex flex-col gap-4">
           <p className="text-sm text-foreground/70">
-            <span className="block text-2xl font-semibold tabular-nums tracking-tight text-foreground">
+            <span className="mb-2 block text-balance text-3xl font-semibold tabular-nums tracking-[-0.03em] text-foreground sm:text-5xl">
               {formatarUSD(artista.minimo)} a {formatarUSD(artista.maximo)}
             </span>
             pelas tuas {formatarNumero(artista.reproducoes)} audições, conforme
             a plataforma
           </p>
 
-          <div className="overflow-x-auto">
+          <div className="max-w-3xl overflow-x-auto">
             <table className="w-full text-left text-sm tabular-nums">
               <caption className="sr-only">
                 Valor estimado por plataforma, para {artista.nome} e para todas
@@ -96,6 +96,6 @@ export function CartaoValor() {
           </div>
         </div>
       )}
-    </CartaoDescoberta>
+    </PainelDescoberta>
   );
 }

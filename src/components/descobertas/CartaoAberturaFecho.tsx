@@ -5,8 +5,8 @@ import {
   type ContagemDeFaixa,
   primeiraEUltimaDoDia,
 } from "@/lib/analise";
-import { CartaoDescoberta } from "./CartaoDescoberta";
 import { formatarNumero } from "./formatar";
+import { PainelDescoberta } from "./PainelDescoberta";
 import { useDescoberta } from "./useDescoberta";
 
 const TOP = 3;
@@ -48,7 +48,7 @@ export function CartaoAberturaFecho() {
   const { resultado: dia, cartao } = useDescoberta(primeiraEUltimaDoDia);
 
   return (
-    <CartaoDescoberta
+    <PainelDescoberta
       {...cartao}
       pergunta="Com que música começas e acabas o dia?"
       titulo={dia ? "Sabes acordar. Dormir, nem por isso." : undefined}
@@ -76,6 +76,6 @@ export function CartaoAberturaFecho() {
           />
         </div>
       )}
-    </CartaoDescoberta>
+    </PainelDescoberta>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { maiorSequenciaRepetida } from "@/lib/analise";
-import { CartaoDescoberta } from "./CartaoDescoberta";
+import { PainelDescoberta } from "./PainelDescoberta";
 import { useDescoberta } from "./useDescoberta";
 
 // acima disto a fila de marcas deixa de caber e deixa de se ler
@@ -11,7 +11,7 @@ export function CartaoMaratona() {
   const { resultado, cartao } = useDescoberta(maiorSequenciaRepetida);
 
   return (
-    <CartaoDescoberta
+    <PainelDescoberta
       {...cartao}
       pergunta="Qual foi a música que ouviste mais vezes seguidas?"
       titulo={resultado ? `${resultado.vezes} vezes seguidas, amor` : undefined}
@@ -22,7 +22,7 @@ export function CartaoMaratona() {
       {resultado && (
         <div className="flex flex-col gap-3">
           {/* uma marca por repetição: a quantidade vê-se antes de se ler */}
-          <div aria-hidden="true" className="flex flex-wrap gap-[3px]">
+          <div aria-hidden="true" className="flex flex-wrap gap-1">
             {Array.from(
               { length: Math.min(resultado.vezes, MARCAS_MAX) },
               (_, i) => (
@@ -30,7 +30,7 @@ export function CartaoMaratona() {
                   // posições fixas: a lista nunca é reordenada
                   // biome-ignore lint/suspicious/noArrayIndexKey: marcas idênticas
                   key={i}
-                  className="h-6 w-1.5 rounded-full bg-foreground/80"
+                  className="h-10 w-1.5 rounded-full bg-foreground/80 sm:h-14 sm:w-2"
                 />
               ),
             )}
@@ -43,6 +43,6 @@ export function CartaoMaratona() {
           </p>
         </div>
       )}
-    </CartaoDescoberta>
+    </PainelDescoberta>
   );
 }

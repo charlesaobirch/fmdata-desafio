@@ -16,7 +16,7 @@ export type EstadoDescoberta = "loading" | "erro" | "vazio" | "sucesso";
  * audições.
  *
  * Devolve o resultado e, em `cartao`, as props de estado prontas a
- * passar ao CartaoDescoberta.
+ * passar ao PainelDescoberta.
  */
 export function useDescoberta<T>(
   calcular: (scrobbles: Scrobble[]) => T | null,

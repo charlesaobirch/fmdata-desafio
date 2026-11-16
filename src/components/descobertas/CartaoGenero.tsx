@@ -5,8 +5,8 @@ import {
   generoPorFaixaDoDia,
   MOMENTOS_DO_DIA,
 } from "@/lib/analise";
-import { CartaoDescoberta } from "./CartaoDescoberta";
 import { formatarIndice } from "./formatar";
+import { PainelDescoberta } from "./PainelDescoberta";
 import { useDescoberta } from "./useDescoberta";
 
 // quantos géneros acima do habitual mostrar por momento
@@ -25,9 +25,8 @@ export function CartaoGenero() {
   );
 
   return (
-    <CartaoDescoberta
+    <PainelDescoberta
       {...cartao}
-      largo
       mensagemVazia="Ainda não há audições com géneros suficientes em nenhum momento do dia (são precisas 200 por género)."
       pergunta="Que géneros ouves mais a cada momento do dia?"
       titulo={
@@ -88,6 +87,6 @@ export function CartaoGenero() {
           })}
         </ul>
       )}
-    </CartaoDescoberta>
+    </PainelDescoberta>
   );
 }
