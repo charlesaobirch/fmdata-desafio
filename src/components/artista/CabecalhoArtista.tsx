@@ -46,7 +46,7 @@ function Biografia({ info }: { info: ArtistInfo }) {
           type="button"
           aria-expanded={aberta}
           onClick={() => setAberta((a) => !a)}
-          className="rounded font-medium text-foreground underline decoration-destaque decoration-2 underline-offset-4 transition-colors duration-150 hover:text-destaque-texto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+          className="rounded font-medium text-foreground underline decoration-foreground/30 decoration-2 underline-offset-4 transition-colors duration-150 hover:text-destaque-texto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
         >
           {aberta ? "Ler menos" : "Ler mais"}
         </button>

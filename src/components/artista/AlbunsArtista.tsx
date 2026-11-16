@@ -20,6 +20,8 @@ interface LinhaProps {
   artista: string;
   album: AlbumDoArtista;
   doArtista: Scrobble[];
+  /** O álbum mais ouvido: a sua barra é o ponto rosa do bloco. */
+  primeiro: boolean;
 }
 
 /**
@@ -27,7 +29,7 @@ interface LinhaProps {
  * enquanto carrega, se falhar ou se não houver tracklist, degrada para
  * "X faixas ouvidas" (guia, 8.3) — sem mensagem de erro por álbum.
  */
-function LinhaAlbum({ artista, album, doArtista }: LinhaProps) {
+function LinhaAlbum({ artista, album, doArtista, primeiro }: LinhaProps) {
   const { data } = useAlbumInfo(artista, album.nome);
   const ouvidas = useMemo(
     () =>
@@ -68,7 +70,9 @@ function LinhaAlbum({ artista, album, doArtista }: LinhaProps) {
               className="h-1 rounded-full bg-foreground/10"
             >
               <span
-                className="block h-full rounded-full bg-destaque"
+                className={`block h-full rounded-full ${
+                  primeiro ? "bg-destaque" : "bg-foreground/50"
+                }`}
                 style={{ width: `${(ouvidas / data.track_count) * 100}%` }}
               />
             </span>
@@ -118,11 +122,12 @@ export function AlbunsArtista({ artista, doArtista, className }: Props) {
     >
       {/* grid-cols-1 = minmax(0, 1fr): um nome longo não alarga a coluna */}
       <ol className="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2">
-        {albuns.map((album) => (
+        {albuns.map((album, i) => (
           <LinhaAlbum
             key={album.chave}
             artista={artista}
             album={album}
+            primeiro={i === 0}
             doArtista={doArtista}
           />
         ))}

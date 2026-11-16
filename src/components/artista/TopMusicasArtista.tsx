@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { formatarNumero } from "@/components/descobertas/formatar";
 import { Bloco } from "@/components/ui/Bloco";
 import { Capa } from "@/components/ui/Capa";
+import { classePosicao } from "@/components/ui/estilos";
 import { topMusicasDoArtista } from "@/lib/artist";
 import type { Scrobble } from "@/types";
 
@@ -26,9 +27,7 @@ export function TopMusicasArtista({ doArtista, className }: Props) {
       <ol className="flex flex-col gap-3">
         {musicas.map((m, i) => (
           <li key={m.chave} className="flex items-center gap-3">
-            <span className="w-5 shrink-0 text-right text-sm tabular-nums text-foreground/60">
-              {i + 1}
-            </span>
+            <span className={classePosicao(i)}>{i + 1}</span>
             <div className="relative size-11 shrink-0 overflow-hidden rounded-lg">
               <Capa
                 src={m.imagem}

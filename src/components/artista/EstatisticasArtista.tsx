@@ -49,13 +49,18 @@ export function EstatisticasArtista({ doArtista, todos, className }: Props) {
       mensagemVazia="Nenhuma audição deste artista tem data, por isso ficam fora das contas."
     >
       <dl className="grid grid-cols-2 gap-x-6 gap-y-5 md:grid-cols-5">
-        {cartoes.map((c) => (
+        {cartoes.map((c, i) => (
           <div key={c.rotulo} className="flex flex-col gap-1">
             <dt className="flex items-center gap-1 text-xs text-foreground/70">
               {"icone" in c && c.icone}
               {c.rotulo}
             </dt>
-            <dd className="text-2xl font-semibold tabular-nums tracking-tight text-destaque-texto">
+            {/* só o número principal (audições) a rosa: um ponto por bloco */}
+            <dd
+              className={`text-2xl font-semibold tabular-nums tracking-tight ${
+                i === 0 ? "text-destaque-texto" : ""
+              }`}
+            >
               {c.valor}
             </dd>
           </div>
