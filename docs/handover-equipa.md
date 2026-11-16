@@ -152,6 +152,7 @@ propósito (26 MB). Quem precisar dele corre `npm run dataset`.
 - **Corram `npm run test` (+ `:limite`) depois de qualquer alteração a `lib/`, `services/` ou `store/`** — se partiram algo, sabem em segundos, não na demo.
 - **Instalar dependências novas com atenção:** houve um caso em que o `npm install` podou um pacote que não estava no `package.json` (apanhámo-lo porque o `tsc` rebentou). Depois de instalar algo, corram `npm run lint` e `npm run test` para confirmar.
 - **O `zustand` (v5) já está no `package.json`** — não instalem outra versão; o store usa padrões de v5 (currying, `useShallow`).
+- **Persistência: NUNCA persistir os scrobbles** — o dataset completo tem ~25 MB e estoura a quota do localStorage (5–10 MB) em vários browsers, o que partia o app inteiro (bug apanhado em integração). O `partialize` da store só persiste `periodo` + perfis de artista/álbum; os scrobbles voltam a ser pedidos a cada sessão (a cache em memória evita repetidos durante a navegação). Há também um `armazenamentoSeguro` no store: se a escrita falhar, só sai um `console.warn` — o erro nunca se propaga para a UI. Se acrescentarem dados persistidos novos, lembrem-se disto.
 - **Erro 404 é normal** (artista inexistente) e tem estado próprio (`not-found`) — não o tratem como falha de rede.
 - **`useAlbumInfo` é opcional por design** — se falhar, a UI degrada com elegância; nunca deixem um álbum sem dados partir a página.
 - **Imagens podem faltar** (`image_url: null`) — todas as `<img>` precisam de fallback/`alt`.
