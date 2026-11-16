@@ -10,6 +10,7 @@ import { filtrarPorArtista } from "@/lib/filters";
 import type { Scrobble } from "@/types";
 import { CabecalhoArtista } from "./CabecalhoArtista";
 import { EstatisticasArtista } from "./EstatisticasArtista";
+import { ScrobblesPorMes } from "./ScrobblesPorMes";
 import { TopMusicasArtista } from "./TopMusicasArtista";
 
 const FOCO =
@@ -101,6 +102,7 @@ function ConteudoArtista({ doArtista, todos }: ConteudoProps) {
           todos={todos}
         />
         <TopMusicasArtista className="md:col-span-2" doArtista={doArtista} />
+        <ScrobblesPorMes className="md:col-span-3" doArtista={doArtista} />
       </div>
     </>
   );
