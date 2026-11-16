@@ -19,6 +19,11 @@ interface BlocoProps {
   mensagemErro?: string;
   aoRepetir?: () => void;
   mensagemVazia?: string;
+  /**
+   * Vazio em "Todo o histórico": não há período maior para escolher,
+   * por isso a mensagem não pode mandar mudar o período.
+   */
+  mensagemVaziaHistorico?: string;
   /** Esqueleto com a forma do conteúdo; por omissão, três linhas. */
   esqueleto?: ReactNode;
   className?: string;
@@ -40,6 +45,7 @@ export function Bloco({
   mensagemErro,
   aoRepetir,
   mensagemVazia,
+  mensagemVaziaHistorico = "O teu histórico ainda não tem audições para mostrar aqui.",
   esqueleto,
   className = "",
   children,
@@ -86,7 +92,11 @@ export function Bloco({
           aoRepetir={aoRepetir}
         />
       )}
-      {estado === "vazio" && <EstadoVazio mensagem={mensagemVazia} />}
+      {estado === "vazio" && (
+        <EstadoVazio
+          mensagem={periodo === "tudo" ? mensagemVaziaHistorico : mensagemVazia}
+        />
+      )}
       {estado === "sucesso" && children}
     </section>
   );
