@@ -2,16 +2,13 @@
 
 import { HeartIcon } from "@solar-icons/react/linear/heart";
 import { useMemo } from "react";
-import { formatarNumero } from "@/components/descobertas/formatar";
+import {
+  formatarNumero,
+  formatarPercentagem,
+} from "@/components/descobertas/formatar";
 import { Bloco } from "@/components/ui/Bloco";
 import { resumoDoArtista } from "@/lib/artist";
 import type { Scrobble } from "@/types";
-
-/** 8.43 -> "8,4%"; abaixo de 0,1 não arredonda para "0,0%". */
-function formatarPercentagem(p: number): string {
-  if (p > 0 && p < 0.1) return "<0,1%";
-  return `${p.toFixed(1).replace(".", ",")}%`;
-}
 
 interface Props {
   doArtista: Scrobble[];

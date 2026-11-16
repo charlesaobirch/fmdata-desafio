@@ -1,7 +1,7 @@
 "use client";
 
 import { artistaDeCasa } from "@/lib/analise";
-import { formatarNumero } from "./formatar";
+import { formatarNumero, formatarPercentagem } from "./formatar";
 import { PainelDescoberta } from "./PainelDescoberta";
 import { useDescoberta } from "./useDescoberta";
 
@@ -69,7 +69,7 @@ export function CartaoArtistaDeCasa() {
             <div>
               <dt className="text-foreground/70">Do que ouviste</dt>
               <dd className="font-medium tabular-nums">
-                {casa.percentagemDoTotal.toFixed(1).replace(".", ",")}%
+                {formatarPercentagem(casa.percentagemDoTotal)}
               </dd>
             </div>
             <div>
