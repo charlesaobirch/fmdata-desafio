@@ -19,7 +19,11 @@ export function CartaoValor() {
       {...cartao}
       pergunta="Quanto terão recebido os artistas pelas tuas audições?"
       titulo={artista ? `E a ${artista.nome}, ficou com quê?` : undefined}
-      subtitulo={artista ? "nove anos deram para meio café" : undefined}
+      subtitulo={
+        artista
+          ? "nove anos deram para um café. Ou quinze, se tiveres ouvido no Tidal."
+          : undefined
+      }
       nota={
         valor &&
         "As taxas por reprodução são uma assunção nossa, a partir de médias divulgadas publicamente. Não vêm da API e variam com o país, o contrato e o ano."
