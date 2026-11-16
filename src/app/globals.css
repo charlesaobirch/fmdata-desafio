@@ -1,9 +1,10 @@
 @import "tailwindcss";
 
 /*
- * Tokens em duas camadas: primitivos (as duas cores do tema, que
- * mudam com o esquema do sistema) e semânticos (o papel de cada uma).
- * Trocar de tema é só mudar o mapeamento semântico.
+ * Tokens em duas camadas: primitivos (as cores do tema, que mudam com
+ * o esquema do sistema) e semânticos (o papel de cada uma). Trocar de
+ * tema é só mudar o mapeamento semântico; o modo escuro só troca
+ * primitivos.
  */
 :root {
   /* controlos nativos (o menu do <select>) seguem o esquema do sistema */
@@ -13,14 +14,31 @@
   --cor-papel: #ffffff;
   --cor-tinta: #171717;
 
+  /*
+   * Destaque: o rosa da Ana e dois tons do mesmo matiz (OKLCH, só muda
+   * a luminosidade). O rosa puro é para marcas (barras, gráficos,
+   * contornos: >= 3:1 em todos os fundos). Como texto não chega a 4,5:1,
+   * por isso o texto rosa usa o tom do fundo onde está: >= 4,8:1.
+   */
+  --rosa: #e6197d;
+  --rosa-sobre-claro: #b60058;
+  --rosa-sobre-escuro: #f15391;
+  /* qual dos dois tons serve o fundo da página e qual o da faixa invertida */
+  --rosa-texto-pagina: var(--rosa-sobre-claro);
+  --rosa-texto-inverso: var(--rosa-sobre-escuro);
+
   /* semânticos */
   --background: var(--cor-papel);
   --foreground: var(--cor-tinta);
+  --destaque: var(--rosa);
+  --destaque-texto: var(--rosa-texto-pagina);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-destaque: var(--destaque);
+  --color-destaque-texto: var(--destaque-texto);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -29,6 +47,8 @@
   :root {
     --cor-papel: #0a0a0a;
     --cor-tinta: #ededed;
+    --rosa-texto-pagina: var(--rosa-sobre-escuro);
+    --rosa-texto-inverso: var(--rosa-sobre-claro);
   }
 }
 
@@ -40,6 +60,7 @@
 .tema-invertido {
   --background: var(--cor-tinta);
   --foreground: var(--cor-papel);
+  --destaque-texto: var(--rosa-texto-inverso);
 }
 
 body {
