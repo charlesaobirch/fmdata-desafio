@@ -8,6 +8,8 @@ import { AvisoHistorico } from "@/components/ui/AvisoHistorico";
 import { EstadoCarregar } from "@/components/ui/EstadoCarregar";
 import { EstadoSemHistorico } from "@/components/ui/EstadoSemHistorico";
 import { BOTAO_PRIMARIO } from "@/components/ui/estilos";
+import { ACAO_FAIXA, FaixaEntrada } from "@/components/ui/FaixaEntrada";
+import { Rodape } from "@/components/ui/Rodape";
 import { useScrobblesDoArtista } from "@/hooks/useScrobblesDoArtista";
 import type { Scrobble } from "@/types";
 import { AlbunsArtista } from "./AlbunsArtista";
@@ -19,24 +21,36 @@ import { ScrobblesPorMes } from "./ScrobblesPorMes";
 import { TopMusicasArtista } from "./TopMusicasArtista";
 import { UltimasAudicoes } from "./UltimasAudicoes";
 
-const FOCO =
-  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground";
-
-function Moldura({ children }: { children: ReactNode }) {
+function Moldura({
+  subtitulo,
+  children,
+}: {
+  /** O artista, na faixa de entrada (o canónico quando já se conhece). */
+  subtitulo: string;
+  children: ReactNode;
+}) {
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-10 p-8">
-      <Link
-        href="/"
-        className={`inline-flex w-fit items-center gap-1.5 rounded text-sm text-foreground/70 transition-colors duration-150 hover:text-destaque-texto ${FOCO}`}
-      >
-        <ArrowLeftIcon />
-        Dashboard
-      </Link>
-      {/* só aparece se o histórico falhar, e fica enquanto se tenta outra vez */}
-      <AvisoHistorico />
-      <AnuncioHistorico />
-      {children}
-    </main>
+    <>
+      <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-10 p-8">
+        <FaixaEntrada
+          titulo="fmdata"
+          subtitulo={
+            <p className="truncate text-sm text-foreground/70">{subtitulo}</p>
+          }
+          acao={
+            <Link href="/" className={ACAO_FAIXA}>
+              <ArrowLeftIcon />
+              Dashboard
+            </Link>
+          }
+        />
+        {/* só aparece se o histórico falhar, e fica enquanto se tenta outra vez */}
+        <AvisoHistorico />
+        <AnuncioHistorico />
+        {children}
+      </main>
+      <Rodape />
+    </>
   );
 }
 
@@ -56,9 +70,9 @@ function EsqueletoPagina() {
 }
 
 /** A página inteira a carregar (também serve de fallback do Suspense). */
-export function EsqueletoArtista() {
+export function EsqueletoArtista({ nome }: { nome?: string }) {
   return (
-    <Moldura>
+    <Moldura subtitulo={nome || "Página do artista"}>
       <EsqueletoPagina />
     </Moldura>
   );
@@ -147,11 +161,12 @@ export function PaginaArtista({ nome }: { nome: string }) {
   const { doArtista, comData, todos, existe, nomeCanonico, status } =
     useScrobblesDoArtista(nome);
 
-  if (status === "idle" || status === "loading") return <EsqueletoArtista />;
+  if (status === "idle" || status === "loading")
+    return <EsqueletoArtista nome={nome} />;
 
   if (status === "error" || status === "not-found") {
     return (
-      <Moldura>
+      <Moldura subtitulo={nome || "Artista"}>
         <section className="flex flex-col items-start gap-4 py-12">
           <h1 className="text-3xl font-semibold tracking-tight">
             {nome || "Artista"}
@@ -166,14 +181,14 @@ export function PaginaArtista({ nome }: { nome: string }) {
   // audições sem data abre, com os blocos vazios
   if (!nome || !existe || !nomeCanonico) {
     return (
-      <Moldura>
+      <Moldura subtitulo="Artista não encontrado">
         <ArtistaNaoEncontrado nome={nome} />
       </Moldura>
     );
   }
 
   return (
-    <Moldura>
+    <Moldura subtitulo={nomeCanonico}>
       {/* key: ao saltar para um semelhante, os blocos começam do zero
           (p.ex. a bio volta a fechada) em vez de herdar estado */}
       <ConteudoArtista

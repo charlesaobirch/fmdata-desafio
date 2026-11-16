@@ -15,8 +15,9 @@ import { CartaoValor } from "./CartaoValor";
 export function Descobertas() {
   return (
     <section
+      id="descobertas"
       aria-labelledby="descobertas-titulo"
-      className="tema-invertido bg-background text-foreground"
+      className="tema-invertido scroll-mt-4 bg-background text-foreground"
     >
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-24 px-8 py-20 sm:gap-36 sm:py-32">
         <CabecalhoDescobertas />

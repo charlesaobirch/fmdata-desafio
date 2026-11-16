@@ -9,21 +9,25 @@ import { formatarData } from "@/lib/dates";
  * última audição, não de hoje (guia, 15: "24h" a partir de agora).
  */
 export function NotaPeriodos() {
-  const { referencia } = useFiltradosPor("tudo");
+  const { inicio, referencia } = useFiltradosPor("tudo");
 
   return (
     <p className="max-w-prose text-pretty text-sm text-foreground/70">
-      Cada bloco tem o seu período, que se muda no topo do bloco. Os períodos
-      contam a partir da tua última audição
-      {referencia && (
+      {inicio && referencia && (
         <>
-          , a{" "}
+          De{" "}
+          <span className="font-medium text-foreground">
+            {formatarData(inicio)}
+          </span>{" "}
+          a{" "}
           <span className="font-medium text-foreground">
             {formatarData(referencia)}
           </span>
+          .{" "}
         </>
       )}
-      , e não de hoje.
+      Cada bloco tem o seu período, que se muda no topo do bloco; os períodos
+      contam a partir da tua última audição, e não de hoje.
     </p>
   );
 }

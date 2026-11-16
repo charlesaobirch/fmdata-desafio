@@ -1,3 +1,4 @@
+import { ArrowDownIcon } from "@solar-icons/react/linear/arrow-down";
 import { GeneroMaisOuvido } from "@/components/dashboard/GeneroMaisOuvido";
 import { Grafico24h } from "@/components/dashboard/Grafico24h";
 import { NotaPeriodos } from "@/components/dashboard/NotaPeriodos";
@@ -8,6 +9,8 @@ import { Totais } from "@/components/dashboard/Totais";
 import { Descobertas } from "@/components/descobertas/Descobertas";
 import { AnuncioHistorico } from "@/components/ui/AnuncioHistorico";
 import { AvisoHistorico } from "@/components/ui/AvisoHistorico";
+import { ACAO_FAIXA, FaixaEntrada } from "@/components/ui/FaixaEntrada";
+import { Rodape } from "@/components/ui/Rodape";
 
 /**
  * Dashboard. Server Component: os blocos são Client Components e cada
@@ -18,13 +21,17 @@ export default function PaginaDashboard() {
   return (
     <main className="flex min-h-screen flex-col gap-10">
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-10 p-8">
-        <section className="flex flex-col gap-2">
-          <h1 className="text-xl font-semibold">
-            fmdata — o teu histórico em números
-          </h1>
-
-          <NotaPeriodos />
-        </section>
+        <FaixaEntrada
+          principal
+          titulo="fmdata — o teu histórico em números"
+          subtitulo={<NotaPeriodos />}
+          acao={
+            <a href="#descobertas" className={ACAO_FAIXA}>
+              Ver a análise
+              <ArrowDownIcon />
+            </a>
+          }
+        />
 
         {/* só aparece se o histórico falhar: um aviso por todos os blocos */}
         <AvisoHistorico />
@@ -44,6 +51,7 @@ export default function PaginaDashboard() {
 
       {/* a toda a largura: a faixa editorial sai da coluna do dashboard */}
       <Descobertas />
+      <Rodape />
     </main>
   );
 }

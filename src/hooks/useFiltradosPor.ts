@@ -1,18 +1,21 @@
 "use client";
 
 import { useMemo } from "react";
-import { dataDeReferencia } from "../lib/dates";
+import { dataDeReferencia, parseDataScrobble } from "../lib/dates";
 import { filtrarPorPeriodo, removerSemData } from "../lib/filters";
 import type { Periodo, Scrobble, Status } from "../types";
 import { useScrobbles } from "./useScrobbles";
 
 interface Filtrados {
   scrobbles: Scrobble[];
+  /** A primeira audição com data (o histórico não vem ordenado). */
+  inicio: Date | null;
   referencia: Date | null;
 }
 
 interface CalculosDoHistorico {
   limpos: Scrobble[];
+  inicio: Date | null;
   referencia: Date | null;
   porPeriodo: Map<Periodo, Scrobble[]>;
 }
@@ -32,8 +35,14 @@ export function filtradosPor(todos: Scrobble[], periodo: Periodo): Filtrados {
   let calculos = cache.get(todos);
   if (!calculos) {
     const limpos = removerSemData(todos);
+    let inicio: Date | null = null;
+    for (const s of limpos) {
+      const data = parseDataScrobble(s);
+      if (data && (inicio === null || data < inicio)) inicio = data;
+    }
     calculos = {
       limpos,
+      inicio,
       // a referência (audição mais recente) vem dos dados completos
       referencia: dataDeReferencia(limpos),
       porPeriodo: new Map(),
@@ -47,7 +56,11 @@ export function filtradosPor(todos: Scrobble[], periodo: Periodo): Filtrados {
     calculos.porPeriodo.set(periodo, scrobbles);
   }
 
-  return { scrobbles, referencia: calculos.referencia };
+  return {
+    scrobbles,
+    inicio: calculos.inicio,
+    referencia: calculos.referencia,
+  };
 }
 
 /**
@@ -58,6 +71,7 @@ export function filtradosPor(todos: Scrobble[], periodo: Periodo): Filtrados {
 export function useFiltradosPor(periodo: Periodo): {
   scrobbles: Scrobble[];
   todos: Scrobble[];
+  inicio: Date | null;
   referencia: Date | null;
   status: Status;
   error: string | null;
@@ -65,10 +79,10 @@ export function useFiltradosPor(periodo: Periodo): {
 } {
   const { data: todos, status, error, recarregar } = useScrobbles();
 
-  const { scrobbles, referencia } = useMemo(
+  const { scrobbles, inicio, referencia } = useMemo(
     () => filtradosPor(todos, periodo),
     [todos, periodo],
   );
 
-  return { scrobbles, todos, referencia, status, error, recarregar };
+  return { scrobbles, todos, inicio, referencia, status, error, recarregar };
 }
