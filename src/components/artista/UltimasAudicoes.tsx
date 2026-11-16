@@ -1,5 +1,6 @@
 "use client";
 
+import { HeartIcon } from "@solar-icons/react/linear/heart";
 import { useMemo } from "react";
 import { Bloco } from "@/components/ui/Bloco";
 import { ultimasAudicoes } from "@/lib/artist";
@@ -40,7 +41,15 @@ export function UltimasAudicoes({ doArtista, className }: Props) {
             key={`${s.date_uts ?? s.date_iso}-${i}`}
             className="flex flex-col gap-0.5 py-2 first:pt-0 last:pb-0"
           >
-            <p className="truncate text-sm font-medium">{s.track_name}</p>
+            <p className="flex items-center gap-1.5 text-sm font-medium">
+              <span className="truncate">{s.track_name}</span>
+              {s.loved === 1 && (
+                <>
+                  <HeartIcon className="size-3.5 shrink-0 text-foreground/70" />
+                  <span className="sr-only">(favorita)</span>
+                </>
+              )}
+            </p>
             <p className="flex justify-between gap-3 text-xs text-foreground/70">
               <span className="truncate">{s.album_name || "Sem álbum"}</span>
               {data ? (

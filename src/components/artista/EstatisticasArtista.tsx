@@ -1,5 +1,6 @@
 "use client";
 
+import { HeartIcon } from "@solar-icons/react/linear/heart";
 import { useMemo } from "react";
 import { formatarNumero } from "@/components/descobertas/formatar";
 import { Bloco } from "@/components/ui/Bloco";
@@ -31,7 +32,11 @@ export function EstatisticasArtista({ doArtista, todos, className }: Props) {
       rotulo: "Do teu total",
       valor: formatarPercentagem(r.percentagemDoTotal),
     },
-    { rotulo: "Faixas favoritas", valor: formatarNumero(r.faixasFavoritas) },
+    {
+      rotulo: "Faixas favoritas",
+      valor: formatarNumero(r.faixasFavoritas),
+      icone: <HeartIcon className="size-3.5" />,
+    },
     // null quando nenhuma audição tem data: nunca "Invalid Date"
     { rotulo: "Primeira audição", valor: r.primeiraReproducao ?? "Sem data" },
     { rotulo: "Última audição", valor: r.ultimaReproducao ?? "Sem data" },
@@ -47,7 +52,10 @@ export function EstatisticasArtista({ doArtista, todos, className }: Props) {
       <dl className="grid grid-cols-2 gap-x-6 gap-y-5 md:grid-cols-5">
         {cartoes.map((c) => (
           <div key={c.rotulo} className="flex flex-col gap-1">
-            <dt className="text-xs text-foreground/70">{c.rotulo}</dt>
+            <dt className="flex items-center gap-1 text-xs text-foreground/70">
+              {"icone" in c && c.icone}
+              {c.rotulo}
+            </dt>
             <dd className="text-2xl font-semibold tabular-nums tracking-tight">
               {c.valor}
             </dd>

@@ -1,3 +1,5 @@
+import { DangerTriangleIcon } from "@solar-icons/react/linear/danger-triangle";
+
 interface EstadoErroProps {
   /** O que falhou, em linguagem do utilizador. */
   mensagem?: string;
@@ -14,11 +16,15 @@ export function EstadoErro({
 }: EstadoErroProps) {
   return (
     <div role="alert" className="flex flex-col items-start gap-3 text-sm">
-      <p>
-        {mensagem}
-        {detalhe && (
-          <span className="block text-foreground/70">Detalhe: {detalhe}</span>
-        )}
+      <p className="flex gap-2">
+        {/* o ícone reforça, não substitui: a mensagem diz o que falhou */}
+        <DangerTriangleIcon className="mt-0.5 size-4 shrink-0" />
+        <span>
+          {mensagem}
+          {detalhe && (
+            <span className="block text-foreground/70">Detalhe: {detalhe}</span>
+          )}
+        </span>
       </p>
       {aoRepetir && (
         <button
