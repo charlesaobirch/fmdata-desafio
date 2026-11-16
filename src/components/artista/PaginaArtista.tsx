@@ -2,11 +2,10 @@
 
 import { ArrowLeftIcon } from "@solar-icons/react/linear/arrow-left";
 import Link from "next/link";
-import { type ReactNode, useMemo } from "react";
+import type { ReactNode } from "react";
 import { EstadoCarregar } from "@/components/ui/EstadoCarregar";
 import { EstadoErro } from "@/components/ui/EstadoErro";
-import { useScrobbles } from "@/hooks/useScrobbles";
-import { filtrarPorArtista } from "@/lib/filters";
+import { useScrobblesDoArtista } from "@/hooks/useScrobblesDoArtista";
 import type { Scrobble } from "@/types";
 import { ArtistasSemelhantes } from "./ArtistasSemelhantes";
 import { CabecalhoArtista } from "./CabecalhoArtista";
@@ -120,12 +119,9 @@ function ConteudoArtista({ doArtista, todos }: ConteudoProps) {
  * dados; os blocos só montam quando ele existe.
  */
 export function PaginaArtista({ nome }: { nome: string }) {
-  const { data: todos, status, error, recarregar } = useScrobbles();
   // sempre o histórico completo: a página do artista ignora o período
-  const doArtista = useMemo(
-    () => (nome ? filtrarPorArtista(todos, nome) : []),
-    [todos, nome],
-  );
+  const { doArtista, todos, status, error, recarregar } =
+    useScrobblesDoArtista(nome);
 
   if (status === "idle" || status === "loading") return <EsqueletoArtista />;
 
@@ -142,7 +138,7 @@ export function PaginaArtista({ nome }: { nome: string }) {
     );
   }
 
-  if (doArtista.length === 0) {
+  if (!nome || doArtista.length === 0) {
     return (
       <Moldura>
         <ArtistaNaoEncontrado nome={nome} />

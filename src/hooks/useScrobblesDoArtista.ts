@@ -13,13 +13,15 @@ export function useScrobblesDoArtista(nome: string): {
   doArtista: Scrobble[];
   todos: Scrobble[];
   status: Status;
+  error: string | null;
+  recarregar: () => void;
 } {
-  const { data: todos, status } = useScrobbles();
+  const { data: todos, status, error, recarregar } = useScrobbles();
 
   const doArtista = useMemo(
     () => filtrarPorArtista(todos, nome),
     [todos, nome],
   );
 
-  return { doArtista, todos, status };
+  return { doArtista, todos, status, error, recarregar };
 }
