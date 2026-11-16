@@ -13,6 +13,7 @@ import { EstatisticasArtista } from "./EstatisticasArtista";
 import { RelogioArtista } from "./RelogioArtista";
 import { ScrobblesPorMes } from "./ScrobblesPorMes";
 import { TopMusicasArtista } from "./TopMusicasArtista";
+import { UltimasAudicoes } from "./UltimasAudicoes";
 
 const FOCO =
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground";
@@ -103,6 +104,7 @@ function ConteudoArtista({ doArtista, todos }: ConteudoProps) {
           todos={todos}
         />
         <TopMusicasArtista className="md:col-span-2" doArtista={doArtista} />
+        <UltimasAudicoes doArtista={doArtista} />
         <ScrobblesPorMes className="md:col-span-3" doArtista={doArtista} />
         <RelogioArtista className="md:col-span-2" doArtista={doArtista} />
       </div>
