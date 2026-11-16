@@ -132,6 +132,36 @@ export function albunsDoArtista(doArtista: Scrobble[]): AlbumDoArtista[] {
   );
 }
 
+/**
+ * O "X" de "Ouviste X de Y faixas": as faixas da tracklist do álbum
+ * (`tracklist_names`, separada por ";") que já ouviste com esse nome de
+ * álbum. Só conta o que está na tracklist, por isso faixas bónus,
+ * versões e edições deluxe guardadas com o mesmo nome de álbum ficam de
+ * fora e o X nunca passa do Y (`total`, o track_count da API).
+ *
+ * Devolve null quando não há tracklist ou total: sem eles não se sabe o
+ * X honesto, e a interface mostra só "X faixas ouvidas".
+ */
+export function faixasOuvidasDoAlbum(
+  doArtista: Scrobble[],
+  album: string,
+  tracklist: string,
+  total: number,
+): number | null {
+  const faixasDoAlbum = separarLista(tracklist, ";").map(normalizarNome);
+  if (faixasDoAlbum.length === 0 || total <= 0) return null;
+
+  const alvo = normalizarNome(album);
+  const ouvidas = new Set(
+    doArtista
+      .filter((s) => normalizarNome(s.album_name) === alvo)
+      .map((s) => normalizarNome(s.track_name)),
+  );
+
+  const naTracklist = new Set(faixasDoAlbum.filter((f) => ouvidas.has(f)));
+  return Math.min(naTracklist.size, total);
+}
+
 /* ---------- Evolução temporal ---------- */
 
 /**

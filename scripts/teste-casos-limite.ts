@@ -1,6 +1,7 @@
 import {
   albunsDoArtista,
   artistaExiste,
+  faixasOuvidasDoAlbum,
   resumoDoArtista,
   scrobblesPorMes,
 } from "../src/lib/artist";
@@ -202,6 +203,36 @@ verificar(
     );
   })(),
 );
+
+console.log("\n[casos limite: faixasOuvidasDoAlbum]");
+{
+  const ouvi = [
+    sc({ album_name: "25", track_name: "Hello" }),
+    sc({ album_name: "25", track_name: "hello " }),
+    sc({ album_name: "25", track_name: "When We Were Young" }),
+    sc({ album_name: "25", track_name: "Hello - Live at the BBC" }),
+    sc({ album_name: "25", track_name: "Can't Let Go" }),
+    sc({ album_name: "30", track_name: "Easy on Me" }),
+  ];
+  const tracklist = "Hello; Send My Love; I Miss You; When We Were Young";
+  verificar(
+    "só contam faixas da tracklist (bónus e versões fora)",
+    faixasOuvidasDoAlbum(ouvi, "25", tracklist, 4) === 2,
+  );
+  verificar(
+    "nunca passa do total da API",
+    faixasOuvidasDoAlbum(ouvi, "25", tracklist, 1) === 1,
+  );
+  verificar(
+    "faixas de outro álbum não contam",
+    faixasOuvidasDoAlbum(ouvi, "30", tracklist, 4) === 0,
+  );
+  verificar(
+    "sem tracklist → null (a interface degrada)",
+    faixasOuvidasDoAlbum(ouvi, "25", "", 11) === null &&
+      faixasOuvidasDoAlbum(ouvi, "25", tracklist, 0) === null,
+  );
+}
 
 console.log(
   falhas === 0
