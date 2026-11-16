@@ -1,5 +1,8 @@
 "use client";
 
+import { GeneroMaisOuvido } from "@/components/dashboard/GeneroMaisOuvido";
+import { Grafico24h } from "@/components/dashboard/Grafico24h";
+import { TopAlbuns } from "@/components/dashboard/TopAlbuns";
 import { Descobertas } from "@/components/descobertas/Descobertas";
 import { useFiltrados } from "@/hooks/useFiltrados";
 import { usePeriodo } from "@/hooks/usePeriodo";
@@ -63,6 +66,12 @@ export default function PaginaVerificacao() {
           <p className="text-3xl font-bold">{scrobbles.length} audições</p>
         )}
       </section>
+
+      <div className="grid gap-4 md:grid-cols-3">
+        <TopAlbuns className="md:col-span-3" />
+        <Grafico24h className="md:col-span-2" />
+        <GeneroMaisOuvido />
+      </div>
 
       <Descobertas />
     </main>
