@@ -422,6 +422,11 @@ export interface Estimativa {
 export interface ValorEstimado {
   total: Estimativa;
   artistaPrincipal: Estimativa & { nome: string };
+  /**
+   * Os 10 artistas com mais audições, por ordem decrescente (o
+   * artistaPrincipal é o 1.º): o cartão deixa escolher para quem ver.
+   */
+  topArtistas: (Estimativa & { nome: string })[];
 }
 
 function estimar(
@@ -449,6 +454,8 @@ function estimar(
  * - Conta todas as audições (como totalScrobbles e artistaDeCasa).
  * - Artista principal: o de mais audições, agrupado por nome
  *   normalizado; em empate, o primeiro por ordem alfabética da chave.
+ * - topArtistas: os 10 primeiros dessa mesma ordem, para o seletor
+ *   do cartão.
  * - As taxas podem ser substituídas (por omissão TAXAS_POR_REPRODUCAO).
  */
 export function valorEstimado(
@@ -464,9 +471,10 @@ export function valorEstimado(
     if (atual) atual.reproducoes += 1;
     else porArtista.set(k, { nome: s.artist_name, reproducoes: 1 });
   }
-  const [, principal] = [...porArtista.entries()].sort(
+  const ordenados = [...porArtista.entries()].sort(
     ([ka, a], [kb, b]) => b.reproducoes - a.reproducoes || ka.localeCompare(kb),
-  )[0];
+  );
+  const principal = ordenados[0][1];
 
   return {
     total: estimar(scrobbles.length, taxas),
@@ -474,5 +482,8 @@ export function valorEstimado(
       nome: principal.nome,
       ...estimar(principal.reproducoes, taxas),
     },
+    topArtistas: ordenados
+      .slice(0, 10)
+      .map(([, a]) => ({ nome: a.nome, ...estimar(a.reproducoes, taxas) })),
   };
 }

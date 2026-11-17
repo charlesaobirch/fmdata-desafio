@@ -405,6 +405,24 @@ verificar(
 );
 verificar("vazio devolve null (valor)", valorEstimado([]) === null);
 
+verificar(
+  "topArtistas: 10 artistas, o principal primeiro (Adele)",
+  valor?.topArtistas.length === 10 &&
+    valor.topArtistas[0].nome === "Adele" &&
+    valor.topArtistas[0].reproducoes === 4345,
+);
+verificar(
+  "topArtistas: por ordem decrescente de audições",
+  valor?.topArtistas.every(
+    (a, i) => i === 0 || a.reproducoes <= valor.topArtistas[i - 1].reproducoes,
+  ) === true,
+);
+verificar(
+  "topArtistas: o intervalo bate com as mesmas taxas",
+  quase(valor?.topArtistas[0].minimo, 3.0415) &&
+    quase(valor?.topArtistas[0].maximo, 56.485),
+);
+
 // casos à mão
 const maoValor = valorEstimado(
   [falso("b", "x", D1), falso("B", "y", D1 + H), falso("a", "z", D1)],
