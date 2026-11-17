@@ -40,11 +40,13 @@ export function CartaoGenero() {
       pergunta="Que géneros ouves mais a cada momento do dia?"
       titulo={
         momentos
-          ? "De manhã és Anitta. De madrugada és uma britânica a chorar."
+          ? "De manhã, o gingado da Anitta. De madrugada, a melancolia britânica."
           : undefined
       }
       subtitulo={
-        momentos ? "funk ao pequeno-almoço, baladas às 3 da manhã" : undefined
+        momentos
+          ? "funk ao pequeno-almoço, vozes femininas depois da meia-noite."
+          : undefined
       }
       nota={
         momentos &&
