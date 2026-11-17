@@ -51,7 +51,7 @@ export function SeletorPeriodo({
   return (
     <span
       className={`group relative ${FORMA} ${
-        recortado ? "font-medium text-destaque-texto" : "text-foreground/70"
+        recortado ? "font-medium text-destaque-texto" : "text-foreground"
       }`}
     >
       <select
