@@ -26,8 +26,8 @@
   /* o roxo e o azul da Ana: só no gradiente de fundo, nunca em texto */
   --roxo: #3b1e5e;
   --azul: #4d8dff;
-  /* força do gradiente de fundo: muito ténue no claro */
-  --fundo-intensidade: 6%;
+  /* força do gradiente de fundo: a mesma presença no claro e no escuro */
+  --fundo-intensidade: 18%;
   /* qual dos dois tons serve o fundo da página e qual o da faixa invertida */
   --rosa-texto-pagina: var(--rosa-sobre-claro);
   --rosa-texto-inverso: var(--rosa-sobre-escuro);
@@ -59,6 +59,30 @@
 }
 
 /*
+ * Escolha manual do esquema (o botão de tema escreve data-tema no
+ * <html>): os mesmos primitivos do sistema, forçados. Sem data-tema,
+ * vale o esquema do sistema (acima). As regras ficam depois do @media
+ * para ganharem quando ambos se aplicam.
+ */
+:root[data-tema="claro"] {
+  color-scheme: light;
+  --cor-papel: #ffffff;
+  --cor-tinta: #171717;
+  --rosa-texto-pagina: var(--rosa-sobre-claro);
+  --rosa-texto-inverso: var(--rosa-sobre-escuro);
+  --fundo-intensidade: 18%;
+}
+
+:root[data-tema="escuro"] {
+  color-scheme: dark;
+  --cor-papel: #0a0a0a;
+  --cor-tinta: #ededed;
+  --rosa-texto-pagina: var(--rosa-sobre-escuro);
+  --rosa-texto-inverso: var(--rosa-sobre-claro);
+  --fundo-intensidade: 18%;
+}
+
+/*
  * As mesmas duas cores, trocadas: a parte editorial (Descobertas)
  * distingue-se do resto do dashboard sem paleta nova. Tudo o que usa
  * bg-background / text-foreground / foreground/xx lá dentro inverte.
@@ -75,6 +99,18 @@ body {
   color: var(--foreground);
   /* a Geist que o layout.tsx carrega (next/font); o resto é recurso */
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/*
+ * O menu nativo do <select>: o navegador abre-o com fundo padrão (branco)
+ * e as opções herdam a cor do texto da página — no escuro, texto claro
+ * sobre branco só se lê ao passar o rato. Fundo e cor explícitos nas
+ * opções: as variáveis resolvem no elemento, por isso o menu acompanha
+ * o bloco em que está (dentro de .tema-invertido, acompanha a inversão).
+ */
+option {
+  background: var(--background);
+  color: var(--foreground);
 }
 
 /*

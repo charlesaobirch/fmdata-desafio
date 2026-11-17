@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { BotaoTema } from "./BotaoTema";
 
 interface FaixaEntradaProps {
   /** O título; com `principal`, é o <h1> da página. */
@@ -36,7 +37,11 @@ export function FaixaEntrada({
         )}
         {subtitulo}
       </div>
-      {acao && <div className="shrink-0">{acao}</div>}
+      {/* o tema vive aqui para existir nas duas páginas, junto à ação */}
+      <div className="flex shrink-0 items-center gap-2">
+        <BotaoTema />
+        {acao}
+      </div>
     </header>
   );
 }

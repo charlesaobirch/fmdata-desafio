@@ -24,6 +24,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="pt"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        {/* tema guardado antes da 1.ª pintura: sem flash do esquema errado
+            (o BotaoTema escreve "claro"/"escuro" nesta chave) */}
+        <script
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: string estática, sem input externo; tem de correr antes da 1.ª pintura
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem("fmdata-tema");if(t==="claro"||t==="escuro")document.documentElement.dataset.tema=t}catch(e){}`,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
