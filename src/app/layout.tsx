@@ -22,6 +22,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="pt"
+      // o script anti-flash escreve data-tema no <html> antes da 1.ª
+      // pintura: o servidor não o conhece, e a divergência do atributo é
+      // intencional. Só vale para este elemento — os filhos continuam
+      // com os avisos de hidratação a rigor.
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
