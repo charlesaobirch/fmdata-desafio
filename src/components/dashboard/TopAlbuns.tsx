@@ -1,5 +1,6 @@
 "use client";
 
+import { LinkArtista } from "@/components/artista/LinkArtista";
 import { formatarNumero } from "@/components/descobertas/formatar";
 import { Bloco } from "@/components/ui/Bloco";
 import { Capa } from "@/components/ui/Capa";
@@ -63,8 +64,13 @@ export function TopAlbuns({ className }: { className?: string }) {
                   {album.nome}
                 </p>
                 {album.subtitulo && (
-                  <p className="truncate text-xs text-white/85">
-                    {album.subtitulo}
+                  <p className="text-xs text-white/85">
+                    {/* o cartão não é clicável: o link é só o artista */}
+                    <LinkArtista
+                      nome={album.subtitulo}
+                      sobreImagem
+                      className="inline-block max-w-full truncate align-top"
+                    />
                   </p>
                 )}
                 <p className="text-xs tabular-nums text-white/85">

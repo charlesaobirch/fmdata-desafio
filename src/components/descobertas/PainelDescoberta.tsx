@@ -8,8 +8,8 @@ interface PainelDescobertaProps {
   /** A pergunta a que o painel responde: é sempre o título. */
   pergunta: string;
   /** A resposta em tom de manchete: a protagonista, em letra gigante. */
-  titulo?: string;
-  subtitulo?: string;
+  titulo?: ReactNode;
+  subtitulo?: ReactNode;
   /** Assunções e definições que têm de ficar visíveis junto do resultado. */
   nota?: ReactNode;
   estado: EstadoDescoberta;

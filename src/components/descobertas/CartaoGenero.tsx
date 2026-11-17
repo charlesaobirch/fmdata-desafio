@@ -1,5 +1,6 @@
 "use client";
 
+import { LinkArtista } from "@/components/artista/LinkArtista";
 import {
   type GeneroDoMomento,
   generoPorFaixaDoDia,
@@ -39,9 +40,12 @@ export function CartaoGenero() {
       mensagemVazia="Ainda não há audições com géneros suficientes em nenhum momento do dia (são precisas 200 por género)."
       pergunta="Que géneros ouves mais a cada momento do dia?"
       titulo={
-        momentos
-          ? "De manhã, o gingado da Anitta. De madrugada, a melancolia britânica."
-          : undefined
+        momentos ? (
+          <>
+            De manhã, o gingado da <LinkArtista nome="Anitta" />. De madrugada,
+            a melancolia britânica.
+          </>
+        ) : undefined
       }
       subtitulo={
         momentos

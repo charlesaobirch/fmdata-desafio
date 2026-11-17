@@ -1,5 +1,6 @@
 "use client";
 
+import { LinkArtista } from "@/components/artista/LinkArtista";
 import { type Maratona, maiorSequenciaRepetida } from "@/lib/analise";
 import { PainelDescoberta } from "./PainelDescoberta";
 import { useDescoberta } from "./useDescoberta";
@@ -46,7 +47,7 @@ export function CartaoMaratona() {
             <span className="font-medium text-foreground">
               {resultado.faixa}
             </span>{" "}
-            · {resultado.artista}
+            · <LinkArtista nome={resultado.artista} />
           </p>
         </div>
       )}

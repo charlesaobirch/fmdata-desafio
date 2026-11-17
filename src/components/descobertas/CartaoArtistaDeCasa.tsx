@@ -1,5 +1,6 @@
 "use client";
 
+import { LinkArtista } from "@/components/artista/LinkArtista";
 import { artistaDeCasa } from "@/lib/analise";
 import { contar, formatarNumero, formatarPercentagem } from "./formatar";
 import { PainelDescoberta } from "./PainelDescoberta";
@@ -15,9 +16,12 @@ export function CartaoArtistaDeCasa() {
       {...cartao}
       pergunta="Quem é o artista mais presente no teu dia a dia?"
       titulo={
-        casa
-          ? `A ${casa.nome} não é tua artista favorita. É tua coinquilina.`
-          : undefined
+        casa ? (
+          <>
+            A <LinkArtista nome={casa.nome} /> não é tua artista favorita. É tua
+            coinquilina.
+          </>
+        ) : undefined
       }
       subtitulo={
         casa

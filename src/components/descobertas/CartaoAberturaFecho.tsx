@@ -1,5 +1,6 @@
 "use client";
 
+import { LinkArtista } from "@/components/artista/LinkArtista";
 import {
   type ContagemDeArtista,
   type ContagemDeFaixa,
@@ -29,7 +30,9 @@ function Coluna({
       <ol className="flex flex-col gap-1 text-sm">
         {artistas.slice(0, TOP).map((a) => (
           <li key={a.artista} className="flex justify-between gap-3">
-            <span>{a.artista}</span>
+            <span>
+              <LinkArtista nome={a.artista} />
+            </span>
             <span className="tabular-nums text-foreground/70">
               {contar(a.dias, "dia", "dias")}
             </span>
@@ -40,7 +43,7 @@ function Coluna({
         <p className="text-sm text-foreground/70">
           Música mais repetida:{" "}
           <span className="font-medium text-foreground">{faixa.faixa}</span>,{" "}
-          {faixa.artista} (
+          <LinkArtista nome={faixa.artista} /> (
           <span
             className={destacar ? "font-medium text-destaque-texto" : undefined}
           >

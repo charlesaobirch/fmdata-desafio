@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { caminhoDoArtista } from "@/components/artista/caminho";
+import { LinkArtista } from "@/components/artista/LinkArtista";
 import { formatarNumero } from "@/components/descobertas/formatar";
 import { Bloco } from "@/components/ui/Bloco";
 import { Capa } from "@/components/ui/Capa";
@@ -49,12 +48,10 @@ export function TopArtistas({ className }: { className?: string }) {
                 sizes="40px"
               />
             </div>
-            <Link
-              href={caminhoDoArtista(a.nome)}
-              className="min-w-0 flex-1 truncate rounded font-medium decoration-destaque decoration-2 underline-offset-4 transition-colors duration-150 hover:text-destaque-texto hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
-            >
-              {a.nome}
-            </Link>
+            <LinkArtista
+              nome={a.nome}
+              className="min-w-0 flex-1 truncate font-medium"
+            />
             <span className="shrink-0 text-sm tabular-nums text-foreground/70">
               {formatarNumero(a.contagem)}
               <span className="sr-only">

@@ -2,6 +2,7 @@
 
 import { AltArrowDownIcon } from "@solar-icons/react/linear/alt-arrow-down";
 import { useState } from "react";
+import { LinkArtista } from "@/components/artista/LinkArtista";
 import { valorEstimado } from "@/lib/analise";
 import { contar, formatarTaxa, formatarUSD, formatarValor } from "./formatar";
 import { PainelDescoberta } from "./PainelDescoberta";
@@ -27,7 +28,13 @@ export function CartaoValor() {
     <PainelDescoberta
       {...cartao}
       pergunta="Quanto terão recebido os artistas pelas tuas audições?"
-      titulo={artista ? `E a ${artista.nome}, ficou com quê?` : undefined}
+      titulo={
+        artista ? (
+          <>
+            E a <LinkArtista nome={artista.nome} />, ficou com quê?
+          </>
+        ) : undefined
+      }
       subtitulo={
         artista
           ? "nove anos deram para um café. Ou quinze, se tiveres ouvido no Tidal."
@@ -94,7 +101,7 @@ export function CartaoValor() {
                     scope="col"
                     className="py-1.5 pr-3 text-right font-normal"
                   >
-                    {artista.nome} (USD)
+                    <LinkArtista nome={artista.nome} /> (USD)
                   </th>
                   <th scope="col" className="py-1.5 text-right font-normal">
                     Tudo (USD)
