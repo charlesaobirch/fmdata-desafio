@@ -23,7 +23,7 @@ export function CartaoMaratona() {
       pergunta="Qual foi a música que ouviste mais vezes seguidas?"
       titulo={resultado ? `${resultado.vezes} vezes seguidas, amor` : undefined}
       subtitulo={
-        resultado ? `${resultado.faixa}, duas horas sem parar` : undefined
+        resultado ? `${resultado.faixa}, na semana em que saiu.` : undefined
       }
     >
       {resultado && (
