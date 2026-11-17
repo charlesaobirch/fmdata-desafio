@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -29,17 +30,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <head>
-        {/* tema guardado antes da 1.ª pintura: sem flash do esquema errado
-            (o BotaoTema escreve "claro"/"escuro" nesta chave) */}
-        <script
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: string estática, sem input externo; tem de correr antes da 1.ª pintura
-          dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem("fmdata-tema");if(t==="claro"||t==="escuro")document.documentElement.dataset.tema=t}catch(e){}`,
-          }}
-        />
-      </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {/* tema guardado antes da 1.ª pintura, sem flash do esquema errado
+            (o BotaoTema escreve "claro"/"escuro" nesta chave). Via
+            next/script: um <script> cru dentro de um componente dispara
+            o aviso do React 19; beforeInteractive corre no HTML inicial,
+            antes de qualquer hidratação. */}
+        <Script id="tema" strategy="beforeInteractive">
+          {`try{var t=localStorage.getItem("fmdata-tema");if(t==="claro"||t==="escuro")document.documentElement.dataset.tema=t}catch(e){}`}
+        </Script>
+        {children}
+      </body>
     </html>
   );
 }
