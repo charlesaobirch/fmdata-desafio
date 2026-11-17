@@ -56,44 +56,36 @@ function Coluna({
   );
 }
 
-const vezes = (n: number) => contar(n, "vez", "vezes");
-
 /**
- * Só afirma contraste quando os números são mesmo diferentes; com a
- * mesma contagem, uma frase neutra no mesmo tom.
+ * Os mesmos artistas, pela mesma ordem, a abrir e a fechar o dia? Só
+ * então o subtítulo os nomeia: com outros dados a frase seria falsa.
  */
-function frasesDoDia(
-  abre: number | undefined,
-  fecha: number | undefined,
-): { titulo: string; subtitulo?: string } {
-  if (abre === undefined || fecha === undefined) {
-    return { titulo: "Cada dia começa e acaba à sua maneira." };
-  }
-  if (abre > fecha) {
-    return {
-      titulo: "Sabes acordar. Dormir, nem por isso.",
-      subtitulo: `a primeira do dia repete-se ${vezes(abre)}, a última só ${vezes(fecha)}`,
-    };
-  }
-  if (fecha > abre) {
-    return {
-      titulo: "Sabes adormecer. Acordar, nem por isso.",
-      subtitulo: `a última do dia repete-se ${vezes(fecha)}, a primeira só ${vezes(abre)}`,
-    };
-  }
-  return {
-    titulo: "Começas e acabas o dia com a mesma teimosia.",
-    subtitulo: `a primeira e a última do dia repetem-se ${vezes(abre)} cada`,
-  };
+function mesmosNasDuasPontas(
+  abrem: ContagemDeArtista[],
+  fecham: ContagemDeArtista[],
+): string[] | null {
+  const a = abrem.slice(0, TOP).map((x) => x.artista);
+  const f = fecham.slice(0, TOP).map((x) => x.artista);
+  return a.length > 0 && a.length === f.length && a.every((n, i) => n === f[i])
+    ? a
+    : null;
+}
+
+/** "Adele, Tove Lo e Jão", cada nome com link para o artista. */
+function listaDeArtistas(nomes: string[]) {
+  return nomes.map((nome, i) => (
+    <span key={nome}>
+      {i > 0 && (i === nomes.length - 1 ? " e " : ", ")}
+      <LinkArtista nome={nome} />
+    </span>
+  ));
 }
 
 export function CartaoAberturaFecho() {
   const { resultado: dia, cartao } = useDescoberta(primeiraEUltimaDoDia);
-  const frases = dia
-    ? frasesDoDia(dia.faixaQueMaisAbre?.dias, dia.faixaQueMaisFecha?.dias)
-    : null;
-  // o ponto rosa do painel: a coluna cujo número sustenta o título;
-  // em empate o título é neutro e nenhuma coluna se destaca
+  const mesmos = dia ? mesmosNasDuasPontas(dia.quemAbre, dia.quemFecha) : null;
+  // o ponto rosa do painel: os dias da faixa que mais se repete numa das
+  // pontas do dia; em empate, nenhuma coluna se destaca
   const abre = dia?.faixaQueMaisAbre?.dias ?? 0;
   const fecha = dia?.faixaQueMaisFecha?.dias ?? 0;
   const vence = abre > fecha ? "abre" : fecha > abre ? "fecha" : null;
@@ -102,8 +94,12 @@ export function CartaoAberturaFecho() {
     <PainelDescoberta
       {...cartao}
       pergunta="Com que música começas e acabas o dia?"
-      titulo={frases?.titulo}
-      subtitulo={frases?.subtitulo}
+      titulo={dia ? "Quem abre o teu dia também o fecha." : undefined}
+      subtitulo={
+        mesmos ? (
+          <>{listaDeArtistas(mesmos)}, pela mesma ordem, de manhã e à noite.</>
+        ) : undefined
+      }
       nota={
         dia &&
         `Em ${contar(dia.diasComMusica, "dia", "dias")} com música, a primeira e a última audição de cada dia (UTC).`
